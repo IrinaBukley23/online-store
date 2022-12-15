@@ -1,3 +1,5 @@
+import { appModule } from './app/app.module';
+import { bootstrap } from './routes';
 import './style.scss';
 
-console.log('Hello world');
+bootstrap(appModule);
