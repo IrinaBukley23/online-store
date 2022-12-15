@@ -5,6 +5,9 @@ const wfm = {
                 resolve();
             }, ms )
         } )
+    }, 
+    isUndefined(d: any) {
+        return typeof d === 'undefined';
     }
 
 }

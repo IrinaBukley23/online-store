@@ -13,8 +13,8 @@ export const header = new Header({
     <nav>
       <a href="#">Online-store</a>
       <ul>
-        <li><a href="#">Main</a></li> 
-        <li><a href="#">NotFound</a></li> 
+        <li><a href="#">Home Page</a></li> 
+        <li><a href="#single">Single Page</a></li> 
       </ul>
     </nav>
     `,
