@@ -1,5 +1,6 @@
 import { WFMModule } from '../routes';
 import { appComponent } from './app.component';
+import { header } from './components/header/header';
 
 class AppModule extends WFMModule {
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
@@ -10,6 +11,7 @@ class AppModule extends WFMModule {
 
 export const appModule = new AppModule({
   components: [
-    appComponent,
+    header
   ],
+  bootstrap: appComponent
 });
