@@ -1,12 +1,15 @@
-import { router } from "../tools/router";
-import { wfm } from "../tools/utils";
+import { ConfigComp, ConfigPage, Route } from '../../types';
+import { router } from '../tools/router';
+import { wfm } from '../tools/utils';
 
 export class Module {
-  components: any;
-  bootstrapComponent: any;
-  routes: any;
+  components: ConfigPage[];
 
-  constructor(config: any) {
+  bootstrapComponent: any;
+
+  routes: Route[];
+
+  constructor(config: ConfigComp) {
     this.components = config.components;
     this.bootstrapComponent = config.bootstrap;
     this.routes = config.routes;
@@ -14,7 +17,7 @@ export class Module {
 
   start(): void {
     this.initComponents();
-    if(this.routes) this.initRoutes();
+    if (this.routes) this.initRoutes();
   }
 
   initComponents(): void {
@@ -22,23 +25,27 @@ export class Module {
     this.components.forEach(this.renderComponent.bind(this));
   }
 
-  initRoutes() {
+  initRoutes(): void {
     window.addEventListener('hashchange', this.renderRoute.bind(this));
     this.renderRoute();
   }
 
   renderRoute() {
-    let url = router.getUrl();
-    let route = this.routes.find((r: any ) => r.path === url);
-    console.log(route)
-    if(wfm.isUndefined(route)) {
-      route = this.routes.find((r: any) => r.path === '**');
+    const url = router.getUrl();
+    let route = this.routes.find((r: Route) => r.path === url);
+    if (route) {
+      if (wfm.isUndefined(route)) {
+        route = this.routes.find((r: Route) => r.path === '**');
+      }
+      const elem = document.querySelector('router-outlet') as HTMLElement;
+      elem.innerHTML = `<${route?.component.selector}></${route?.component.selector}>`;
+      this.renderComponent(route?.component);
     }
-    (document.querySelector('router-outlet') as HTMLElement).innerHTML = `<${route.component.selector}></${route.component.selector}>`;
-    this.renderComponent(route.component)
   }
 
+  // eslint-disable-next-line class-methods-use-this
   renderComponent(c: any) {
+    // type c: ConfigPage
     c.render();
   }
 }

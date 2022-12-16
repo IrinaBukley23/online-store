@@ -1,8 +1,8 @@
 import { appModule } from './app/app.module';
-import { bootstrap } from './routes';
-import { wfm } from './routes/index';
+import { bootstrap, wfm } from './routes';
+
 import './style.scss';
 
-wfm.delay(2000).then( () => {
-    bootstrap(appModule);
-} );
+wfm.delay(2000).then(() => {
+  bootstrap(appModule);
+});

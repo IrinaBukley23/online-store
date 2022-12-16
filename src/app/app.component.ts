@@ -1,8 +1,9 @@
 import { WFMComponent } from '../routes';
+import { ConfigPage } from '../types';
 
 class AppComponent extends WFMComponent {
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor(config: any) {
+  constructor(config: ConfigPage) {
     super(config);
   }
 }

@@ -5,9 +5,9 @@ import { wfm } from './tools/utils';
 import { router } from './tools/router';
 
 export {
-    WFMModule,
-    WFMComponent,
-    bootstrap, 
-    wfm, 
-    router
-}
+  WFMModule,
+  WFMComponent,
+  bootstrap,
+  wfm,
+  router,
+};
