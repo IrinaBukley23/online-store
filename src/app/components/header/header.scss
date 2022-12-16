@@ -1,21 +1,24 @@
 nav {
     width: 1140px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     a {
-        color: #ffffff;
+        color: #000000;
         text-decoration: none;
+        font-size: 2rem;
     }
     ul {
         display: flex;
         justify-content: space-around;
         align-items: center;
         list-style: none;
+        font-size: 2rem;
         li {
             margin: 0 15px;
             a {
-                color: #ffffff;
+                color: #000000;
                 text-decoration: none;
             }
         }

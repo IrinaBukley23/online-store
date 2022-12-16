@@ -30,21 +30,19 @@ export class Module {
     this.renderRoute();
   }
 
-  renderRoute() {
+  renderRoute(): void {
     const url = router.getUrl();
     let route = this.routes.find((r: Route) => r.path === url);
-    if (route) {
-      if (wfm.isUndefined(route)) {
-        route = this.routes.find((r: Route) => r.path === '**');
-      }
-      const elem = document.querySelector('router-outlet') as HTMLElement;
-      elem.innerHTML = `<${route?.component.selector}></${route?.component.selector}>`;
-      this.renderComponent(route?.component);
+    if (wfm.isUndefined(route as Route)) {
+      route = this.routes.find((r: Route) => r.path === '**');
     }
+    const elem = document.querySelector('router-outlet') as HTMLElement;
+    elem.innerHTML = `<${route?.component.selector}></${route?.component.selector}>`;
+    this.renderComponent(route?.component);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  renderComponent(c: any) {
+  renderComponent(c: any): void {
     // type c: ConfigPage
     c.render();
   }

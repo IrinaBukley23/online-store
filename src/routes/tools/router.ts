@@ -1,5 +1,5 @@
 export const router = {
-  getUrl() {
+  getUrl(): string {
     return window.location.hash.slice(1);
   },
 };
