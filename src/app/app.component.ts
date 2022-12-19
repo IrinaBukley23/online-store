@@ -13,6 +13,6 @@ export const appComponent = new AppComponent({
     template: `
     <app-header class="wrapper"></app-header>
     <router-outlet class="wrapper"></router-outlet>
-    <app-footer class="wrapper footer"></app-footer>
+    <app-footer class="footer"></app-footer>
   `,
 });

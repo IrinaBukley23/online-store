@@ -1,15 +1,95 @@
 .footer {
-    margin: 30px 0;
-    display: flex;
-    justify-content: space-between;
+    display: block;
+    padding: 30px 0;
     background-color: $color-accent-dark;
+    color: #ffffff;
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__rs-logo {
+        width: 200px;
+        @include max-576 {
+            width: 120px;
+        }
+
+        svg {
+            width: 130px;
+
+            @include max-576 {
+                width: 90px;
+            }
+
+            path {
+                transition: 0.5s;
+                fill: #ffffff;
+            }
+        }
+
+        &:hover {
+            svg {
+                path {
+                    fill: #a2ffe0;
+                }
+            }
+        }
+    }
 
     &__links {
+        width: 200px;
         display: flex;
-        flex-direction: column;
+        justify-content: end;
+
+        @include max-576 {
+            width: 120px;
+        }
+
+        &-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
         &-github {
             display: flex;
+            align-items: center;
+            gap: 8px;
+
+            p {
+                transition: 0.5s;
+
+                @include max-576 {
+                    font-size: 1.4rem;
+                }
+            }
+
+            svg {
+                width: 30px;
+
+                @include max-576 {
+                    width: 20px;
+                }
+
+                path {
+                    transition: 0.5s;
+                    fill: #ffffff;
+                }
+            }
+
+            &:hover {
+                p {
+                    color: #a2ffe0;
+                }
+
+                svg {
+                    path {
+                        fill: #a2ffe0;
+                    }
+                }
+            }
         }
     }
 }
