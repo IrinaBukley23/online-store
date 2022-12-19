@@ -16,7 +16,7 @@ export const notFoundPage = new NotFoundPage({
   template: `
       <div class="error">
         <p class="error__text">Page doesn't exist</p>
-        <img style={{display: 'block', width: '250px', height: '250px', objectFit: 'contain', margin: '0 auto'}} src=${img} alt="Error"/>
+        <img class="error__image" src=${img} alt="Error"/>
         <a class="error__link" href="#">Back to main page</a>
       </div>
     `,
