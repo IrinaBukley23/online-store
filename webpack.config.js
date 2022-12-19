@@ -9,7 +9,10 @@ const devServer = (isDev) => !isDev ? {} : {
   devServer: {
     open: true,
     port: 8080,
-    contentBase: path.join(__dirname, 'public'),
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
   },
 };
 
