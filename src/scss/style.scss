@@ -1,0 +1,18 @@
+@import 'abstract/variables';
+@import 'abstract/mixins';
+
+@import 'base/reset';
+@import 'base/fonts';
+@import 'base/text';
+
+@import 'components/buttons';
+
+@import 'layout/basic';
+@import 'layout/header';
+@import '../app/components/footer/footer';
+
+body {
+    min-height: 100vh;
+    background-color: $color-main;
+    color: $color-text;
+}
