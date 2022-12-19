@@ -11,8 +11,8 @@ class AppComponent extends WFMComponent {
 export const appComponent = new AppComponent({
     selector: 'app-root',
     template: `
-    <app-header></app-header>
-    <router-outlet></router-outlet>
-    <app-footer></app-footer>
+    <app-header class="wrapper"></app-header>
+    <router-outlet class="wrapper"></router-outlet>
+    <app-footer class="wrapper footer"></app-footer>
   `,
 });

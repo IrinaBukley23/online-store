@@ -1,0 +1,15 @@
+@import './../../../scss/abstract/variables';
+
+.footer {
+    display: flex;
+    background-color: $color-accent-dark;
+
+    &__links {
+        display: flex;
+        flex-direction: column;
+
+        &-github {
+            display: flex;
+        }
+    }
+}
