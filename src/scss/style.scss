@@ -9,10 +9,17 @@
 
 @import 'layout/basic';
 @import 'layout/header';
-@import '../app/components/footer/footer';
+@import 'layout/footer';
 
 body {
-    min-height: 100vh;
-    background-color: $color-main;
-    color: $color-text;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: $color-main;
+	color: $color-text;
+	text-transform: uppercase;
 }
+@import '../app/components/footer/footer';
+
