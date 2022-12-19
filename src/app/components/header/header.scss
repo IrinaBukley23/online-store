@@ -1,11 +1,9 @@
 nav {
-    width: 1140px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     a {
-        color: #000000;
         text-decoration: none;
         font-size: 2rem;
     }
@@ -18,7 +16,6 @@ nav {
         li {
             margin: 0 15px;
             a {
-                color: #000000;
                 text-decoration: none;
             }
         }

@@ -9,7 +9,7 @@
 
 @import 'layout/basic';
 @import 'layout/header';
-@import 'layout/footer';
+@import '../app/components/footer/footer';
 
 body {
     min-height: 100vh;

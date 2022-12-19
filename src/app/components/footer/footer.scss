@@ -1,7 +1,7 @@
-@import './../../../scss/abstract/variables';
-
 .footer {
+    margin: 30px 0;
     display: flex;
+    justify-content: space-between;
     background-color: $color-accent-dark;
 
     &__links {

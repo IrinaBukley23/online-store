@@ -1,6 +1,5 @@
 import { WFMComponent } from '../../../routes';
 import { ConfigPage } from '../../../types';
-import './footer.scss';
 import githubLogo from '../../../assets/images/github-logo.svg';
 import RSLogo from '../../../assets/images/rs_school.svg';
 
