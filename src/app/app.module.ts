@@ -3,6 +3,7 @@ import { ConfigComp } from '../types';
 import { appComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { header } from './components/header/header';
+import { homePage } from './pages/homePage/homePage';
 import { products } from './components/products/products';
 import { footer } from './components/footer/footer';
 
@@ -14,7 +15,7 @@ class AppModule extends WFMModule {
 }
 
 export const appModule = new AppModule({
-    components: [header, products, footer],
+    components: [header, homePage, products, footer],
     bootstrap: appComponent,
     routes: appRoutes,
 });
