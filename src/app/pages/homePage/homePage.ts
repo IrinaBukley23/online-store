@@ -11,6 +11,6 @@ class HomePage extends WFMComponent {
 export const homePage = new HomePage({
     selector: 'home',
     template: `
-        <products></products>
+        <products class="d-flex"></products>
     `,
 });
