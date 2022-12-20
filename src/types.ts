@@ -21,3 +21,18 @@ export interface Route {
   path: string;
   component: ConfigPage
 }
+
+
+export interface Product {
+  brand: string;
+  category: string;
+  description: string;
+  discountPercentage: number;
+  id: number;
+  images: string[];
+  price: number;
+  raiting: number;
+  stock: number;
+  thumbnail: string;
+  title: string;
+}

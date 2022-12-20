@@ -22,3 +22,9 @@ body {
     text-transform: uppercase;
 }
 @import '../app/components/footer/footer';
+
+#card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
