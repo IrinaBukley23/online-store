@@ -1,20 +1,19 @@
-import { ConfigComp, Route } from '../../types';
+import { ModuleConfig, Route } from '../../types';
 import { router } from '../tools/router';
 import { wfm } from '../tools/utils';
-import { Component } from './components';
+import { Component } from './component';
 
 export class Module {
     bootstrapComponent: Component;
     routes: Route[];
 
-    constructor(config: ConfigComp) {
+    constructor(config: ModuleConfig) {
         this.bootstrapComponent = config.bootstrapComponent;
         this.routes = config.routes;
     }
 
     start(): void {
         this.bootstrapComponent.render();
-        this.bootstrapComponent.initInnerComponents();
         if (this.routes) this.initRoutes();
     }
 
@@ -31,10 +30,10 @@ export class Module {
         }
         const elem = document.querySelector('router-outlet') as HTMLElement;
         elem.innerHTML = `<${route?.component.selector}></${route?.component.selector}>`;
-        route && this.renderComponent(route.component);
+        if (route) this.renderComponent(route.component);
     }
 
     renderComponent(c: Component): void {
-        c.render && c.render();
+        if (c.render) c.render();
     }
 }

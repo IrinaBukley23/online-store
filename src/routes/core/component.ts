@@ -18,10 +18,10 @@ export class Component implements Component {
         if (!this.el) throw new Error(`Component with selector ${this.selector} wasn't found`);
         this.el.innerHTML = this.template;
 
-        this.initInnerComponents();
+        if (this.innerComponents) this.initInnerComponents();
     }
 
     initInnerComponents(): void {
-        if (this.innerComponents) this.innerComponents.forEach((component) => component.render);
+        if (this.innerComponents) this.innerComponents.forEach((component) => component.render());
     }
 }

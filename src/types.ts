@@ -1,4 +1,4 @@
-export interface ConfigComp {
+export interface ModuleConfig {
     bootstrapComponent: Component;
     routes: Route[];
 }

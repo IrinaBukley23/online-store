@@ -1,10 +1,10 @@
 import { WFMModule } from '../routes';
-import { ConfigComp } from '../types';
+import { ModuleConfig } from '../types';
 import { appComponent } from './app.component';
 import { appRoutes } from './app.routes';
 
 class AppModule extends WFMModule {
-    constructor(config: ConfigComp) {
+    constructor(config: ModuleConfig) {
         super(config);
     }
 }
