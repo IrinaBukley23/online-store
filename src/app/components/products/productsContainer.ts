@@ -26,7 +26,7 @@ productsData.products.forEach((product: Product) => {
                     </div>
                     <div class="product__buttons">
                         <button class="button">Add to cart</button>
-                        <button class="button">Details</button>
+                        <a class="button" href="#cart">Details</a>
                     </div>
                 </div>
             </div>
