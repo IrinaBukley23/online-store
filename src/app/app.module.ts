@@ -1,19 +1,15 @@
 import { WFMModule } from '../routes';
-import { ConfigComp } from '../types';
+import { ModuleConfig } from '../types';
 import { appComponent } from './app.component';
 import { appRoutes } from './app.routes';
-import { header } from './components/header/header';
-import { footer } from './components/footer/footer';
 
 class AppModule extends WFMModule {
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor(config: ConfigComp) {
+    constructor(config: ModuleConfig) {
         super(config);
     }
 }
 
 export const appModule = new AppModule({
-    components: [header, footer],
-    bootstrap: appComponent,
+    bootstrapComponent: appComponent,
     routes: appRoutes,
 });

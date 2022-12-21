@@ -1,17 +1,18 @@
 import { WFMComponent } from '../../../routes/index';
-import { ConfigPage } from '../../../types';
+import { ComponentConfig } from '../../../types';
+import './homePage.scss';
+import { productsContainer } from '../../components/products/productsContainer';
 
 class HomePage extends WFMComponent {
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor(config: ConfigPage) {
-    super(config);
-  }
+    constructor(config: ComponentConfig) {
+        super(config);
+    }
 }
 
 export const homePage = new HomePage({
-  selector: 'home',
-  template: `
-        <h1>Home page</h1>
-        <div><h4>App components works!!!</h4></div>
+    selector: 'home',
+    innerComponents: [productsContainer],
+    template: `
+        <products-container class="product__cards"></products-container>
     `,
 });

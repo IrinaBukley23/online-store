@@ -1,18 +1,21 @@
 import { WFMComponent } from '../routes';
-import { ConfigPage } from '../types';
+import { ComponentConfig } from '../types';
+import { header } from './components/header/header';
+import { footer } from './components/footer/footer';
 
-class AppComponent extends WFMComponent {
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor(config: ConfigPage) {
+export class AppComponent extends WFMComponent {
+    constructor(config: ComponentConfig) {
         super(config);
     }
 }
 
 export const appComponent = new AppComponent({
     selector: 'app-root',
+    innerComponents: [header, footer],
     template: `
-    <app-header class="wrapper"></app-header>
-    <router-outlet class="wrapper"></router-outlet>
-    <app-footer class="footer"></app-footer>
-  `,
+        <app-header class="wrapper"></app-header>
+        <router-outlet id="card-container" class="wrapper">
+        </router-outlet>
+        <app-footer class="footer"></app-footer>
+    `,
 });

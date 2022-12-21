@@ -5,8 +5,8 @@ import { singlePage } from './pages/singlePage/singlePage';
 import { cartPage } from './pages/cartPage/cartPage';
 
 export const appRoutes: Route[] = [
-  { path: '', component: homePage },
-  { path: 'single', component: singlePage },
-  { path: 'cart', component: cartPage },
-  { path: '**', component: notFoundPage },
+    { path: '', component: homePage },
+    { path: 'single', component: singlePage },
+    { path: 'cart', component: cartPage },
+    { path: '**', component: notFoundPage },
 ];
