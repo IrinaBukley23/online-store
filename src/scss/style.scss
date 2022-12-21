@@ -9,7 +9,8 @@
 
 @import 'layout/basic';
 @import 'layout/header';
-@import 'layout/footer';
+@import '../app/components/footer/footer';
+@import '../app/components/filter/filter';
 
 body {
     margin-top: 80px;
@@ -22,7 +23,6 @@ body {
     color: $color-text;
     text-transform: uppercase;
 }
-@import '../app/components/footer/footer';
 
 .lds-ripple {
     display: inline-block;

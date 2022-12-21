@@ -1,7 +1,8 @@
 import { WFMComponent } from '../../../routes/index';
 import { ComponentConfig } from '../../../types';
+import { productsContainer } from '../../components/productsContainer/productsContainer';
+import { filter } from '../../components/filter/filter';
 import './homePage.scss';
-import { productsContainer } from '../../components/products/productsContainer';
 
 class HomePage extends WFMComponent {
     constructor(config: ComponentConfig) {
@@ -11,8 +12,9 @@ class HomePage extends WFMComponent {
 
 export const homePage = new HomePage({
     selector: 'home',
-    innerComponents: [productsContainer],
+    innerComponents: [productsContainer, filter],
     template: `
+        <filter class="filter"></filter>
         <products-container class="product__cards"></products-container>
     `,
 });
