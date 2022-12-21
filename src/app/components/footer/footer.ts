@@ -1,14 +1,15 @@
 import { WFMComponent } from '../../../routes';
-import { ConfigPage } from '../../../types';
+import { ComponentConfig } from '../../../types';
 
 class Footer extends WFMComponent {
-    constructor(config: ConfigPage) {
+    constructor(config: ComponentConfig) {
         super(config);
     }
 }
 
 export const footer = new Footer({
     selector: 'app-footer',
+    innerComponents: null,
     template: `
       <div class="wrapper footer__wrapper">
         <a href="https://rs.school/js/" class="footer__rs-logo">

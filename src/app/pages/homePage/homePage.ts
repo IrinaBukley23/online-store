@@ -1,10 +1,10 @@
 import { WFMComponent } from '../../../routes/index';
-import { ConfigPage } from '../../../types';
+import { ComponentConfig } from '../../../types';
 import './homePage.scss';
 import { productsContainer } from '../../components/products/productsContainer';
 
 class HomePage extends WFMComponent {
-    constructor(config: ConfigPage) {
+    constructor(config: ComponentConfig) {
         super(config);
     }
 }
@@ -14,5 +14,5 @@ export const homePage = new HomePage({
     template: `
         <products-container class="product__cards"></products-container>
     `,
-    innerComponents: [productsContainer]
+    innerComponents: [productsContainer],
 });

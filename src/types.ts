@@ -1,38 +1,45 @@
 export interface ConfigComp {
-  bootstrap: any;
-  components: ConfigPage[];
-  routes: Route[];
+    bootstrapComponent: Component;
+    routes: Route[];
 }
 
 export interface Module {
-  bootstrap: any;
-  components: ConfigPage[];
-  routes: Route[];
-  start: () => void
+    bootstrapComponent: ComponentConfig;
+    components: ComponentConfig[];
+    routes: Route[];
+    start: () => void;
 }
 
-export interface ConfigPage {
-  el?: HTMLElement | null;
-  selector: string;
-  template: string;
+export interface Component {
+    el: HTMLElement | null;
+    selector: string;
+    template: string;
+    innerComponents: null | Component[];
+    render: () => void;
+    initInnerComponents: () => void;
+}
+
+export interface ComponentConfig {
+    selector: string;
+    template: string;
+    innerComponents: null | Component[];
 }
 
 export interface Route {
-  path: string;
-  component: ConfigPage;
-  module?: any;
+    path: string;
+    component: Component;
 }
 
 export interface Product {
-  brand: string;
-  category: string;
-  description: string;
-  discountPercentage: number;
-  id: number;
-  images: string[];
-  price: number;
-  rating: number;
-  stock: number;
-  thumbnail: string;
-  title: string;
+    brand: string;
+    category: string;
+    description: string;
+    discountPercentage: number;
+    id: number;
+    images: string[];
+    price: number;
+    rating: number;
+    stock: number;
+    thumbnail: string;
+    title: string;
 }

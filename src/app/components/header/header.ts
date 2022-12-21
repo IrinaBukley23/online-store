@@ -1,20 +1,20 @@
 import { WFMComponent } from '../../../routes';
-import { ConfigPage } from '../../../types';
+import { ComponentConfig } from '../../../types';
 import mainLogo from '../../../../public/logo.png';
 import cart from '../../../../public/cart.png';
 
 import './header.scss';
 
 class Header extends WFMComponent {
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor(config: ConfigPage) {
-    super(config);
-  }
+    constructor(config: ComponentConfig) {
+        super(config);
+    }
 }
 
 export const header = new Header({
-  selector: 'app-header',
-  template: `
+    selector: 'app-header',
+    innerComponents: null,
+    template: `
     <header class="header">
       <div class="wrapper"> 
         <a class="header__logo" href="#">

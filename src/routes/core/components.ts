@@ -1,21 +1,27 @@
-import { ConfigPage } from '../../types';
+import { ComponentConfig } from '../../types';
 
-export class Component {
-  template: string;
+export class Component implements Component {
+    template: string;
+    selector: string;
+    el: HTMLElement | null;
+    innerComponents: null | Component[];
 
-  selector: string;
+    constructor(config: ComponentConfig) {
+        this.template = config.template;
+        this.selector = config.selector;
+        this.el = null;
+        this.innerComponents = config.innerComponents;
+    }
 
-  el: HTMLElement | null;
+    render(): void {
+        this.el = document.querySelector(this.selector);
+        if (!this.el) throw new Error(`Component with selector ${this.selector} wasn't found`);
+        this.el.innerHTML = this.template;
 
-  constructor(config: ConfigPage) {
-    this.template = config.template;
-    this.selector = config.selector;
-    this.el = null;
-  }
+        this.initInnerComponents();
+    }
 
-  render(): void {
-    this.el = document.querySelector(this.selector);
-    if (!this.el) throw new Error(`Component with selector ${this.selector} wasn't found`);
-    this.el.innerHTML = this.template;
-  }
+    initInnerComponents(): void {
+        if (this.innerComponents) this.innerComponents.forEach((component) => component.render);
+    }
 }

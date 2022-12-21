@@ -1,13 +1,12 @@
-
 import { WFMComponent } from '../../../routes';
-import { ConfigPage, Product } from '../../../types';
+import { ComponentConfig, Product } from '../../../types';
 import './productsContainer.scss';
 import { productsData } from '../../../data/productsData';
 
 class ProductsContainer extends WFMComponent {
-  constructor(config: ConfigPage) {
-   super(config);
-  }
+    constructor(config: ComponentConfig) {
+        super(config);
+    }
 }
 
 let cardsTemplate = ``;
@@ -31,10 +30,11 @@ productsData.products.forEach((product: Product) => {
                     </div>
                 </div>
             </div>
-            `
-})
+            `;
+});
 
 export const productsContainer = new ProductsContainer({
-  selector: 'products-container',
-  template: `${cardsTemplate}`,
+    selector: 'products-container',
+    innerComponents: null,
+    template: `${cardsTemplate}`,
 });
