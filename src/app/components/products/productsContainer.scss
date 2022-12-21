@@ -1,0 +1,46 @@
+.product {
+  padding: 30px 10px;
+  height: auto;
+
+  &__cards {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__container {
+    border: 2px solid #000000;
+    border-radius: 20px;
+    height: 100%;
+    padding: 20px 10px;
+  }
+
+  &__image {
+    margin-top: 20px;
+    height: 200px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__description {
+    margin-top: 16px;
+  }
+
+  &__title {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  &__buttons {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-around;
+    .button {
+      border: 2px solid #000000;
+    }
+  }
+}
+

@@ -39,6 +39,11 @@ export class Module {
     const elem = document.querySelector('router-outlet') as HTMLElement;
     elem.innerHTML = `<${route?.component.selector}></${route?.component.selector}>`;
     this.renderComponent(route?.component);
+
+    if (route?.module) {
+      const module = route.module;
+      module.initComponents();
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this

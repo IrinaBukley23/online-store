@@ -19,9 +19,9 @@ export interface ConfigPage {
 
 export interface Route {
   path: string;
-  component: ConfigPage
+  component: ConfigPage;
+  module?: any;
 }
-
 
 export interface Product {
   brand: string;
@@ -31,7 +31,7 @@ export interface Product {
   id: number;
   images: string[];
   price: number;
-  raiting: number;
+  rating: number;
   stock: number;
   thumbnail: string;
   title: string;

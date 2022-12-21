@@ -8,8 +8,7 @@ export class Component {
   el: HTMLElement | null;
 
   constructor(config: ConfigPage) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-sequences
-    this.template = config.template,
+    this.template = config.template;
     this.selector = config.selector;
     this.el = null;
   }
