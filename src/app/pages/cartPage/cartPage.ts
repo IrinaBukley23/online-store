@@ -1,18 +1,18 @@
 import { WFMComponent } from '../../../routes/index';
-import { ConfigPage } from '../../../types';
+import { ComponentConfig } from '../../../types';
 
 import './cartPage.scss';
 
 class CartPage extends WFMComponent {
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor(config: ConfigPage) {
-    super(config);
-  }
+    constructor(config: ComponentConfig) {
+        super(config);
+    }
 }
 
 export const cartPage = new CartPage({
-  selector: 'notFound',
-  template: `
+    selector: 'notFound',
+    innerComponents: null,
+    template: `
       <section class="cart">
         <h2 class="cart__title">Cart page</h2>
         <a class="error__link" href="#">Back to main page</a>

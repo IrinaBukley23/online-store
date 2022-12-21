@@ -1,13 +1,12 @@
-export interface ModuleConfig {
-    bootstrapComponent: Component;
-    routes: Route[];
-}
-
 export interface Module {
     bootstrapComponent: ComponentConfig;
     components: ComponentConfig[];
     routes: Route[];
     start: () => void;
+}
+export interface ModuleConfig {
+    bootstrapComponent: Component;
+    routes: Route[];
 }
 
 export interface Component {
