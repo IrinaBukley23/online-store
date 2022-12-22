@@ -1,5 +1,7 @@
 import { WFMComponent } from '../../../routes';
 import { ComponentConfig } from '../../../types';
+import { categoryFilter } from './categoryFilter/categoryFilter'
+import { brandFilter } from './brandFilter/brandFilter';
 
 class Filter extends WFMComponent {
     constructor(config: ComponentConfig) {
@@ -9,8 +11,9 @@ class Filter extends WFMComponent {
 
 export const filter = new Filter({
     selector: 'filter',
-    innerComponents: null,
+    innerComponents: [categoryFilter, brandFilter],
     template: `
-      filter
+      <category-filter></category-filter>
+      <brand-filter></brand-filter>
     `,
 });

@@ -29,7 +29,7 @@ export class Module {
             route = this.routes.find((r: Route) => r.path === '**');
         }
         const elem = document.querySelector('router-outlet') as HTMLElement;
-        elem.innerHTML = `<${route?.component.selector} class="${route?.component.selector}"></${route?.component.selector}>`;
+        elem.innerHTML = `<${route?.component.selector} class="${route?.component.selector} wrapper"></${route?.component.selector}>`;
         if (route) this.renderComponent(route.component);
     }
 
