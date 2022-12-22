@@ -4,15 +4,15 @@ export interface Module {
     start: () => void;
 }
 export interface ModuleConfig {
-    bootstrapComponent: Component;
+    bootstrapComponent: ComponentInterface;
     routes: Route[];
 }
 
-export interface Component {
+export interface ComponentInterface {
     el: HTMLElement | null;
     selector: string;
     template: string;
-    innerComponents: null | Component[];
+    innerComponents: null | ComponentInterface[];
     render: () => void;
     initInnerComponents: () => void;
     events?: () => void;
@@ -21,12 +21,12 @@ export interface Component {
 export interface ComponentConfig {
     selector: string;
     template: string;
-    innerComponents: null | Component[];
+    innerComponents: null | ComponentInterface[];
 }
 
 export interface Route {
     path: string;
-    component: Component;
+    component: ComponentInterface;
 }
 
 export interface Product {

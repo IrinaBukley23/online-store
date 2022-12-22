@@ -1,10 +1,10 @@
-import { ComponentConfig, EventsObject } from '../../types';
+import { ComponentConfig, ComponentInterface, EventsObject } from '../../types';
 
-export class Component implements Component {
+export class Component implements ComponentInterface {
     template: string;
     selector: string;
     el: HTMLElement | null;
-    innerComponents: Component[] | null;
+    innerComponents: ComponentInterface[] | null;
     events?: () => { [key: string]: string };
 
     constructor(config: ComponentConfig) {
