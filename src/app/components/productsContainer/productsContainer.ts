@@ -13,7 +13,7 @@ let cardsTemplate = ``;
 
 productsData.products.forEach((product: Product) => {
     cardsTemplate += `
-            <div class="product col-lg-3 col-md-4 col-6">
+            <div data-category="${product.category}" data-brand="${product.brand}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">
                     <div class="product__title">
                      ${product.title}

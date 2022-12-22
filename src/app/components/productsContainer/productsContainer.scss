@@ -6,6 +6,7 @@
         display: flex;
         flex-wrap: wrap;
         flex: 1 1 80%;
+        align-content: start;
     }
 
     &__container {

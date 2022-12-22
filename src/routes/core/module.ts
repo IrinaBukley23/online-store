@@ -3,7 +3,7 @@ import { router } from '../tools/router';
 import { wfm } from '../tools/utils';
 import { Component } from './component';
 
-export class Module {
+export class Module implements Module {
     bootstrapComponent: Component;
     routes: Route[];
 

@@ -1,3 +1,5 @@
-export function bootstrap(module: any): void {
-  module.start();
+import { Module } from './../../types';
+
+export function bootstrap(module: Module): void {
+    module.start();
 }

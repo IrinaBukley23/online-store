@@ -1,6 +1,5 @@
 export interface Module {
     bootstrapComponent: ComponentConfig;
-    components: ComponentConfig[];
     routes: Route[];
     start: () => void;
 }
@@ -16,6 +15,7 @@ export interface Component {
     innerComponents: null | Component[];
     render: () => void;
     initInnerComponents: () => void;
+    events?: () => void;
 }
 
 export interface ComponentConfig {
@@ -41,4 +41,8 @@ export interface Product {
     stock: number;
     thumbnail: string;
     title: string;
+}
+
+export interface EventsObject {
+    [key: string]: string;
 }
