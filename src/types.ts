@@ -1,4 +1,4 @@
-export interface Module {
+export interface ModuleInterface {
     bootstrapComponent: ComponentConfig;
     routes: Route[];
     start: () => void;

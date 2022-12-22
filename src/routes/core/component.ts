@@ -5,7 +5,7 @@ export class Component implements ComponentInterface {
     selector: string;
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
-    events?: () => { [key: string]: string };
+    // type events = () => { [key: string]: string };
 
     constructor(config: ComponentConfig) {
         this.template = config.template;
@@ -33,14 +33,16 @@ export class Component implements ComponentInterface {
 
         const events: EventsObject = this.events();
 
-        Object.keys(events).forEach((key): void => {
+        Object.keys(events).forEach((key: string): void => {
             const listenerTypeAndSelector = key.split(' ');
             const [eventType, targetSelector] = listenerTypeAndSelector;
 
             const targetElements = this.el?.querySelectorAll(targetSelector);
 
             targetElements?.forEach((elem) => {
-                elem?.addEventListener(eventType, this[events[key]].bind(this));
+                const eventHandlerName = events[key];
+                const eventHandler = this[eventHandlerName].bind(this);
+                elem?.addEventListener(eventType, eventHandler);
             });
         });
     }
