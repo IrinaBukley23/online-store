@@ -1,32 +1,34 @@
-export interface Module {
+export interface ModuleInterface {
     bootstrapComponent: ComponentConfig;
-    components: ComponentConfig[];
+    components?: ComponentConfig[];
     routes: Route[];
     start: () => void;
 }
 export interface ModuleConfig {
-    bootstrapComponent: Component;
+    bootstrapComponent: ComponentInterface ;
     routes: Route[];
 }
 
-export interface Component {
+export interface ComponentInterface  {
     el: HTMLElement | null;
     selector: string;
     template: string;
-    innerComponents: null | Component[];
+    innerComponents: null | ComponentInterface [];
     render: () => void;
     initInnerComponents: () => void;
+    events?: () => { [key: string]: string };
 }
 
 export interface ComponentConfig {
     selector: string;
     template: string;
-    innerComponents: null | Component[];
+    innerComponents: null | ComponentInterface [];
+    render?: () => void;
 }
 
 export interface Route {
     path: string;
-    component: Component;
+    component: ComponentInterface ;
 }
 
 export interface Product {
@@ -41,4 +43,8 @@ export interface Product {
     stock: number;
     thumbnail: string;
     title: string;
+}
+
+export interface EventsObject {
+    [key: string]: string;
 }

@@ -8,7 +8,7 @@ const wfm = {
       }, ms);
     });
   },
-  isUndefined(d: Route): boolean {
+  isUndefined(d: Route | any): boolean {
     return typeof d === 'undefined';
   },
 
