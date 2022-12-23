@@ -8,14 +8,11 @@ class ProductsContainer extends WFMComponent {
         super(config);
     }
 
-    events() {
-        return {
-            'click .btn__details': 'getId'
-        }
-    }
+    clickSelector: string = '.btn__details';
+    clickAction: string = 'getId';
 
-    getId({target}: MouseEvent) {
-        console.log(target);
+    getId = (event: MouseEvent): void => {
+        console.log(event);
         // if(!target) return;
         // target.setAttribute('href', `#single/${target.id}`)
     }
@@ -48,5 +45,5 @@ productsData.products.forEach((product: Product) => {
 export const productsContainer = new ProductsContainer({
     selector: 'products-container',
     innerComponents: null,
-    template: `${cardsTemplate}`,
+    template: `${cardsTemplate}`
 });
