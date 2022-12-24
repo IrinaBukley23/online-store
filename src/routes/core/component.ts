@@ -6,7 +6,7 @@ export class Component implements ComponentInterface {
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
     clickSelector: string | undefined;
-    clickAction!: string;
+    handleClick?: (e: Event) => void;
 
     constructor(config: ComponentConfig) {
         this.template = config.template;
@@ -31,13 +31,16 @@ export class Component implements ComponentInterface {
 
     _initEvents(): void {
         const clickSelector = this.clickSelector;
+        const eventClick: string = "click"
+        const listener = this.handleClick?.bind(this);
         if (!clickSelector) return;
+        if (!listener) return;
 
-        const clickAction = this.clickAction;
         const elems = this.el?.querySelectorAll(clickSelector);
-        console.log(clickAction)
         elems?.forEach((elem) => {
-            elem?.addEventListener('click', clickAction);
+            if(elem) {
+                elem.addEventListener(eventClick, listener);
+            }
         });
     }
 }

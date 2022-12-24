@@ -9,9 +9,9 @@ class SinglePage extends WFMComponent {
     }
 }
 
-let product = productsData.products[6]
+let product = productsData.products[5]
 
-let cardDescr = `<section class="cart">
+const cardDescr = `<section class="cart">
     <div>"хлебные крошки"</div>
     <div class="cart__wrapper">
       <h2 class="cart__title">${product.title}</h2>

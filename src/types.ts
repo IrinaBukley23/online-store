@@ -18,7 +18,7 @@ export interface ComponentInterface  {
     initInnerComponents: () => void;
     events?: () => { [key: string]: string };
     clickSelector?: string;
-    clickAction?: string;
+    handleClick?: (e:Event) => void;
 }
 
 export interface ComponentConfig {
