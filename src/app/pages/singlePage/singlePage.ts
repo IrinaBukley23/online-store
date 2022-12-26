@@ -15,12 +15,22 @@ class SinglePage extends WFMComponent {
   let product: Product = productsData.products[prodId];
 //});
 
-const cardDescr = `<section class="cart">
-  <div>"хлебные крошки"</div>
-  <div class="cart__wrapper">
-    <h2 class="cart__title">${product.title}</h2>
-    <div class="cart__info">
-      <div class="cart__info-images">
+const cardDescr = `<section class="single">
+  <div class="single__crumbs">
+    <ul class="crumbs__list">
+      <li class="crumbs__list-item">Store</li>
+      <li class="crumbs__list-item"> >> </li>
+      <li class="crumbs__list-item">${product.category}</li>
+      <li class="crumbs__list-item"> >> </li>
+      <li class="crumbs__list-item">${product.brand}</li>
+      <li class="crumbs__list-item"> >> </li>
+      <li class="crumbs__list-item">${product.title}</li>
+    </ul>
+  </div>
+  <div class="single__wrapper">
+    <h2 class="single__title">${product.title}</h2>
+    <div class="single__info">
+      <div class="single__info-images">
         <img src=${product.images[0]} alt=${product.title}>
         <ul class="images__list">
             <li class="images__list-item">
@@ -34,7 +44,7 @@ const cardDescr = `<section class="cart">
             </li>
         </ul>
       </div>
-      <div class="cart__info-descr">
+      <div class="single__info-descr">
         <ul class="descr__list">
           <li class="descr__list-item">
             <p class="descr__list-item_top">Description:</p>
@@ -62,10 +72,10 @@ const cardDescr = `<section class="cart">
           </li>
         </ul>
       </div>
-      <div class="cart__info-price">
-        <div class="cart__info-price_sum">€${product.price}</div>
-        <button class="cart__info-price_btn">add to cart</button>
-        <button class="cart__info-price_btn">buy now</button>
+      <div class="single__info-price">
+        <div class="single__info-price_sum">€${product.price}</div>
+        <button class="single__info-price_btn">add to single</button>
+        <button class="single__info-price_btn">buy now</button>
       </div>
     </div>
     </div>
