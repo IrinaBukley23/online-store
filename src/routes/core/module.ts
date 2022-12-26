@@ -1,4 +1,4 @@
-import { ComponentInterface, ModuleConfig, ModuleInterface, Route } from '../../types';
+import { ModuleConfig, Route, ComponentInterface } from '../../types';
 import { router } from '../tools/router';
 import { wfm } from '../tools/utils';
 

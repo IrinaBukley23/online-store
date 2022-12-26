@@ -10,12 +10,9 @@ class CartPage extends WFMComponent {
 }
 
 export const cartPage = new CartPage({
-    selector: 'notFound',
+    selector: 'cart',
     innerComponents: null,
     template: `
-      <section class="cart">
-        <h2 class="cart__title">Cart page</h2>
-        <a class="error__link" href="#">Back to main page</a>
-      </section>
+      <h1>Cart Page</h1>
     `,
 });

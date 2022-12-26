@@ -8,25 +8,28 @@ export interface ModuleConfig {
     routes: Route[];
 }
 
-export interface ComponentInterface {
+export interface ComponentInterface  {
     el: HTMLElement | null;
     selector: string;
     template: string;
     innerComponents: null | ComponentInterface[];
     render: () => void;
     initInnerComponents: () => void;
-    events?: () => void;
+    events?: () => { [key: string]: string };
+    clickSelector?: string;
+    handleClick?: (e:Event) => void;
 }
 
 export interface ComponentConfig {
     selector: string;
     template: string;
-    innerComponents: null | ComponentInterface[];
+    innerComponents: null | ComponentInterface [];
+    render?: () => void;
 }
 
 export interface Route {
     path: string;
-    component: ComponentInterface;
+    component: ComponentInterface ;
 }
 
 export interface Product {
