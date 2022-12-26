@@ -7,6 +7,7 @@ class HomePage extends WFMComponent {
     constructor(config: ComponentConfig) {
         super(config);
     }
+
 }
 
 export const homePage = new HomePage({

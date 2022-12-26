@@ -1,0 +1,81 @@
+@import '../../../scss/abstract/variables';
+
+.cart {
+    text-align: center;
+    &__wrapper{
+    width: 70%;
+    margin: 0 auto 80px;
+    border: 2px solid #000000;
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px $color-accent-dark;
+    }
+    &__title {
+        font-size: 3.6rem;
+        font-weight: 500;
+        margin-bottom: 20px;
+        padding: 8px;
+        border-bottom: 4px solid $color-accent-dark;
+    }
+    &__info {
+        padding: 20px;
+        display: flex;
+        &-images {
+            width: 40%;
+            margin: 0 15px;
+            .images__list {
+                display: flex;
+                &-item {
+                    margin: 10px 10px 0;
+                }
+            }
+        }
+        &-descr {
+            width: 40%;
+            .descr__list {
+                &-item {
+                    margin-bottom: 10px;
+                    border: 2px solid $color-accent-dark;
+                    // padding: 15px 10px;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    &_top {
+                        background: $color-accent-dark;
+                        color: $color-main;
+                        padding: 5px;
+                    }
+                    &_bottom {
+                        background: $color-main;
+                        color: $color-accent-dark;
+                        padding: 5px;
+                    }
+                }
+            }
+        }
+        &-price {
+            width: 20%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            &_sum {
+                margin: 10px 0;
+                font-size: 4rem;
+                font-weight: 700;
+            }
+            &_btn {
+                display: block;
+                margin: 10px 0;
+                padding: 15px 45px;
+                border: 2px solid #000000;
+                border-radius: 10px;
+                background: $color-accent-dark;
+                color: $color-main;
+                text-transform: uppercase;
+                transition: all 0.8s ease-in-out;
+                &:hover {
+                    box-shadow: 5px 5px 5px black;
+                }
+            }
+        }
+    }
+}

@@ -1,10 +1,9 @@
-import { ModuleConfig, Route } from '../../types';
+import { ModuleConfig, Route, ComponentInterface } from '../../types';
 import { router } from '../tools/router';
 import { wfm } from '../tools/utils';
-import { Component } from './component';
 
-export class Module {
-    bootstrapComponent: Component;
+export class Module implements Module {
+    bootstrapComponent: ComponentInterface;
     routes: Route[];
 
     constructor(config: ModuleConfig) {
@@ -33,7 +32,7 @@ export class Module {
         if (route) this.renderComponent(route.component);
     }
 
-    renderComponent(c: Component): void {
+    renderComponent(c: ComponentInterface): void {
         if (c.render) c.render();
     }
 }
