@@ -1,7 +1,15 @@
 @import '../../../scss/abstract/variables';
 
-.cart {
+.single {
     text-align: center;
+    &__crumbs {
+        width: 70%;
+        margin: 10px auto 30px;
+    }
+    .crumbs__list {
+        display: flex;
+        justify-content: space-around;
+    }
     &__wrapper{
     width: 70%;
     margin: 0 auto 80px;
