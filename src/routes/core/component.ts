@@ -1,4 +1,4 @@
-import { ComponentConfig, ComponentInterface, EventsObject } from '../../types';
+import { ComponentConfig, ComponentInterface } from '../../types';
 
 export class Component implements ComponentInterface {
     template: string;
@@ -6,7 +6,8 @@ export class Component implements ComponentInterface {
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
     clickSelector: string | undefined;
-    handleClick?: (e: Event) => void;
+    public handleClick?(e: Event): void;
+    public handleInputChange?(e: Event): void;
 
     constructor(config: ComponentConfig) {
         this.template = config.template;
@@ -30,15 +31,25 @@ export class Component implements ComponentInterface {
     }
 
     _initEvents(): void {
+        // Add input change handler
+        const componentElem = this.el;
+        if (this.handleInputChange) {
+            const inputChangeHandler = this.handleInputChange.bind(this);
+
+            console.log('change handler');
+
+            componentElem?.addEventListener('change', inputChangeHandler);
+        }
+
         const clickSelector = this.clickSelector;
-        const eventClick = "click"
+        const eventClick = 'click';
         const listener = this.handleClick?.bind(this);
         if (!clickSelector) return;
         if (!listener) return;
 
         const elems = this.el?.querySelectorAll(clickSelector);
         elems?.forEach((elem) => {
-            if(elem) {
+            if (elem) {
                 elem.addEventListener(eventClick, listener);
             }
         });

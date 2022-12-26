@@ -18,7 +18,7 @@ productsData.products.forEach((product: Product) => {
 productCategories.forEach((category, index) => {
     categoryFilterTemplate += `
         <div class="form-check">
-            <input class="category-checkbox form-check-input" type="checkbox" value="${category}" id="category-checkbox-${index}">
+            <input data-brand="${}" class="category-checkbox form-check-input" type="checkbox" value="${category}" id="category-checkbox-${index}">
             <label class="form-check-label" for="category-checkbox-${index}">
                 ${category}
             </label>
