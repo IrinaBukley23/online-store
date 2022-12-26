@@ -16,15 +16,15 @@ class HomePage extends WFMComponent {
         };
     }
 
-    handleCategoryCheckbox({ target }: Event) {
-        const targetEl = target as Element;
+    handleCategoryCheckbox() {
+        // const targetEl = target as Element;
         this.showCheckedCategories();
     }
 
     handleBrandCheckbox({ target }: Event) {
-        const targetEl = target as Element;
+        // const targetEl = target as Element;
 
-        const labelEl = targetEl.nextElementSibling;
+        // const labelEl = targetEl.nextElementSibling;
     }
 
     showCheckedCategories() {

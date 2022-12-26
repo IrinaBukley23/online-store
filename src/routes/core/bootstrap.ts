@@ -1,5 +1,5 @@
-import { Module } from './../../types';
+import { ModuleInterface } from './../../types';
 
-export function bootstrap(module: Module): void {
+export function bootstrap(module: ModuleInterface): void {
     module.start();
 }
