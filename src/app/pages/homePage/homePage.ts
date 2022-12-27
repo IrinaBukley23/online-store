@@ -19,28 +19,26 @@ class HomePage extends WFMComponent {
         if (target.classList.contains('category-checkbox')) {
             console.log('target - category');
 
-            this.handleCategoryCheckbox(event);
+            this.handleCategoryCheckbox();
             this.changeActiveBrandCheckboxes();
         }
 
         if (target.classList.contains('brand-checkbox')) {
             console.log('target - brand');
-            this.handleBrandCheckbox(event);
+            this.handleBrandCheckbox();
             this.changeActiveCategoryCheckboxes();
         }
     }
 
-    private handleCategoryCheckbox(event: Event): void {
-        const target = event.target as HTMLInputElement;
-        this.showChecked();
+    private handleCategoryCheckbox(): void {
+        this.showCheckedCards();
     }
 
-    private handleBrandCheckbox(event: Event): void {
-        const target = event.target as HTMLInputElement;
-        this.showChecked();
+    private handleBrandCheckbox(): void {
+        this.showCheckedCards();
     }
 
-    private showChecked(): void {
+    private showCheckedCards(): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
         const checkedCategoryInputs = document.querySelectorAll('.category-filter .form-check-input:checked');
         const checkedBrandInputs = document.querySelectorAll('.brand-filter .form-check-input:checked');
@@ -65,7 +63,7 @@ class HomePage extends WFMComponent {
             card.classList.remove('d-none');
 
             if (chosenCategories.length && chosenBrands.length) {
-                if (!chosenCategories.includes(card.dataset.category) && !chosenBrands.includes(card.dataset.brand)) {
+                if (!chosenCategories.includes(card.dataset.category) || !chosenBrands.includes(card.dataset.brand)) {
                     card.classList.add('d-none');
                 }
             } else if (chosenCategories.length) {
