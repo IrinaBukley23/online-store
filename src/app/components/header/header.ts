@@ -3,8 +3,6 @@ import { ComponentConfig } from '../../../types';
 import mainLogo from '../../../../public/logo.png';
 import cart from '../../../../public/cart.png';
 
-import './header.scss';
-
 class Header extends WFMComponent {
     constructor(config: ComponentConfig) {
         super(config);
@@ -15,7 +13,6 @@ export const header = new Header({
     selector: 'app-header',
     innerComponents: null,
     template: `
-    <header class="header">
       <div class="wrapper"> 
         <a class="header__logo" href="#">
           <img src="${mainLogo}" alt="logo">
@@ -28,6 +25,5 @@ export const header = new Header({
           <span class="header__count">0</span>
         </a>
       </div>
-    <header>
   `,
 });

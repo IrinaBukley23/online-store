@@ -13,8 +13,8 @@ export const appComponent = new AppComponent({
     selector: 'app-root',
     innerComponents: [header, footer],
     template: `
-        <app-header class="wrapper"></app-header>
-        <router-outlet id="card-container" class="wrapper">
+        <app-header class="header"></app-header>
+        <router-outlet>
         </router-outlet>
         <app-footer class="footer"></app-footer>
     `,

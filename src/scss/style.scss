@@ -8,8 +8,12 @@
 @import 'components/buttons';
 
 @import 'layout/basic';
-@import 'layout/header';
-@import 'layout/footer';
+@import '../app/components/footer/footer';
+@import '../app/components/header/header';
+@import '../app/components/filter/filter';
+@import '../app/components/filter/categoryFilter/categoryFilter';
+@import '../app/components/filter/brandFilter/brandFilter';
+@import '../app/components/productsContainer/productsContainer';
 
 body {
     margin-top: 80px;
@@ -22,7 +26,6 @@ body {
     color: $color-text;
     text-transform: uppercase;
 }
-@import '../app/components/footer/footer';
 
 .lds-ripple {
     display: inline-block;

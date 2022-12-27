@@ -1,6 +1,5 @@
 import { WFMComponent } from '../../../routes';
 import { ComponentConfig, Product } from '../../../types';
-import './productsContainer.scss';
 import { productsData } from '../../../data/productsData';
 import { appRoutes } from '../../app.routes';
 
@@ -9,11 +8,11 @@ class ProductsContainer extends WFMComponent {
         super(config);
     }
 
-    clickSelector: string = '.btn__details';
+    clickSelector = '.btn__details';
     handleClick = (event: Event): void => {
-        const target = event.target
-        if(!target) return;
-        let id = (target as HTMLElement).getAttribute('id');
+        const target = event.target;
+        if (!target) return;
+        const id = (target as HTMLElement).getAttribute('id');
         (target as HTMLElement).setAttribute('href', `#single/${id}`);
         document.getElementById('card-container')?.setAttribute('data-id', `${id}`)
         appRoutes[1].path = `single/${id}`;
@@ -25,7 +24,7 @@ let cardsTemplate = ``;
 
 productsData.products.forEach((product: Product) => {
     cardsTemplate += `
-            <div class="product col-lg-3 col-md-4 col-6">
+            <div data-category="${product.category}" data-brand="${product.brand}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">
                     <div class="product__title">
                      ${product.title}
@@ -48,5 +47,5 @@ productsData.products.forEach((product: Product) => {
 export const productsContainer = new ProductsContainer({
     selector: 'products-container',
     innerComponents: null,
-    template: `${cardsTemplate}`
+    template: `${cardsTemplate}`,
 });

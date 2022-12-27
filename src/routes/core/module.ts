@@ -1,8 +1,8 @@
-import { ModuleConfig, Route, ComponentInterface } from '../../types';
+import { ModuleConfig, Route, ComponentInterface, ModuleInterface } from '../../types';
 import { router } from '../tools/router';
 import { wfm } from '../tools/utils';
 
-export class Module implements Module {
+export class Module implements ModuleInterface {
     bootstrapComponent: ComponentInterface;
     routes: Route[];
 
@@ -28,7 +28,7 @@ export class Module implements Module {
             route = this.routes.find((r: Route) => r.path === '**');
         }
         const elem = document.querySelector('router-outlet') as HTMLElement;
-        elem.innerHTML = `<${route?.component.selector}></${route?.component.selector}>`;
+        elem.innerHTML = `<${route?.component.selector} class="${route?.component.selector} wrapper"></${route?.component.selector}>`;
         if (route) this.renderComponent(route.component);
     }
 

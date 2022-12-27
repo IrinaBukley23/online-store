@@ -1,11 +1,10 @@
 export interface ModuleInterface {
     bootstrapComponent: ComponentConfig;
-    components?: ComponentConfig[];
     routes: Route[];
     start: () => void;
 }
 export interface ModuleConfig {
-    bootstrapComponent: ComponentInterface ;
+    bootstrapComponent: ComponentInterface;
     routes: Route[];
 }
 
@@ -13,7 +12,7 @@ export interface ComponentInterface  {
     el: HTMLElement | null;
     selector: string;
     template: string;
-    innerComponents: null | ComponentInterface [];
+    innerComponents: null | ComponentInterface[];
     render: () => void;
     initInnerComponents: () => void;
     events?: () => { [key: string]: string };
