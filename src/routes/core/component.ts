@@ -6,6 +6,7 @@ export class Component implements ComponentInterface {
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
     clickSelector: string | undefined;
+    public init?(): void;
     public handleClick?(e: Event): void;
     public handleInputChange?(e: Event): void;
 
@@ -23,6 +24,7 @@ export class Component implements ComponentInterface {
 
         if (this.innerComponents) this.initInnerComponents();
 
+        if (this.init) this.init();
         this._initEvents();
     }
 
