@@ -35,9 +35,6 @@ export class Component implements ComponentInterface {
         const componentElem = this.el;
         if (this.handleInputChange) {
             const inputChangeHandler = this.handleInputChange.bind(this);
-
-            console.log('change handler');
-
             componentElem?.addEventListener('change', inputChangeHandler);
         }
 
