@@ -12,15 +12,15 @@ class SinglePage extends WFMComponent {
     handleClick = (event: Event): void => {
       const target = event.target;
       if(!(target as HTMLElement).classList.contains('images__list-item')) return;
-
-      this.el?.querySelectorAll('.images__list-item').forEach((imageItem) => {
-        imageItem.classList.remove('active');
-        if((target as HTMLElement).classList.contains('active')) {
-          document.querySelector('.images__large')?.innerHTML = `<img src=${imageItem} alt="photo">`;
-        }
-      });
+      console.log()
+      this.el?.querySelectorAll('.images__list-item').forEach((imageItem) => imageItem.classList.remove('active'));
       if (!target) return; 
       (target as HTMLElement).classList.add('active');
+      if((target as HTMLElement).classList.contains('active')) {
+        let elem = document.querySelector('.images__large');
+        let currentImgSrc = ((target as HTMLElement).childNodes[1] as HTMLElement).getAttribute('src')
+        if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
+      }
     }
 }
 
