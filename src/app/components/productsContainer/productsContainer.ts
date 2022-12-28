@@ -47,5 +47,8 @@ productsData.products.forEach((product: Product) => {
 export const productsContainer = new ProductsContainer({
     selector: 'products-container',
     innerComponents: null,
-    template: `${cardsTemplate}`,
+    getTemplate() {
+        return `
+        ${cardsTemplate}
+      `}
 });

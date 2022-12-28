@@ -12,8 +12,9 @@ class Filter extends WFMComponent {
 export const filter = new Filter({
     selector: 'filter',
     innerComponents: [categoryFilter, brandFilter],
-    template: `
-      <category-filter class="filter__block category-filter"></category-filter>
-      <brand-filter class="filter__block brand-filter"></brand-filter>
-    `,
+    getTemplate() {
+        return `
+        <category-filter class="filter__block category-filter"></category-filter>
+        <brand-filter class="filter__block brand-filter"></brand-filter>
+      `}
 });

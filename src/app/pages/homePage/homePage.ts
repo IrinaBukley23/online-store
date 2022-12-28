@@ -171,8 +171,9 @@ class HomePage extends WFMComponent {
 export const homePage = new HomePage({
     selector: 'home',
     innerComponents: [productsContainer, filter],
-    template: `
+    getTemplate() {
+        return `
         <filter class="filter"></filter>
         <products-container class="product__cards"></products-container>
-    `,
+    `}
 });

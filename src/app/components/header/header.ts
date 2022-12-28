@@ -12,18 +12,19 @@ class Header extends WFMComponent {
 export const header = new Header({
     selector: 'app-header',
     innerComponents: null,
-    template: `
+    getTemplate() {
+      return `
       <div class="wrapper"> 
-        <a class="header__logo" href="#">
-          <img src="${mainLogo}" alt="logo">
-        </a>
-        <div class="header__sum">
-          <p>Cart total: € <span>0.00</span></p> 
-        </div>
-        <a class="header__cart" href="#cart">
-          <img src="${cart}" alt="cart">
-          <span class="header__count">0</span>
-        </a>
+      <a class="header__logo" href="#">
+        <img src="${mainLogo}" alt="logo">
+      </a>
+      <div class="header__sum">
+        <p>Cart total: € <span>0.00</span></p> 
       </div>
-  `,
+      <a class="header__cart" href="#cart">
+        <img src="${cart}" alt="cart">
+        <span class="header__count">0</span>
+      </a>
+    </div>
+    `}
 });
