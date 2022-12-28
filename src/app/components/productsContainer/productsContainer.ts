@@ -14,9 +14,7 @@ class ProductsContainer extends WFMComponent {
         if (!target) return;
         const id = (target as HTMLElement).getAttribute('id');
         (target as HTMLElement).setAttribute('href', `#single/${id}`);
-        document.getElementById('card-container')?.setAttribute('data-id', `${id}`)
         appRoutes[1].path = `single/${id}`;
-        if(id) localStorage.setItem('prodId', id);
     }
 }
 

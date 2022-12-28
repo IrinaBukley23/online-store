@@ -17,9 +17,11 @@ export class Component implements ComponentInterface {
     }
 
     render(): void {
+        const [_, id] = window.location.hash.split('/');
+        const template = this.getTemplate(id ? { id } : {});
         this.el = document.querySelector(this.selector);
         if (!this.el) throw new Error(`Component with selector ${this.selector} wasn't found`);
-        this.el.innerHTML = this.getTemplate();
+        this.el.innerHTML = template;
 
         if (this.innerComponents) this.initInnerComponents();
 
@@ -38,8 +40,9 @@ export class Component implements ComponentInterface {
             componentElem?.addEventListener('change', inputChangeHandler);
         }
 
+        // Add click handler
         const clickSelector = this.clickSelector;
-        const eventClick = 'click';
+        const eventClick: string = 'click';
         const listener = this.handleClick?.bind(this);
         if (!clickSelector) return;
         if (!listener) return;

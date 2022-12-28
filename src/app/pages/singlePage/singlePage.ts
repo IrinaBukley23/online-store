@@ -14,8 +14,8 @@ export const singlePage = new SinglePage({
   innerComponents: null,
   getTemplate: (params?: { [id: string]: string }) => {
     if (!params?.id) return "";
-  
-    const [product] = productsData.products.filter(product => product.id === Number(params.id));
+
+    const [product] = productsData.products.filter((product: Product) => product.id === Number(params.id));
     return `<section class="single">
     <div class="single__crumbs">
       <ul class="crumbs__list">
@@ -80,6 +80,6 @@ export const singlePage = new SinglePage({
         </div>
       </div>
       </div>
-    </section>`;
+    </section>`
   }
-})
+});
