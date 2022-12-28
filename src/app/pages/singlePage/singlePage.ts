@@ -7,6 +7,21 @@ class SinglePage extends WFMComponent {
   constructor(config: ComponentConfig) {
       super(config);
   }
+
+  clickSelector = '.images__list-item';
+    handleClick = (event: Event): void => {
+      const target = event.target;
+      if(!(target as HTMLElement).classList.contains('images__list-item')) return;
+
+      this.el?.querySelectorAll('.images__list-item').forEach((imageItem) => {
+        imageItem.classList.remove('active');
+        if((target as HTMLElement).classList.contains('active')) {
+          document.querySelector('.images__large')?.innerHTML = `<img src=${imageItem} alt="photo">`;
+        }
+      });
+      if (!target) return; 
+      (target as HTMLElement).classList.add('active');
+    }
 }
 
 export const singlePage = new SinglePage({
@@ -16,6 +31,15 @@ export const singlePage = new SinglePage({
     if (!params?.id) return "";
 
     const [product] = productsData.products.filter((product: Product) => product.id === Number(params.id));
+    let imagesCards = '';
+    let largeImg = `<img src=${product.images[0]} alt=${product.title}>`;
+
+    product.images.forEach(img => {
+      imagesCards += `<li class="images__list-item">
+        <img src=${img} alt='photo'>
+      </li>`;
+    })
+
     return `<section class="single">
     <div class="single__crumbs">
       <ul class="crumbs__list">
@@ -32,17 +56,11 @@ export const singlePage = new SinglePage({
       <h2 class="single__title">${product.title}</h2>
       <div class="single__info">
         <div class="single__info-images">
-          <img src=${product.images[0]} alt=${product.title}>
+          <div class="images__large">
+            ${largeImg}
+          </div>
           <ul class="images__list">
-              <li class="images__list-item">
-                  <img src=${product.images[0]} alt=${product.title}>
-              </li>
-              <li class="images__list-item">
-                  <img src=${product.images[1]} alt=${product.title}>
-              </li>
-              <li class="images__list-item">
-                  <img src=${product.images[2]} alt=${product.title}>
-              </li>
+              ${imagesCards}
           </ul>
         </div>
         <div class="single__info-descr">
