@@ -11,7 +11,6 @@ export interface ModuleConfig {
 export interface ComponentInterface  {
     el: HTMLElement | null;
     selector: string;
-    template: string;
     innerComponents: null | ComponentInterface[];
     render: () => void;
     initInnerComponents: () => void;
@@ -22,7 +21,7 @@ export interface ComponentInterface  {
 
 export interface ComponentConfig {
     selector: string;
-    template: string;
+    getTemplate: (params?: {[key: string]: string}) => string;
     innerComponents: null | ComponentInterface [];
     render?: () => void;
 }
