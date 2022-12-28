@@ -7,8 +7,8 @@ class DualSlider extends WFMComponent {
         super(config);
     }
 
-    init() {
-        function controlFromInput(fromSlider, fromInput, toInput, controlSlider): void {
+    public init(): void {
+        function controlFromInput(fromSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement): void {
             const [from, to] = getParsed(fromInput, toInput);
             fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
             if (from > to) {
@@ -31,7 +31,7 @@ class DualSlider extends WFMComponent {
             }
         }
 
-        function controlFromSlider(fromSlider, toSlider, fromInput) {
+        function controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, fromInput: HTMLInputElement) {
             const [from, to] = getParsed(fromSlider, toSlider);
             fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
             if (from > to) {
@@ -42,7 +42,7 @@ class DualSlider extends WFMComponent {
             }
         }
 
-        function controlToSlider(fromSlider, toSlider, toInput) {
+        function controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, toInput: HTMLInputElement) {
             const [from, to] = getParsed(fromSlider, toSlider);
             fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
             setToggleAccessible(toSlider);
