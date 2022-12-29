@@ -16,26 +16,6 @@ class ProductsContainer extends WFMComponent {
         (target as HTMLElement).setAttribute('href', `#single/${id}`);
         appRoutes[1].path = `single/${id}`;
     }
-
-    cartProducts: CartItem[] = [];
-    cartSelector = '.btn__to-cart';
-    addToCart = (event: Event): void => {
-        const target = event.target;
-        if (!target) return;
-        const id = (target as HTMLElement).getAttribute('id');
-
-        if(!id) return;
-
-        this.cartProducts.push({
-            'id': +id,
-            'counter': 1
-        });
-        console.log(this.cartProducts)
-        // window.localStorage.setItem('productsInCart', JSON.stringify(this.cartProducts.push({
-        //     'id': +id,
-        //     'counter': 1
-        // })));
-    }
 }
 
 let cardsTemplate = ``;
@@ -61,6 +41,28 @@ productsData.products.forEach((product: Product) => {
             </div>
         `;
 });
+const cartProducts: CartItem[] = [];
+const cartSelector = '.btn__to-cart';
+const btnArr = document.querySelectorAll(cartSelector);
+        console.log(btnArr)
+        btnArr.forEach(btn => btn.addEventListener('click', addToCart))
+const addToCart = (event: Event): void => {
+        const target = event.target;
+        if (!target) return;
+        const id = (target as HTMLElement).getAttribute('id');
+
+        if(!id) return;
+
+        cartProducts.push({
+            'id': +id,
+            'counter': 1
+        });
+        console.log(cartProducts)
+        // window.localStorage.setItem('productsInCart', JSON.stringify(this.cartProducts.push({
+        //     'id': +id,
+        //     'counter': 1
+        // })));
+    }
 
 export const productsContainer = new ProductsContainer({
     selector: 'products-container',

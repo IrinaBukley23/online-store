@@ -8,8 +8,8 @@ class SinglePage extends WFMComponent {
       super(config);
   }
 
-  imageSelector = '.images__list-item';
-  getProdImg = (event: Event): void => {
+  detailsSelector = '.images__list-item';
+  getDetails = (event: Event): void => {
       const target = event.target;
       if(!(target as HTMLElement).classList.contains('images__list-item')) return;
       this.el?.querySelectorAll('.images__list-item').forEach((imageItem) => imageItem.classList.remove('active'));
@@ -28,7 +28,6 @@ export const singlePage = new SinglePage({
   innerComponents: null,
   getTemplate: (params?: { [id: string]: string }) => {
     if (!params?.id) return "";
-
     const [product] = productsData.products.filter((product: Product) => product.id === Number(params.id));
     let imagesCards = '';
     const largeImg = `<img src=${product.images[0]} alt=${product.title}>`;
@@ -92,7 +91,7 @@ export const singlePage = new SinglePage({
         </div>
         <div class="single__info-price">
           <div class="single__info-price_sum">€${product.price}</div>
-          <button class="single__info-price_btn">add to single</button>
+          <button class="single__info-price_btn">add to cart</button>
           <button class="single__info-price_btn">buy now</button>
         </div>
       </div>
