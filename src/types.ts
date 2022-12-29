@@ -8,28 +8,28 @@ export interface ModuleConfig {
     routes: Route[];
 }
 
-export interface ComponentInterface  {
+export interface ComponentInterface {
     el: HTMLElement | null;
     selector: string;
-    template: string;
+    getTemplate: (params?: { [key: string]: string }) => string;
     innerComponents: null | ComponentInterface[];
     render: () => void;
     initInnerComponents: () => void;
     events?: () => { [key: string]: string };
     clickSelector?: string;
-    handleClick?: (e:Event) => void;
+    handleClick?: (e: Event) => void;
 }
 
 export interface ComponentConfig {
     selector: string;
-    template: string;
+    getTemplate: (params?: { [key: string]: string }) => string;
     innerComponents: null | ComponentInterface [];
     render?: () => void;
 }
 
 export interface Route {
     path: string;
-    component: ComponentInterface ;
+    component: ComponentInterface;
 }
 
 export interface Product {
@@ -46,6 +46,9 @@ export interface Product {
     title: string;
 }
 
-export interface EventsObject {
-    [key: string]: string;
+export interface ProductsData {
+    products: Product[],
+    total: number,
+    skip: number,
+    limit: number
 }

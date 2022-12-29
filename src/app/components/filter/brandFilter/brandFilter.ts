@@ -29,7 +29,7 @@ productCategories.forEach((brand, index) => {
 export const brandFilter = new BrandFilter({
     selector: 'brand-filter',
     innerComponents: null,
-    template: `
+    getTemplate: () => `
         <h5 class="brand-filter__title">Brands</h5>
         <div class="filter__block-options brand-filter__options">${brandFilterTemplate}</div>
     `,

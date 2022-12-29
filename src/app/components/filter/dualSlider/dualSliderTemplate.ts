@@ -2,7 +2,7 @@ import { WFMComponent } from '../../../../routes';
 import { ComponentConfig, Product } from '../../../../types';
 import { productsData } from '../../../../data/productsData';
 
-class DualSlider extends WFMComponent {
+export class DualSliderTemplate extends WFMComponent {
     constructor(config: ComponentConfig) {
         super(config);
     }
@@ -19,7 +19,7 @@ class DualSlider extends WFMComponent {
             }
         }
 
-        function controlToInput(toSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement) {
+        function controlToInput(toSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement): void {
             const [from, to] = getParsed(fromInput, toInput);
             fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
             setToggleAccessible(toInput);
@@ -31,7 +31,7 @@ class DualSlider extends WFMComponent {
             }
         }
 
-        function controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, fromInput: HTMLInputElement) {
+        function controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, fromInput: HTMLInputElement): void {
             const [from, to] = getParsed(fromSlider, toSlider);
             fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
             if (from > to) {
@@ -42,7 +42,7 @@ class DualSlider extends WFMComponent {
             }
         }
 
-        function controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, toInput: HTMLInputElement) {
+        function controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, toInput: HTMLInputElement): void {
             const [from, to] = getParsed(fromSlider, toSlider);
             fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
             setToggleAccessible(toSlider);
@@ -55,13 +55,13 @@ class DualSlider extends WFMComponent {
             }
         }
 
-        function getParsed(currentFrom: HTMLInputElement, currentTo: HTMLInputElement) {
-            const from = parseInt(currentFrom.value, 10);
-            const to = parseInt(currentTo.value, 10);
+        function getParsed(currentFrom: HTMLInputElement, currentTo: HTMLInputElement): string[] {
+            const from = currentFrom.value
+            const to = currentTo.value
             return [from, to];
         }
 
-        function fillSlider(from: HTMLInputElement, to: HTMLInputElement, sliderColor: string, rangeColor: string, controlSlider: HTMLInputElement) {
+        function fillSlider(from: HTMLInputElement, to: HTMLInputElement, sliderColor: string, rangeColor: string, controlSlider: HTMLInputElement): void {
             const rangeDistance = +to.max - +to.min;
             const fromPosition = +from.value - +to.min;
             const toPosition = +to.value - +to.min;
@@ -73,10 +73,10 @@ class DualSlider extends WFMComponent {
                   ${rangeColor} ${(toPosition)/(rangeDistance)*100}%, 
                   ${sliderColor} ${(toPosition)/(rangeDistance)*100}%, 
                   ${sliderColor} 100%)`;
-            }
+        }
 
-        function setToggleAccessible(currentTarget: HTMLInputElement): void {
-            const toSlider = document.querySelector('#toSlider') as HTMLInputElement;
+        const setToggleAccessible = (currentTarget: HTMLInputElement): void => {
+            const toSlider = document.querySelector(`${this.selector} #toSlider`) as HTMLInputElement;
             if (Number(currentTarget.value) <= 0 ) {
                 toSlider.style.zIndex = '2';
             } else {
@@ -84,37 +84,16 @@ class DualSlider extends WFMComponent {
             }
         }
 
-        const fromSlider = document.querySelector('#fromSlider') as HTMLInputElement;
-        const toSlider = document.querySelector('#toSlider') as HTMLInputElement;
-        const fromInput = document.querySelector('#fromInput') as HTMLInputElement;
-        const toInput = document.querySelector('#toInput') as HTMLInputElement;
+        const fromSlider = document.querySelector(`${this.selector} #fromSlider`) as HTMLInputElement;
+        const toSlider = document.querySelector(`${this.selector} #toSlider`) as HTMLInputElement;
+        const fromInput = document.querySelector(`${this.selector} #fromInput`) as HTMLInputElement;
+        const toInput = document.querySelector(`${this.selector} #toInput`) as HTMLInputElement;
         fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
         setToggleAccessible(toSlider);
 
-        fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
-        toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
-        fromInput.oninput = () => controlFromInput(fromSlider, fromInput, toInput, toSlider);
-        toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
+        fromSlider.oninput = (): void => controlFromSlider(fromSlider, toSlider, fromInput);
+        toSlider.oninput = (): void => controlToSlider(fromSlider, toSlider, toInput);
+        fromInput.oninput = (): void => controlFromInput(fromSlider, fromInput, toInput, toSlider);
+        toInput.oninput = (): void => controlToInput(toSlider, fromInput, toInput, toSlider);
     }
 }
-
-export const dualSlider = new DualSlider({
-    selector: 'dual-slider',
-    innerComponents: null,
-    template: `
-            <div class="sliders_control">
-                <input id="fromSlider" type="range" value="10" min="0" max="100"/>
-                <input id="toSlider" type="range" value="40" min="0" max="100"/>
-            </div>
-            <div class="form_control">
-                <div class="form_control_container">
-                    <div class="form_control_container__time">Min</div>
-                    <input class="form_control_container__time__input" type="number" id="fromInput" value="10" min="0" max="100"/>
-                </div>
-                <div class="form_control_container">
-                    <div class="form_control_container__time">Max</div>
-                    <input class="form_control_container__time__input" type="number" id="toInput" value="40" min="0" max="100"/>
-                </div>
-            </div>
-    `,
-});

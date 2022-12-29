@@ -70,7 +70,7 @@ const cardDescr = `<section class="cart">
 export const singlePage = new SinglePage({
     selector: 'single',
     innerComponents: null,
-    template: `
+    getTemplate: () => `
         ${cardDescr}
     `,
 });

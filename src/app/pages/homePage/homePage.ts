@@ -2,6 +2,7 @@ import { WFMComponent } from '../../../routes/index';
 import { ComponentConfig, Product } from '../../../types';
 import { productsContainer } from '../../components/productsContainer/productsContainer';
 import { filter } from '../../components/filter/filter';
+import { dualSliderStock } from '../../components/filter/dualSlider/dualSliderStock';
 import { productsData } from '../../../data/productsData';
 import './homePage.scss';
 
@@ -11,6 +12,7 @@ class HomePage extends WFMComponent {
     constructor(config: ComponentConfig) {
         super(config);
         this.productsData = productsData.products;
+        // dualSliderStock.render({ min: '200', max: '300' });
     }
 
     public handleInputChange(event: Event): void {
@@ -171,7 +173,7 @@ class HomePage extends WFMComponent {
 export const homePage = new HomePage({
     selector: 'home',
     innerComponents: [productsContainer, filter],
-    template: `
+    getTemplate: () => `
         <filter class="filter"></filter>
         <products-container class="product__cards"></products-container>
     `,

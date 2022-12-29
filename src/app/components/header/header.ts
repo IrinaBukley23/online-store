@@ -12,7 +12,7 @@ class Header extends WFMComponent {
 export const header = new Header({
     selector: 'app-header',
     innerComponents: null,
-    template: `
+    getTemplate: () => `
       <div class="wrapper"> 
         <a class="header__logo" href="#">
           <img src="${mainLogo}" alt="logo">
