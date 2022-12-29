@@ -8,11 +8,10 @@ class SinglePage extends WFMComponent {
       super(config);
   }
 
-  clickSelector = '.images__list-item';
-    handleClick = (event: Event): void => {
+  imageSelector = '.images__list-item';
+  getProdImg = (event: Event): void => {
       const target = event.target;
       if(!(target as HTMLElement).classList.contains('images__list-item')) return;
-      console.log()
       this.el?.querySelectorAll('.images__list-item').forEach((imageItem) => imageItem.classList.remove('active'));
       if (!target) return; 
       (target as HTMLElement).classList.add('active');
@@ -34,8 +33,7 @@ export const singlePage = new SinglePage({
     let imagesCards = '';
     const largeImg = `<img src=${product.images[0]} alt=${product.title}>`;
 
-    const uniqImages = [... new Set(product.images)];
-    uniqImages.forEach(img => {
+    product.images.forEach(img => {
       imagesCards += `<li class="images__list-item">
         <img src=${img} alt='photo'>
       </li>`;

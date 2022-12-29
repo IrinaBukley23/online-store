@@ -9,6 +9,15 @@ class CartPage extends WFMComponent {
     }
 }
 
+function getData() {
+    const storage: string | null = localStorage.getItem ("productsInCart");
+    if(!storage) return;
+    const cartArr = JSON.parse(storage);
+    return cartArr;
+}
+getData();
+//console.log(getData());
+
 export const cartPage = new CartPage({
     selector: 'cart',
     innerComponents: null,

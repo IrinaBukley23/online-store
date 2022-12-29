@@ -5,8 +5,12 @@ export class Component implements ComponentInterface {
     selector: string;
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
-    clickSelector: string | undefined;
-    public handleClick?(e: Event): void;
+    imageSelector: string | undefined;
+    detailsSelector: string | undefined;
+    cartSelector: string | undefined;
+    public getProdImg?(e: Event): void;
+    public getDetails?(e: Event): void;
+    public addToCart?(e: Event): void;
     public handleInputChange?(e: Event): void;
 
     constructor(config: ComponentConfig) {
@@ -41,17 +45,44 @@ export class Component implements ComponentInterface {
         }
 
         // Add click handler
-        const clickSelector = this.clickSelector;
-        const eventClick: string = 'click';
-        const listener = this.handleClick?.bind(this);
-        if (!clickSelector) return;
-        if (!listener) return;
+        //const imageSelector = this.imageSelector;
+        const cartSelector = this.cartSelector;
+        const detailsSelector = this.detailsSelector;
 
-        const elems = this.el?.querySelectorAll(clickSelector);
-        elems?.forEach((elem) => {
-            if (elem) {
-                elem.addEventListener(eventClick, listener);
+       //const listenerGetProdImg = this.getProdImg?.bind(this);
+        const listenerToCartPage = this.addToCart?.bind(this);
+        const listenerGetDetails = this.getDetails?.bind(this);
+        console.log(listenerGetDetails)
+        
+        // if (!imageSelector) return;
+        // if (!listenerGetProdImg) return;
+
+        if (!cartSelector) return;
+        if (!listenerToCartPage) return;
+
+        if (!detailsSelector) return;
+        if (!listenerGetDetails) return;
+
+        // const productImg = this.el?.querySelectorAll(imageSelector);
+        // productImg?.forEach((btn) => {
+        //     if (btn) {
+        //         btn.addEventListener('click', listenerGetProdImg);
+        //     }
+        // });
+
+        const toCartBtns = this.el?.querySelectorAll(cartSelector);
+        toCartBtns?.forEach((btn) => {
+            if (btn) {
+                btn.addEventListener('click', listenerToCartPage);
             }
         });
+
+        const detailsBtn = this.el?.querySelectorAll(detailsSelector);
+        detailsBtn?.forEach((btn) => {
+            if (btn) {
+                btn.addEventListener('click', listenerGetDetails);
+            }
+        });
+
     }
 }
