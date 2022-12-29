@@ -8,25 +8,26 @@ import './homePage.scss';
 
 class HomePage extends WFMComponent {
     private productsData: Product[];
+    private stockFromSlider: HTMLInputElement;
+    private stockToSlider: HTMLInputElement;
+
 
     constructor(config: ComponentConfig) {
         super(config);
         this.productsData = productsData.products;
-        // dualSliderStock.render({ min: '200', max: '300' });
+        this.stockFromSlider = document.querySelector(`dual-slider-stock #fromSlider`) as HTMLInputElement;
+        this.stockToSlider = document.querySelector(`dual-slider-stock #toSlider`) as HTMLInputElement;
     }
 
     public handleInputChange(event: Event): void {
         const target = event.target as HTMLElement;
 
         if (target.classList.contains('category-checkbox')) {
-            console.log('target - category');
-
             this.handleCategoryCheckbox();
             this.changeActiveBrandCheckboxes();
         }
 
         if (target.classList.contains('brand-checkbox')) {
-            console.log('target - brand');
             this.handleBrandCheckbox();
             this.changeActiveCategoryCheckboxes();
         }

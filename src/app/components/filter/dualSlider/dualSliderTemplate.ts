@@ -1,6 +1,5 @@
 import { WFMComponent } from '../../../../routes';
-import { ComponentConfig, Product } from '../../../../types';
-import { productsData } from '../../../../data/productsData';
+import { ComponentConfig } from '../../../../types';
 
 export class DualSliderTemplate extends WFMComponent {
     constructor(config: ComponentConfig) {
@@ -9,9 +8,9 @@ export class DualSliderTemplate extends WFMComponent {
 
     public init(): void {
         function controlFromInput(fromSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement): void {
-            const [from, to] = getParsed(fromInput, toInput);
+            const [from, to] = getCurrentValues(fromInput, toInput);
             fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
-            if (from > to) {
+            if (+from > +to) {
                 fromSlider.value = to;
                 fromInput.value = to;
             } else {
@@ -20,10 +19,10 @@ export class DualSliderTemplate extends WFMComponent {
         }
 
         function controlToInput(toSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement): void {
-            const [from, to] = getParsed(fromInput, toInput);
+            const [from, to] = getCurrentValues(fromInput, toInput);
             fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
             setToggleAccessible(toInput);
-            if (from <= to) {
+            if (+from <= +to) {
                 toSlider.value = to;
                 toInput.value = to;
             } else {
@@ -32,9 +31,9 @@ export class DualSliderTemplate extends WFMComponent {
         }
 
         function controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, fromInput: HTMLInputElement): void {
-            const [from, to] = getParsed(fromSlider, toSlider);
+            const [from, to] = getCurrentValues(fromSlider, toSlider);
             fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
-            if (from > to) {
+            if (+from > +to) {
                 fromSlider.value = to;
                 fromInput.value = to;
             } else {
@@ -43,10 +42,10 @@ export class DualSliderTemplate extends WFMComponent {
         }
 
         function controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, toInput: HTMLInputElement): void {
-            const [from, to] = getParsed(fromSlider, toSlider);
+            const [from, to] = getCurrentValues(fromSlider, toSlider);
             fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
             setToggleAccessible(toSlider);
-            if (from <= to) {
+            if (+from <= +to) {
                 toSlider.value = to;
                 toInput.value = to;
             } else {
@@ -55,9 +54,9 @@ export class DualSliderTemplate extends WFMComponent {
             }
         }
 
-        function getParsed(currentFrom: HTMLInputElement, currentTo: HTMLInputElement): string[] {
-            const from = currentFrom.value
-            const to = currentTo.value
+        function getCurrentValues(currentFrom: HTMLInputElement, currentTo: HTMLInputElement): string[] {
+            const from = currentFrom.value;
+            const to = currentTo.value;
             return [from, to];
         }
 
@@ -77,10 +76,13 @@ export class DualSliderTemplate extends WFMComponent {
 
         const setToggleAccessible = (currentTarget: HTMLInputElement): void => {
             const toSlider = document.querySelector(`${this.selector} #toSlider`) as HTMLInputElement;
-            if (Number(currentTarget.value) <= 0 ) {
+            if (+currentTarget.value <= 0 ) {
                 toSlider.style.zIndex = '2';
+                console.log('< 0');
+                
             } else {
                 toSlider.style.zIndex = '0';
+                console.log('> 0');
             }
         }
 
@@ -91,9 +93,9 @@ export class DualSliderTemplate extends WFMComponent {
         fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
         setToggleAccessible(toSlider);
 
-        fromSlider.oninput = (): void => controlFromSlider(fromSlider, toSlider, fromInput);
-        toSlider.oninput = (): void => controlToSlider(fromSlider, toSlider, toInput);
-        fromInput.oninput = (): void => controlFromInput(fromSlider, fromInput, toInput, toSlider);
-        toInput.oninput = (): void => controlToInput(toSlider, fromInput, toInput, toSlider);
+        fromSlider.addEventListener('input', (): void => controlFromSlider(fromSlider, toSlider, fromInput));
+        toSlider.addEventListener('input', (): void => controlToSlider(fromSlider, toSlider, toInput));
+        fromInput.addEventListener('input', (): void => controlFromInput(fromSlider, fromInput, toInput, toSlider));
+        toInput.addEventListener('input', (): void => controlToInput(toSlider, fromInput, toInput, toSlider));
     }
 }
