@@ -35,7 +35,6 @@ export const singlePage = new SinglePage({
     const largeImg = `<img src=${product.images[0]} alt=${product.title}>`;
 
     const uniqImages = [... new Set(product.images)];
-    console.log(uniqImages, product.images)
     uniqImages.forEach(img => {
       imagesCards += `<li class="images__list-item">
         <img src=${img} alt='photo'>
