@@ -8,11 +8,11 @@ export interface ModuleConfig {
     routes: Route[];
 }
 
-export interface ComponentInterface  {
+export interface ComponentInterface {
     el: HTMLElement | null;
     selector: string;
-    template: string;
     innerComponents: null | ComponentInterface[];
+    getTemplate: (params?: {[key: string]: string}) => string;
     render: () => void;
     initInnerComponents: () => void;
     events?: () => { [key: string]: string };
@@ -22,7 +22,7 @@ export interface ComponentInterface  {
 
 export interface ComponentConfig {
     selector: string;
-    template: string;
+    getTemplate: (params?: {[key: string]: string}) => string;
     innerComponents: null | ComponentInterface [];
     render?: () => void;
 }

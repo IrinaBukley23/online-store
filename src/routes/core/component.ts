@@ -1,7 +1,7 @@
 import { ComponentConfig, ComponentInterface } from '../../types';
 
 export class Component implements ComponentInterface {
-    template: string;
+    getTemplate: (params?: {[key: string]: string}) => string;
     selector: string;
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
@@ -10,16 +10,18 @@ export class Component implements ComponentInterface {
     public handleInputChange?(e: Event): void;
 
     constructor(config: ComponentConfig) {
-        this.template = config.template;
+        this.getTemplate = config.getTemplate;
         this.selector = config.selector;
         this.el = null;
         this.innerComponents = config.innerComponents;
     }
 
     render(): void {
+        const [_, id] = window.location.hash.split('/');
+        const template = this.getTemplate(id ? { id } : {});
         this.el = document.querySelector(this.selector);
         if (!this.el) throw new Error(`Component with selector ${this.selector} wasn't found`);
-        this.el.innerHTML = this.template;
+        this.el.innerHTML = template;
 
         if (this.innerComponents) this.initInnerComponents();
 
@@ -38,8 +40,9 @@ export class Component implements ComponentInterface {
             componentElem?.addEventListener('change', inputChangeHandler);
         }
 
+        // Add click handler
         const clickSelector = this.clickSelector;
-        const eventClick = 'click';
+        const eventClick: string = 'click';
         const listener = this.handleClick?.bind(this);
         if (!clickSelector) return;
         if (!listener) return;

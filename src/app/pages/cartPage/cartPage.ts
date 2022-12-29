@@ -12,7 +12,8 @@ class CartPage extends WFMComponent {
 export const cartPage = new CartPage({
     selector: 'cart',
     innerComponents: null,
-    template: `
-      <h1>Cart Page</h1>
-    `,
+    getTemplate() {
+      return `
+        <h1>Cart Page</h1>
+    `}
 });
