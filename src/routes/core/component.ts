@@ -6,9 +6,9 @@ export class Component implements ComponentInterface {
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
     detailsSelector: string | undefined;
-   // cartSelector: string | undefined;
+    cartSelector: string | undefined;
     public getDetails?(e: Event): void;
-   // public addToCart?(e: Event): void;
+    public addToCart?(e: Event): void;
     public handleInputChange?(e: Event): void;
 
     constructor(config: ComponentConfig) {
@@ -43,24 +43,24 @@ export class Component implements ComponentInterface {
         }
 
         // Add click handler
-        // const cartSelector = this.cartSelector;
+        const cartSelector = this.cartSelector;
         const detailsSelector = this.detailsSelector;
 
-        // const listenerToCartPage = this.addToCart?.bind(this);
+        const listenerToCartPage = this.addToCart?.bind(this);
         const listenerGetDetails = this.getDetails?.bind(this);
 
-        // if (!cartSelector) return;
-        // if (!listenerToCartPage) return;
+        if (!cartSelector) return;
+        if (!listenerToCartPage) return;
 
         if (!detailsSelector) return;
         if (!listenerGetDetails) return;
 
-        // const toCartBtns = this.el?.querySelectorAll(cartSelector);
-        // toCartBtns?.forEach((btn) => {
-        //     if (btn) {
-        //         btn.addEventListener('click', listenerToCartPage);
-        //     }
-        // });
+        const toCartBtns = this.el?.querySelectorAll(cartSelector);
+        toCartBtns?.forEach((btn) => {
+            if (btn) {
+                btn.addEventListener('click', listenerToCartPage);
+            }
+        });
 
         const detailsBtn = this.el?.querySelectorAll(detailsSelector);
         detailsBtn?.forEach((btn) => {

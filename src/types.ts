@@ -16,10 +16,8 @@ export interface ComponentInterface {
     render: () => void;
     initInnerComponents: () => void;
     events?: () => { [key: string]: string };
-    imageSelector?: string;
     detailsSelector?: string;
     cartSelector?: string;
-    getProdImg?(e: Event): void;
     getDetails?(e: Event): void;
     addToCart?(e: Event): void;
 }
