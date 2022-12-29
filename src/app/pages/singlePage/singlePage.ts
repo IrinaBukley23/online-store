@@ -17,8 +17,8 @@ class SinglePage extends WFMComponent {
       if (!target) return; 
       (target as HTMLElement).classList.add('active');
       if((target as HTMLElement).classList.contains('active')) {
-        let elem = document.querySelector('.images__large');
-        let currentImgSrc = ((target as HTMLElement).childNodes[1] as HTMLElement).getAttribute('src')
+        const elem = document.querySelector('.images__large');
+        const currentImgSrc = ((target as HTMLElement).childNodes[1] as HTMLElement).getAttribute('src')
         if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
       }
     }
@@ -32,9 +32,11 @@ export const singlePage = new SinglePage({
 
     const [product] = productsData.products.filter((product: Product) => product.id === Number(params.id));
     let imagesCards = '';
-    let largeImg = `<img src=${product.images[0]} alt=${product.title}>`;
+    const largeImg = `<img src=${product.images[0]} alt=${product.title}>`;
 
-    product.images.forEach(img => {
+    const uniqImages = [... new Set(product.images)];
+    console.log(uniqImages, product.images)
+    uniqImages.forEach(img => {
       imagesCards += `<li class="images__list-item">
         <img src=${img} alt='photo'>
       </li>`;
