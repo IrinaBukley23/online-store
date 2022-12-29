@@ -26,7 +26,6 @@ class ProductsContainer extends WFMComponent {
         const id = (target as HTMLElement).getAttribute('id');
 
         if(!id) return;
-
         this.cartProducts.push({
             'id': +id,
             'counter': 1
