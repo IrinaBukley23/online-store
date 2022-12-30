@@ -1,5 +1,5 @@
 import { WFMComponent } from '../../../routes/index';
-import { ComponentConfig, Product } from '../../../types';
+import { CartItem, ComponentConfig, Product } from '../../../types';
 import { productsData } from '../../../data/productsData';
 import './singlePage.scss';
 
@@ -21,6 +21,28 @@ class SinglePage extends WFMComponent {
       const currentImgSrc = ((target as HTMLElement).childNodes[1] as HTMLElement).getAttribute('src')
       if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
     }
+  }
+
+  // не работает кнопка добавления в корзину???????????????????? в этом обработчике
+  cartProducts: CartItem[] = [];
+  cartSelector = '.single__info-price_btn';
+
+  addToCart = (event: Event): void => {
+      const target = event.target;
+      if (!target) return;
+      const id = (target as HTMLElement).getAttribute('id');
+
+      if(!id) return;
+      const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+      this.cartProducts.push({
+          'product': product,
+          'counter': 1
+      });
+      console.log(this.cartProducts)
+      localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+
+      const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+      cartArr.forEach(item => (item.product.id === product.id) ? (target as HTMLElement).innerHTML = 'drop from cart' : (target as HTMLElement).innerHTML = 'Add to cart');
   }
 }
 

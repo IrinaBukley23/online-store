@@ -40,7 +40,7 @@
             border-bottom: 1px solid $color-accent-dark;
         }
         &-descr {
-            max-width: 500px;
+            width: 500px;
             margin: 0 15px;
             padding: 8px 0;
             font-size: 1.4rem;
@@ -82,6 +82,44 @@
             padding: 5px 8px;
             color: $color-main;
             border-radius: 10px 10px 0 0;
+        }
+        &-subtitle {
+            text-align: center;
+            margin: 15px auto;
+        }
+        &-promo {
+            margin: 15px auto;
+            input {
+                display: block;
+                width: 80%;
+                margin: 15px auto;
+                border-radius: 50px;
+                padding: 8px;
+                border: 2px solid $color-accent-dark;
+                &::placeholder {
+                    text-align: center;
+                }
+            }
+            label {
+                display: block;
+                margin: 0 auto;
+                text-align: center;
+            }
+            
+        }
+    }
+    .button {
+        display: block;
+        margin: 25px auto 0;
+        padding: 15px 25px;
+        border: 2px solid #000000;
+        border-radius: 10px;
+        background: $color-accent-dark;
+        color: $color-main;
+        text-transform: uppercase;
+        transition: all 0.8s ease-in-out;
+        &:hover {
+            box-shadow: 5px 5px 5px black;
         }
     }
     &__title-block {
