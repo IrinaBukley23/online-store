@@ -8,15 +8,14 @@ import './homePage.scss';
 
 class HomePage extends WFMComponent {
     private productsData: Product[];
-    private stockFromSlider: HTMLInputElement;
-    private stockToSlider: HTMLInputElement;
-
 
     constructor(config: ComponentConfig) {
         super(config);
         this.productsData = productsData.products;
-        this.stockFromSlider = document.querySelector(`dual-slider-stock #fromSlider`) as HTMLInputElement;
-        this.stockToSlider = document.querySelector(`dual-slider-stock #toSlider`) as HTMLInputElement;
+    }
+
+    public handleOnInput(event: Event): void {
+        const target = event.target as HTMLElement;
     }
 
     public handleInputChange(event: Event): void {
@@ -31,22 +30,47 @@ class HomePage extends WFMComponent {
             this.handleBrandCheckbox();
             this.changeActiveCategoryCheckboxes();
         }
+
+        const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
+        const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
+        const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+        const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+
+        if (
+            target === stockFromSlider ||
+            target === stockToSlider ||
+            target === priceFromSlider ||
+            target === priceToSlider
+        ) {
+            this.showChosenCards();
+            this.changeActiveBrandCheckboxes();
+            this.changeActiveCategoryCheckboxes();
+        }
     }
 
     private handleCategoryCheckbox(): void {
-        this.showCheckedCards();
+        this.showChosenCards();
     }
 
     private handleBrandCheckbox(): void {
-        this.showCheckedCards();
+        this.showChosenCards();
     }
 
-    private showCheckedCards(): void {
+    private showChosenCards(): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+        const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
+        const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
+        const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+        const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+
         const checkedCategoryInputs = document.querySelectorAll('.category-filter .form-check-input:checked');
         const checkedBrandInputs = document.querySelectorAll('.brand-filter .form-check-input:checked');
         const chosenCategories: (string | undefined)[] = [];
         const chosenBrands: (string | undefined)[] = [];
+        const minPrice = priceFromSlider.min;
+        const maxPrice = priceToSlider.max;
+        const minStock = stockFromSlider.min;
+        const maxStock = stockFromSlider.max;
 
         checkedCategoryInputs.forEach((input) => {
             if (input.nextElementSibling) {
@@ -78,6 +102,18 @@ class HomePage extends WFMComponent {
                     card.classList.add('d-none');
                 }
             }
+
+            if (card.dataset.stock) {
+                if (+card.dataset.stock < +minStock || +card.dataset.stock > +maxStock) {
+                    card.classList.add('d-none');
+                }
+            }
+
+            if (card.dataset.price) {
+                if (+card.dataset.price < +minPrice || +card.dataset.price > +maxPrice) {
+                    card.classList.add('d-none');
+                }
+            }
         });
     }
 
@@ -88,12 +124,12 @@ class HomePage extends WFMComponent {
         const chosenCategories: (string | undefined)[] = [];
 
         if (!checkedCategoryInputs.length) {
-            brandCheckboxes.forEach(checkbox => {
+            brandCheckboxes.forEach((checkbox) => {
                 const checkboxInput = checkbox as HTMLInputElement;
                 checkboxInput.disabled = false;
-            })
+            });
 
-            return
+            return;
         }
 
         checkedCategoryInputs.forEach((input) => {
@@ -122,21 +158,20 @@ class HomePage extends WFMComponent {
                     checkboxInput.checked = false;
                 }
             }
-        })
+        });
     }
 
     private changeActiveCategoryCheckboxes(): void {
         const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
 
         const checkedBrandInputs = document.querySelectorAll('.brand-filter .form-check-input:checked');
-        console.log(checkedBrandInputs);
         const chosenBrands: (string | undefined)[] = [];
 
         if (!checkedBrandInputs.length) {
-            categoryCheckboxes.forEach(checkbox => {
+            categoryCheckboxes.forEach((checkbox) => {
                 const checkboxInput = checkbox as HTMLInputElement;
                 checkboxInput.disabled = false;
-            })
+            });
 
             return;
         }
@@ -167,7 +202,7 @@ class HomePage extends WFMComponent {
                     checkboxInput.checked = false;
                 }
             }
-        })
+        });
     }
 }
 

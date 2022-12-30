@@ -9,6 +9,7 @@ export class Component implements ComponentInterface {
     public init?(): void;
     public handleClick?(e: Event): void;
     public handleInputChange?(e: Event): void;
+    public handleOnInput?(e: Event): void;
 
     constructor(config: ComponentConfig) {
         this.getTemplate= config.getTemplate;
@@ -40,6 +41,12 @@ export class Component implements ComponentInterface {
         if (this.handleInputChange) {
             const inputChangeHandler = this.handleInputChange.bind(this);
             componentElem?.addEventListener('change', inputChangeHandler);
+        }
+
+        // Add onInput handler
+        if (this.handleOnInput) {
+            const onInputHandler = this.handleOnInput.bind(this);
+            componentElem?.addEventListener('input', onInputHandler);
         }
 
         const clickSelector = this.clickSelector;

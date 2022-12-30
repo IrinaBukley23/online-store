@@ -78,11 +78,9 @@ export class DualSliderTemplate extends WFMComponent {
             const toSlider = document.querySelector(`${this.selector} #toSlider`) as HTMLInputElement;
             if (+currentTarget.value <= 0 ) {
                 toSlider.style.zIndex = '2';
-                console.log('< 0');
                 
             } else {
                 toSlider.style.zIndex = '0';
-                console.log('> 0');
             }
         }
 
