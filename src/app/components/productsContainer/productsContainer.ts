@@ -26,15 +26,13 @@ class ProductsContainer extends WFMComponent {
         const id = (target as HTMLElement).getAttribute('id');
 
         if(!id) return;
+        const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
         this.cartProducts.push({
-            'id': +id,
+            'product': product,
             'counter': 1
         });
         console.log(this.cartProducts)
-        // window.localStorage.setItem('productsInCart', JSON.stringify(this.cartProducts.push({
-        //     'id': +id,
-        //     'counter': 1
-        // })));
+        localStorage.setItem('cart', JSON.stringify(this.cartProducts));
     }
 }
 

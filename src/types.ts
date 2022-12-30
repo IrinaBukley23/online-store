@@ -49,7 +49,7 @@ export interface Product {
 }
 
 export interface CartItem {
-    id: number;
+    product: Product;
     counter: number;
 }
 
