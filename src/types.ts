@@ -16,8 +16,10 @@ export interface ComponentInterface {
     render: () => void;
     initInnerComponents: () => void;
     events?: () => { [key: string]: string };
-    clickSelector?: string;
-    handleClick?: (e:Event) => void;
+    detailsSelector?: string;
+    cartSelector?: string;
+    getDetails?(e: Event): void;
+    addToCart?(e: Event): void;
 }
 
 export interface ComponentConfig {
@@ -44,6 +46,11 @@ export interface Product {
     stock: number;
     thumbnail: string;
     title: string;
+}
+
+export interface CartItem {
+    product: Product;
+    counter: number;
 }
 
 export interface EventsObject {

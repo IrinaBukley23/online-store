@@ -8,20 +8,20 @@ class SinglePage extends WFMComponent {
       super(config);
   }
 
-  clickSelector = '.images__list-item';
-    handleClick = (event: Event): void => {
-      const target = event.target;
-      if(!(target as HTMLElement).classList.contains('images__list-item')) return;
-      console.log()
-      this.el?.querySelectorAll('.images__list-item').forEach((imageItem) => imageItem.classList.remove('active'));
-      if (!target) return; 
-      (target as HTMLElement).classList.add('active');
-      if((target as HTMLElement).classList.contains('active')) {
-        const elem = document.querySelector('.images__large');
-        const currentImgSrc = ((target as HTMLElement).childNodes[1] as HTMLElement).getAttribute('src')
-        if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
-      }
+  // не работает переключение картинки???????????????????? в этом обработчике
+  detailsSelector = '.images__list-item';
+  getDetails = (event: Event): void => {
+    const target = event.target;
+    if(!(target as HTMLElement).classList.contains('images__list-item')) return;
+    this.el?.querySelectorAll('.images__list-item').forEach((imageItem) => imageItem.classList.remove('active'));
+    if (!target) return; 
+    (target as HTMLElement).classList.add('active');
+    if((target as HTMLElement).classList.contains('active')) {
+      const elem = document.querySelector('.images__large');
+      const currentImgSrc = ((target as HTMLElement).childNodes[1] as HTMLElement).getAttribute('src')
+      if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
     }
+  }
 }
 
 export const singlePage = new SinglePage({
@@ -29,13 +29,11 @@ export const singlePage = new SinglePage({
   innerComponents: null,
   getTemplate: (params?: { [id: string]: string }) => {
     if (!params?.id) return "";
-
     const [product] = productsData.products.filter((product: Product) => product.id === Number(params.id));
     let imagesCards = '';
     const largeImg = `<img src=${product.images[0]} alt=${product.title}>`;
 
-    const uniqImages = [... new Set(product.images)];
-    uniqImages.forEach(img => {
+    product.images.forEach(img => {
       imagesCards += `<li class="images__list-item">
         <img src=${img} alt='photo'>
       </li>`;
@@ -94,7 +92,7 @@ export const singlePage = new SinglePage({
         </div>
         <div class="single__info-price">
           <div class="single__info-price_sum">€${product.price}</div>
-          <button class="single__info-price_btn">add to single</button>
+          <button class="single__info-price_btn">add to cart</button>
           <button class="single__info-price_btn">buy now</button>
         </div>
       </div>
