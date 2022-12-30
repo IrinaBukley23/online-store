@@ -37,6 +37,14 @@ class ProductsContainer extends WFMComponent {
 
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         cartArr.forEach(item => (item.product.id === product.id) ? (target as HTMLElement).innerHTML = 'drop from cart' : (target as HTMLElement).innerHTML = 'add to cart');
+        let cartTotalCounter = 0;
+        let cartTotalSum = 0;
+        cartArr.forEach(item => {
+            cartTotalCounter += item.counter;
+            cartTotalSum += (item.product.price * item.counter);
+            localStorage.setItem('totalSum', String(cartTotalSum))
+            localStorage.setItem('totalCounter', String(cartTotalCounter))
+        })
 
        // не изменяется текстовое значение кнопки ??????????????
         if((target as HTMLElement).innerHTML === 'drop from cart') {

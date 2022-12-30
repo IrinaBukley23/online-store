@@ -18,10 +18,8 @@ export const cartPage = new CartPage({
         let cartTemplate = ``;
         let index = 1;
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        let cartTotalCounter = 0;
-        cartArr.forEach(item => {
-            cartTotalCounter += item.counter
-        })
+        let cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
+        let cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
 
         cartArr.forEach((item: CartItem) => {
             cartTemplate += `
@@ -50,7 +48,7 @@ export const cartPage = new CartPage({
             </div>`;
         });
 
-        if(cartArr.length === 0) {
+        if(cartArr.length === 0 || cartArr === null) {
             return `<h3>Cart is empty</h3>`
         }
         return `<section class="cart">
@@ -74,7 +72,7 @@ export const cartPage = new CartPage({
             <div class="cart__summary">
                 <h3 class="cart__summary-title">Summary</h3>
                 <h4 class="cart__summary-subtitle">Products: <span>${cartTotalCounter}</span> </h4>
-                <h4 class="cart__summary-subtitle">Total: <span></span> </h4>
+                <h4 class="cart__summary-subtitle">Total: €<span>${cartTotalSum}</span> </h4>
                 <div class="cart__summary-promo">
                     <input type="text" placeholder="Enter promo code">
                     <label>Promo for test: 'RS', 'EPM'</label>
