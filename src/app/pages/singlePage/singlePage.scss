@@ -39,6 +39,7 @@
             }
             .images__list {
                 display: flex;
+                flex-wrap: wrap;
                 &-item {
                     margin: 10px 10px 0;
                     padding: 10px;
