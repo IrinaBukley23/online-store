@@ -8,11 +8,10 @@ class CartPage extends WFMComponent {
         super(config);
     }
 
-    // не работают обработики и ломают getDetails обработчик???????????????
-    counterSelector = '.cart__counter';
-    getCounter(e: Event) {
-        if (!e.target) return;
-        console.log(e.target)
+    cartSelector = '.cart__counter';
+    addToCart = (e: Event): void => {
+        //if (!e.target) return;
+        console.log(e.target);
     }
 }
 

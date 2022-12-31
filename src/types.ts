@@ -17,9 +17,7 @@ export interface ComponentInterface {
     initInnerComponents: () => void;
     detailsSelector?: string;
     cartSelector?: string;
-    cartCounter?: string;
     getDetails?(e: Event): void;
-    addToCart?(e: Event): void;
     getCounter?(e: Event): void;
 }
 

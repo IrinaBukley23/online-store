@@ -66,11 +66,7 @@ export const productsContainer = new ProductsContainer({
     getTemplate() {   
         
         let cardsTemplate = ``;
-
         productsData.products.forEach((product: Product) => {
-
-            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);  
-
             cardsTemplate += `
                 <div data-category="${product.category}" data-brand="${product.brand}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">
