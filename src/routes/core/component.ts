@@ -7,8 +7,10 @@ export class Component implements ComponentInterface {
     innerComponents: ComponentInterface[] | null;
     detailsSelector: string | undefined;
     cartSelector: string | undefined;
+    cartCounter: string | undefined;
     public getDetails?(e: Event): void;
     public addToCart?(e: Event): void;
+    public getCounter?(e: Event): void;
     public handleInputChange?(e: Event): void;
 
     constructor(config: ComponentConfig) {
@@ -45,15 +47,20 @@ export class Component implements ComponentInterface {
         // Add click handler
         const cartSelector = this.cartSelector;
         const detailsSelector = this.detailsSelector;
+        const counterSelector = this.cartCounter;
 
         const listenerToCartPage = this.addToCart?.bind(this);
         const listenerGetDetails = this.getDetails?.bind(this);
-
+        const listenerGetCounter = this.getCounter?.bind(this);
+        
         if (!cartSelector) return;
         if (!listenerToCartPage) return;
 
         if (!detailsSelector) return;
         if (!listenerGetDetails) return;
+
+        if (!counterSelector) return;
+        if (!listenerGetCounter) return;
 
         const toCartBtns = this.el?.querySelectorAll(cartSelector);
         toCartBtns?.forEach((btn) => {
@@ -69,5 +76,12 @@ export class Component implements ComponentInterface {
             }
         });
 
+        // если их закоментировать то все работает
+        const incrCounter = this.el?.querySelectorAll(counterSelector);
+        incrCounter?.forEach((btn) => {
+            if (btn) {
+                btn.addEventListener('click', listenerGetCounter);
+            }
+        });
     }
 }

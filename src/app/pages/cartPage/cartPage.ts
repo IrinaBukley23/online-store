@@ -8,7 +8,12 @@ class CartPage extends WFMComponent {
         super(config);
     }
 
-
+    // не работают обработики и ломают getDetails обработчик???????????????
+    counterSelector = '.cart__counter';
+    getCounter(e: Event) {
+        if (!e.target) return;
+        console.log(e.target)
+    }
 }
 
 export const cartPage = new CartPage({
@@ -18,9 +23,9 @@ export const cartPage = new CartPage({
         let cartTemplate = ``;
         let index = 1;
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        let cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
-        let cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
-
+        const cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
+        const cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
+    
         cartArr.forEach((item: CartItem) => {
             cartTemplate += `
             <div class="cart__products-elem">
@@ -39,9 +44,9 @@ export const cartPage = new CartPage({
                 <div class="cart__products-sum">
                     <p>Stock: <span>${item.product.stock}</span> </p>
                     <div class="cart__counter">
-                        <button> - </button> 
-                        <span>${item.counter}</span> 
-                        <button> + </button>
+                        <button class="cart__counter-decr">-</button> 
+                        <span class="cart__counter-result">${item.counter}</span> 
+                        <button class="cart__counter-incr">+</button>
                     </div>
                     <p>€<span>${item.product.price}</span></p>
                 </div>

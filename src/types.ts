@@ -15,11 +15,12 @@ export interface ComponentInterface {
     getTemplate: (params?: {[key: string]: string}) => string;
     render: () => void;
     initInnerComponents: () => void;
-    events?: () => { [key: string]: string };
     detailsSelector?: string;
     cartSelector?: string;
+    cartCounter?: string;
     getDetails?(e: Event): void;
     addToCart?(e: Event): void;
+    getCounter?(e: Event): void;
 }
 
 export interface ComponentConfig {

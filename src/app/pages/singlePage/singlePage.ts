@@ -8,7 +8,6 @@ class SinglePage extends WFMComponent {
       super(config);
   }
 
-  // не работает переключение картинки???????????????????? в этом обработчике
   detailsSelector = '.images__list-item';
   getDetails = (event: Event): void => {
     const target = event.target;
@@ -57,7 +56,7 @@ export const singlePage = new SinglePage({
 
     product.images.forEach(img => {
       imagesCards += `<li class="images__list-item">
-        <img src=${img} alt='photo'>
+        <img class="images__list-item_img" src=${img} alt='photo'>
       </li>`;
     })
 
