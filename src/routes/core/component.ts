@@ -5,10 +5,13 @@ export class Component implements ComponentInterface {
     selector: string;
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
+    clickSelector: string | undefined;
     detailsSelector: string | undefined;
     cartSelector: string | undefined;
     public getDetails?(e: Event): void;
     public addToCart?(e: Event): void;
+    public changeCounter?(e: Event): void;
+    public handleClick?(e: Event): void;
     public handleInputChange?(e: Event): void;
 
     constructor(config: ComponentConfig) {
@@ -21,10 +24,10 @@ export class Component implements ComponentInterface {
     render(): void {
         const [_, id] = window.location.hash.split('/');
         const template = this.getTemplate(id ? { id } : {});
+
         this.el = document.querySelector(this.selector);
         if (!this.el) throw new Error(`Component with selector ${this.selector} wasn't found`);
         this.el.innerHTML = template;
-
         if (this.innerComponents) this.initInnerComponents();
 
         this._initEvents();
@@ -43,6 +46,12 @@ export class Component implements ComponentInterface {
         }
 
         // Add click handler
+
+        if(this.handleClick) {
+            const clickHandler = this.handleClick.bind(this);
+            componentElem?.addEventListener('click', clickHandler)
+        }
+
         const cartSelector = this.cartSelector;
         const detailsSelector = this.detailsSelector;
 
@@ -68,5 +77,6 @@ export class Component implements ComponentInterface {
                 btn.addEventListener('click', listenerGetDetails);
             }
         });
+
     }
 }

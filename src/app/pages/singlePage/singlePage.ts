@@ -8,31 +8,28 @@ class SinglePage extends WFMComponent {
       super(config);
   }
 
-  detailsSelector = '.images__list-item';
-  getDetails = (event: Event): void => {
-    const target = event.target;
-    if(!(target as HTMLElement).classList.contains('images__list-item')) return;
-    this.el?.querySelectorAll('.images__list-item').forEach((imageItem) => imageItem.classList.remove('active'));
-    if (!target) return; 
-    (target as HTMLElement).classList.add('active');
-    if((target as HTMLElement).classList.contains('active')) {
-      const elem = document.querySelector('.images__large');
-      const currentImgSrc = ((target as HTMLElement).childNodes[1] as HTMLElement).getAttribute('src')
-      if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
-    }
-  }
-
-  // не работает кнопка добавления в корзину???????????????????? в этом обработчике
   cartProducts: CartItem[] = [];
-  cartSelector = '.single__info-price_btn';
+  public handleClick(event: Event): void {
+    const target = event.target as HTMLElement;
 
-  addToCart = (event: Event): void => {
-      const target = event.target;
-      if (!target) return;
+    if (target.classList.contains('images__list-item_img')) {
+      if(!(target as HTMLElement).classList.contains('images__list-item_img')) return;
+      this.el?.querySelectorAll('.images__list-item_img').forEach((imageItem) => imageItem.classList.remove('active'));
+      if (!target) return; 
+      (target as HTMLElement).classList.add('active');
+      if((target as HTMLElement).classList.contains('active')) {
+        const elem = document.querySelector('.images__large');
+        const currentImgSrc = ((target as HTMLElement) as HTMLElement).getAttribute('src')
+        if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
+      }
+    }
+
+    if(target.classList.contains('btn__to-cart')) {
       const id = (target as HTMLElement).getAttribute('id');
 
       if(!id) return;
       const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+
       this.cartProducts.push({
           'product': product,
           'counter': 1
@@ -41,7 +38,28 @@ class SinglePage extends WFMComponent {
       localStorage.setItem('cart', JSON.stringify(this.cartProducts));
 
       const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-      cartArr.forEach(item => (item.product.id === product.id) ? (target as HTMLElement).innerHTML = 'drop from cart' : (target as HTMLElement).innerHTML = 'Add to cart');
+      cartArr.forEach(item => (item.product.id === product.id) ? (target as HTMLElement).innerHTML = 'drop from cart' : (target as HTMLElement).innerHTML = 'add to cart');
+      let cartTotalCounter = 0;
+      let cartTotalSum = 0;
+      cartArr.forEach(item => {
+          cartTotalCounter += item.counter;
+          cartTotalSum += (item.product.price * item.counter);
+          localStorage.setItem('totalSum', String(cartTotalSum))
+          localStorage.setItem('totalCounter', String(cartTotalCounter))
+      })
+
+      // не изменяется текстовое значение кнопки ??????????????
+      if((target as HTMLElement).innerHTML === 'drop from cart') {
+          (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'add to cart'
+      } 
+      if((target as HTMLElement).innerHTML === 'add to cart') {
+          (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'drop from cart';
+          this.cartProducts.push({
+              'product': product,
+              'counter': 1
+          });
+      }
+   }
   }
 }
 
