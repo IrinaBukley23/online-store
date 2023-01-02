@@ -102,6 +102,14 @@
       
         &-promo {
             margin: 15px auto;
+            position: relative;
+            span {
+                color: $color-accent-dark;
+                position: absolute;
+                top: 12%;
+                right: 15%;
+                font-size: 2rem;
+            }
             input {
                 display: block;
                 width: 80%;

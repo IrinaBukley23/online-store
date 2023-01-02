@@ -18,7 +18,7 @@ class CartPage extends WFMComponent {
             if (target.classList.contains('cart-promo')) {
                 const textElem = document.querySelector('.cart-promo_text') as HTMLElement; 
 
-                if (target.value.toLowerCase() === "rs") {
+                if (target.value && target.value.toLowerCase() === "rs") {
                     if(textElem) {
                         textElem.innerHTML = 'Rolling Scopes School - 10%';
                     }
@@ -26,7 +26,7 @@ class CartPage extends WFMComponent {
                     document.querySelector('.cart-promo_block')?.classList.add('active');
                 }
     
-                if (target.value.toLowerCase() === "epm") {
+                if (target.value && target.value.toLowerCase() === "epm") {
                     if(textElem) {
                         textElem.innerHTML = 'EPAM Systems - 10% ';
                     }
@@ -124,15 +124,18 @@ class CartPage extends WFMComponent {
             const appliedPromoItems = document.querySelectorAll('.cart-applied_block-item');
             const promoSum1 = (Number(localStorage.getItem('totalSum')) * 0.9).toFixed(2);
             const promoSum2 = (Number(localStorage.getItem('totalSum')) * 0.8).toFixed(2);
-            console.log(promoSum1);
             if(appliedPromoItems.length === 1) {
                 promoContainer.innerHTML = String(promoSum1);
             }
             if(appliedPromoItems.length === 2) {
                 promoContainer.innerHTML = String(promoSum2);
             }
-            
         }
+
+        if (target.classList.contains('cart-clear')) {
+            (document.querySelector('.cart-promo') as HTMLInputElement).value = '';
+        }
+       
     }
 }
 
@@ -205,6 +208,7 @@ export const cartPage = new CartPage({
                 </div>
                 <div class="cart__summary-promo">
                     <input class="cart-promo" type="text" placeholder="Enter promo code">
+                    <span class="cart-clear">×</span>
                     <div class="cart-promo_block">
                         <p class="cart-promo_text">Rolling Scopes School - 10%</p>
                         <button class="cart-promo_btn">add</button>
