@@ -22,6 +22,19 @@ class CartPage extends WFMComponent {
                 localStorage.setItem('totalCounter', String(curNum))
             }
             (curElem as HTMLElement).innerHTML = String(curNum);
+            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+            let cartTotalSum = 0;
+            let cartTotalCounter = 0;
+            cartArr.forEach(item => {
+                if(Number(curElem.id) === Number(item.product.id)) {
+                    item.counter = curNum;
+                }
+                cartTotalSum += (item.product.price * item.counter);
+                cartTotalCounter += item.counter;
+            })
+            localStorage.setItem('cart', JSON.stringify(cartArr));
+            localStorage.setItem('totalSum', String(cartTotalSum));
+            localStorage.setItem('totalCounter', String(cartTotalCounter))
         }
 
         if (target.classList.contains('cart__counter-incr')) {
