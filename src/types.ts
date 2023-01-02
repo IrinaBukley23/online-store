@@ -16,10 +16,6 @@ export interface ComponentInterface {
     render: () => void;
     initInnerComponents: () => void;
     clickSelector?: string;
-    detailsSelector?: string;
-    cartSelector?: string;
-    getDetails?(e: Event): void;
-    changeCounter?(e: Event): void;
 }
 
 export interface ComponentConfig {

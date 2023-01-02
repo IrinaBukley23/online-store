@@ -6,13 +6,9 @@ export class Component implements ComponentInterface {
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
     clickSelector: string | undefined;
-    detailsSelector: string | undefined;
-    cartSelector: string | undefined;
-    public getDetails?(e: Event): void;
-    public addToCart?(e: Event): void;
-    public changeCounter?(e: Event): void;
     public handleClick?(e: Event): void;
     public handleInputChange?(e: Event): void;
+    public handleInput?(e: Event): void;
 
     constructor(config: ComponentConfig) {
         this.getTemplate = config.getTemplate;
@@ -45,38 +41,16 @@ export class Component implements ComponentInterface {
             componentElem?.addEventListener('change', inputChangeHandler);
         }
 
-        // Add click handler
+        // Add input handler
+        if (this.handleInput) {
+            const inputHandler = this.handleInput.bind(this);
+            componentElem?.addEventListener('input', inputHandler);
+        }
 
+        // Add click handler
         if(this.handleClick) {
             const clickHandler = this.handleClick.bind(this);
             componentElem?.addEventListener('click', clickHandler)
         }
-
-        const cartSelector = this.cartSelector;
-        const detailsSelector = this.detailsSelector;
-
-        const listenerToCartPage = this.addToCart?.bind(this);
-        const listenerGetDetails = this.getDetails?.bind(this);
-        
-        if (!cartSelector) return;
-        if (!listenerToCartPage) return;
-
-        if (!detailsSelector) return;
-        if (!listenerGetDetails) return;
-
-        const toCartBtns = this.el?.querySelectorAll(cartSelector);
-        toCartBtns?.forEach((btn) => {
-            if (btn) {
-                btn.addEventListener('click', listenerToCartPage);
-            }
-        });
-
-        const detailsBtn = this.el?.querySelectorAll(detailsSelector);
-        detailsBtn?.forEach((btn) => {
-            if (btn) {
-                btn.addEventListener('click', listenerGetDetails);
-            }
-        });
-
     }
 }

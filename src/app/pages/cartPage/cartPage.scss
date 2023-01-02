@@ -87,6 +87,22 @@
             text-align: center;
             margin: 15px auto;
         }
+        &-sum {
+            text-align: center;
+            margin: 15px auto;
+            &.active {
+                text-decoration: line-through;
+            }
+            &_promo {
+                display: none;
+                &.active {
+                    display: block;
+                    text-align: center;
+                    margin: 15px auto;
+                }
+            }
+        }
+      
         &-promo {
             margin: 15px auto;
             input {
@@ -96,6 +112,7 @@
                 border-radius: 50px;
                 padding: 8px;
                 border: 2px solid $color-accent-dark;
+                text-align: center;
                 &::placeholder {
                     text-align: center;
                 }
@@ -105,7 +122,78 @@
                 margin: 0 auto;
                 text-align: center;
             }
-            
+        }
+    }
+    &-promo{
+        &_block {
+        display: none;
+            &.active {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        &_text {
+            margin: 0 10px 0 0;
+            font-size: 1.25rem;
+        }
+        &_btn {
+            display: block;
+            padding: 5px 8px;
+            margin: 8px 0;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            background: $color-accent-dark;
+            color: $color-main;
+            text-transform: uppercase;
+            transition: all 0.8s ease-in-out;
+            &:hover {
+                box-shadow: 5px 5px 5px black;
+            }
+        }
+    }
+    &-applied {
+        display: none;
+        &_block {
+            &-item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        &.active {
+            display: block;
+            border: 2px solid $color-accent-dark;
+            border-radius: 10px;
+            padding: 5px 8px;
+            width: 90%;
+            margin: 0 auto;
+        }
+        &_title {
+            margin: 0 10px 0 0;
+            padding: 5px 0;
+            font-size: 1.45rem;
+            text-align: center;
+            border-bottom: 2px solid $color-accent-dark;
+        }
+        &_text {
+            margin: 0 10px 0 0;
+            font-size: 1.25rem;
+        }
+        &_btn {
+            display: block;
+            padding: 5px 8px;
+            margin: 8px 0;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            background: $color-accent-dark;
+            color: $color-main;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            transition: all 0.8s ease-in-out;
+            &:hover {
+                box-shadow: 5px 5px 5px black;
+            }
         }
     }
     .button {

@@ -8,6 +8,28 @@ class CartPage extends WFMComponent {
         super(config);
     }
 
+    public handleInput(event: Event): void {
+        const target = event.target as HTMLInputElement;
+
+        if (target.classList.contains('cart-promo')) {
+            const textElem = document.querySelector('.cart-promo_text') as HTMLElement; 
+
+            if (target.value.toLowerCase() === "rs") {
+                if(textElem) {
+                    textElem.innerHTML = 'Rolling Scopes School - 10%';
+                }
+                document.querySelector('.cart-promo_block')?.classList.add('active');
+            }
+
+            if (target.value.toLowerCase() === "epm") {
+                if(textElem) {
+                    textElem.innerHTML = 'EPAM Systems - 10% ';
+                }
+                document.querySelector('.cart-promo_block')?.classList.add('active');
+            }
+        }
+    }
+
     public handleClick(event: Event): void {
         const target = event.target as HTMLElement;
 
@@ -57,6 +79,65 @@ class CartPage extends WFMComponent {
             localStorage.setItem('cart', JSON.stringify(cartArr));
             localStorage.setItem('totalSum', String(cartTotalSum));
             localStorage.setItem('totalCounter', String(cartTotalCounter))
+        }
+
+        if (target.classList.contains('cart-promo_btn')) {
+
+            document.querySelector('.cart__summary-sum')?.classList.add('active');
+            document.querySelector('.cart__summary-sum_promo')?.classList.add('active');
+            document.querySelector('.cart-applied')?.classList.add('active');
+
+            const appliedPromoList = document.querySelector('.cart-applied_block');
+            const li = document.createElement('li');
+            li.classList.add('cart-applied_block-item');
+
+            const promoCode = (document.querySelector('.cart-promo') as HTMLInputElement).value;
+            const promoApplied = document.querySelectorAll('.cart-applied_block-item');
+            if (promoApplied.length >= 1) {
+                const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
+                if(addBtn) (addBtn).style.display = "none";
+            }
+
+            if (promoCode.toLowerCase() === "rs") {
+                
+                document.querySelector('.cart-promo_block')?.classList.add('active');
+                li.setAttribute('id', 'rs');
+                li.innerHTML = `<p class="cart-applied_text">Rolling Scopes School - 10%</p>
+                <button class="cart-applied_btn">drop</button>
+                `;
+                
+                if(promoApplied.length < 2){
+                    appliedPromoList?.append(li);
+                    promoApplied.forEach(item => {
+                        console.log(item.id)
+                        if(item.id !== 'rs') {
+                            appliedPromoList?.append(li);
+                        } else {
+                            return;
+                        }
+                    }
+                )}
+            }
+
+            if (promoCode.toLowerCase() === "epm") {
+                
+                document.querySelector('.cart-promo_block')?.classList.add('active');
+                li.setAttribute('id', 'epm');
+                li.innerHTML = `<p class="cart-applied_text">EPAM Systems - 10%</p>
+                <button class="cart-applied_btn">drop</button>
+                `;
+                
+                if(promoApplied.length < 2){
+                appliedPromoList?.append(li);
+                promoApplied.forEach(item => {
+                    console.log(item.id)
+                    if(item.id !== 'epm') {
+                        appliedPromoList?.append(li);
+                    } else {
+                        return;
+                    }
+                })}
+            }
         }
     }
 }
@@ -122,9 +203,18 @@ export const cartPage = new CartPage({
             <div class="cart__summary">
                 <h3 class="cart__summary-title">Summary</h3>
                 <h4 class="cart__summary-subtitle">Products: <span>${cartTotalCounter}</span> </h4>
-                <h4 class="cart__summary-subtitle">Total: €<span>${cartTotalSum}</span> </h4>
+                <h4 class="cart__summary-sum">Total: €<span>${cartTotalSum}</span> </h4>
+                <h4 class="cart__summary-sum_promo">Total: €<span>0</span> </h4>
+                <div class="cart-applied">
+                    <h5 class="cart-applied_title">Applied codes</h5>
+                    <ul class="cart-applied_block"></ul>
+                </div>
                 <div class="cart__summary-promo">
-                    <input type="text" placeholder="Enter promo code">
+                    <input class="cart-promo" type="text" placeholder="Enter promo code">
+                    <div class="cart-promo_block">
+                        <p class="cart-promo_text">Rolling Scopes School - 10%</p>
+                        <button class="cart-promo_btn">add</button>
+                    </div>
                     <label>Promo for test: 'RS', 'EPM'</label>
                 </div>
                 <button class="button">Buy now</button>
