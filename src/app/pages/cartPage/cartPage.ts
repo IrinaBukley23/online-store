@@ -1,5 +1,6 @@
 import { WFMComponent } from '../../../routes/index';
 import { CartItem, ComponentConfig } from '../../../types';
+import { appRoutes } from '../../app.routes';
 
 import './cartPage.scss';
 
@@ -7,12 +8,12 @@ class CartPage extends WFMComponent {
     constructor(config: ComponentConfig) {
         super(config);
     }
-
+    promoArr: string[] = [];
     public handleInput(event: Event): void {
         const target = event.target as HTMLInputElement;
         const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
-        const promoItems = document.querySelectorAll('.cart-applied_block-item');
-        if(promoItems.length > 1) {
+        //const promoItems = document.querySelectorAll('.cart-applied_block-item');
+        if(this.promoArr.length > 1) {
             addBtn.classList.add('hidden');
         } else {
             if (target.classList.contains('cart-promo')) {
@@ -89,53 +90,88 @@ class CartPage extends WFMComponent {
         }
 
         if (target.classList.contains('cart-promo_btn')) {
-
-            document.querySelector('.cart__summary-sum')?.classList.add('active');
-            document.querySelector('.cart__summary-sum_promo')?.classList.add('active');
-            document.querySelector('.cart-applied')?.classList.add('active');
-
-            const appliedPromoList = document.querySelector('.cart-applied_block');
-            const li = document.createElement('li');
-            li.classList.add('cart-applied_block-item');
-
             const promoCode = (document.querySelector('.cart-promo') as HTMLInputElement).value;
-            const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
-
             if (promoCode.toLowerCase() === "rs") {
-                document.querySelector('.cart-promo_block')?.classList.add('active');
-                li.setAttribute('id', 'rs');
-                li.innerHTML = `<p class="cart-applied_text">Rolling Scopes School - 10%</p>
-                <button class="cart-applied_btn">drop</button>
-                `;
-                appliedPromoList?.append(li);
-                addBtn.classList.add('hidden');
+                this.promoArr.push('rs')
             } 
-
             if (promoCode.toLowerCase() === "epm") {
-                document.querySelector('.cart-promo_block')?.classList.add('active');
-                li.setAttribute('id', 'epm');
-                li.innerHTML = `<p class="cart-applied_text">EPAM Systems - 10%</p>
-                <button class="cart-applied_btn">drop</button>
-                `;
-                appliedPromoList?.append(li);
-                addBtn.classList.add('hidden');
+                this.promoArr.push('epm')
             } 
-            const promoContainer = <HTMLElement> document.querySelector('.cart__summary-sum_promo span');
-            const appliedPromoItems = document.querySelectorAll('.cart-applied_block-item');
-            const promoSum1 = (Number(localStorage.getItem('totalSum')) * 0.9).toFixed(2);
-            const promoSum2 = (Number(localStorage.getItem('totalSum')) * 0.8).toFixed(2);
-            if(appliedPromoItems.length === 1) {
-                promoContainer.innerHTML = String(promoSum1);
-            }
-            if(appliedPromoItems.length === 2) {
-                promoContainer.innerHTML = String(promoSum2);
-            }
+            this.renderPromoCodes(this.promoArr);
         }
 
         if (target.classList.contains('cart-clear')) {
             (document.querySelector('.cart-promo') as HTMLInputElement).value = '';
         }
-       
+    
+        if(target.classList.contains('cart-applied_btn')) {
+                        
+            const promoContainer = <HTMLElement> document.querySelector('.cart__summary-sum_promo span');
+            const promoSum1 = (Number(localStorage.getItem('totalSum')) * 0.9).toFixed(2);
+            const promoSum2 = (Number(localStorage.getItem('totalSum')) * 0.8).toFixed(2);
+            if(this.promoArr.length === 0) {
+                document.querySelector('.cart__summary-sum_promo')?.classList.remove('active');
+            }
+            if(this.promoArr.length === 1) {
+                promoContainer.innerHTML = String(promoSum1);
+            }
+            if(this.promoArr.length === 2) {
+                promoContainer.innerHTML = String(promoSum2);
+            }
+
+            const i = this.promoArr.indexOf(((target.parentNode as HTMLElement)?.dataset.id) as string);
+            this.promoArr.splice(i, 1);
+            const promoBlock = document.querySelector('.cart-applied');
+            promoBlock?.classList.add('active');
+            if(promoBlock) (promoBlock as HTMLElement).innerHTML = '';
+            this.renderPromoCodes(this.promoArr);
+        }
+        console.log(target)
+        if (target.classList.contains('cart__products-img img') || target.classList.contains('cart__products-descr') || target.classList.contains('cart__products-title') || target.classList.contains('cart__products-raiting')) {
+            console.log((target as HTMLElement).parentNode?.parentNode)
+            const id = (((target as HTMLElement).parentNode as HTMLElement).parentNode as HTMLElement)?.getAttribute('id');
+            (((target as HTMLElement).parentNode as HTMLElement).parentNode as HTMLElement).setAttribute('href', `#single/${id}`);
+            appRoutes[1].path = `single/${id}`;
+        }
+    }
+
+    renderPromoCodes(arr: string[]) {
+        document.querySelector('.cart-applied')?.classList.add('active');
+        document.querySelector('.cart__summary-sum')?.classList.add('active');
+        document.querySelector('.cart__summary-sum_promo')?.classList.add('active');
+
+        const appliedPromoList = document.querySelector('.cart-applied_block');
+        const li = document.createElement('li');
+        li.classList.add('cart-applied_block-item');
+        const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
+    
+        const uniqArr = [... new Set(arr)] 
+        console.log(uniqArr)
+        uniqArr.forEach((item) => {
+            document.querySelector('.cart-promo_block')?.classList.add('active');
+            li.setAttribute('data-id', item)
+            if(item === 'rs') {
+                li.innerHTML = `<p class="cart-applied_text">Rolling Scopes School - 10%</p>
+                <button class="cart-applied_btn">drop</button>
+            `;}
+            if(item === 'epm') {
+                li.innerHTML = `<p class="cart-applied_text">EPAM Systems - 10%</p>
+            <button class="cart-applied_btn">drop</button>
+            `;}
+            appliedPromoList?.append(li);
+            addBtn.classList.add('hidden');
+        })
+
+        const promoContainer = <HTMLElement> document.querySelector('.cart__summary-sum_promo span');
+        const appliedPromoItems = document.querySelectorAll('.cart-applied_block-item');
+        const promoSum1 = (Number(localStorage.getItem('totalSum')) * 0.9).toFixed(2);
+        const promoSum2 = (Number(localStorage.getItem('totalSum')) * 0.8).toFixed(2);
+        if(appliedPromoItems.length === 1) {
+            promoContainer.innerHTML = String(promoSum1);
+        }
+        if(appliedPromoItems.length === 2) {
+            promoContainer.innerHTML = String(promoSum2);
+        }
     }
 }
 
@@ -156,17 +192,19 @@ export const cartPage = new CartPage({
             cartTemplate += `
             <div class="cart__products-elem">
                 <p class="cart__products-num">${index++}</p>
-                <div class="cart__products-img">
-                    <img src=${item.product.images[0]}> 
-                </div>
-                <div  class="cart__products-description">
-                    <h3 class="cart__products-title">${item.product.title}</h3>
-                    <p class="cart__products-descr"> ${item.product.description}</p>
-                    <div class="cart__products-raiting">
-                        <p>Rating: <span>${item.product.rating}</span> </p>
-                        <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
+                <a class="cart__products-link" id=${item.product.id} href="#single/1">
+                    <div class="cart__products-img">
+                        <img src=${item.product.images[0]}> 
                     </div>
-                </div>
+                    <div  class="cart__products-description">
+                        <h3 class="cart__products-title">${item.product.title}</h3>
+                        <p class="cart__products-descr"> ${item.product.description}</p>
+                        <div class="cart__products-raiting">
+                            <p>Rating: <span>${item.product.rating}</span> </p>
+                            <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
+                        </div>
+                    </div>
+                </a>
                 <div class="cart__products-sum">
                     <p>Stock: <span>${item.product.stock}</span> </p>
                     <div class="cart__counter">

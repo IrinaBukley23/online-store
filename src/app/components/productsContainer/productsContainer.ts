@@ -17,6 +17,11 @@ class ProductsContainer extends WFMComponent {
             (target as HTMLElement).setAttribute('href', `#single/${id}`);
             appRoutes[1].path = `single/${id}`;
         }
+        if(target.classList.contains('product__image-link')) {
+            const id = ((target as HTMLElement).parentNode as HTMLElement)?.getAttribute('id');
+            ((target as HTMLElement).parentNode as HTMLElement).setAttribute('href', `#single/${id}`);
+            appRoutes[1].path = `single/${id}`;
+        }
 
         if(target.classList.contains('btn__to-cart')) {
             const id = (target as HTMLElement).getAttribute('id');
@@ -64,7 +69,9 @@ export const productsContainer = new ProductsContainer({
                      ${product.title}
                     </div>
                     <div class="product__image">
-                        <img alt="" src="${product.thumbnail}">
+                        <a id=${product.id} href="#single/1">
+                            <img alt="photo" class="product__image-link"  src="${product.thumbnail}">
+                        </a>
                     </div>
                     <div class="product__description">
                         ${product.description}

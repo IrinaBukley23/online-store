@@ -7,6 +7,12 @@
     &__products {
         width: 75%;
         margin: 0 15px;
+        &-link {
+            display: flex;
+            &:hover {
+                color: #252120;
+            }
+        }
         &-elem {
             display: flex;
             align-items: center;

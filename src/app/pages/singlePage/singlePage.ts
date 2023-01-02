@@ -81,7 +81,7 @@ export const singlePage = new SinglePage({
     return `<section class="single">
     <div class="single__crumbs">
       <ul class="crumbs__list">
-        <li class="crumbs__list-item">Store</li>
+        <li class="crumbs__list-item"> <a href="#">Store</a> </li>
         <li class="crumbs__list-item"> >> </li>
         <li class="crumbs__list-item">${product.category}</li>
         <li class="crumbs__list-item"> >> </li>
