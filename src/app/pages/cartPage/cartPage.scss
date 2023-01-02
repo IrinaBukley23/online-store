@@ -7,15 +7,11 @@
     &__products {
         width: 75%;
         margin: 0 15px;
-        border: 1px solid $color-accent-dark;
-        border-radius: 10px;
-        &-block {
-            padding: 20px 0;
-        }
         &-elem {
             display: flex;
             align-items: center;
-            border-bottom: 1px solid $color-accent-dark;
+            padding: 10px 0;
+            border: 1px solid $color-accent-dark;
         }
         &-num {
             margin-left: 15px;
@@ -71,6 +67,7 @@
     }
     &__summary {
         width: 25%;
+        max-height: 520px;
         margin: 0 15px;
         border: 1px solid $color-accent-dark;
         border-radius: 10px;
@@ -149,6 +146,9 @@
             transition: all 0.8s ease-in-out;
             &:hover {
                 box-shadow: 5px 5px 5px black;
+            }
+            &.hidden {
+                display: none;
             }
         }
     }

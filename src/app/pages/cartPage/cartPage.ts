@@ -10,24 +10,32 @@ class CartPage extends WFMComponent {
 
     public handleInput(event: Event): void {
         const target = event.target as HTMLInputElement;
+        const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
+        const promoItems = document.querySelectorAll('.cart-applied_block-item');
+        if(promoItems.length > 1) {
+            addBtn.classList.add('hidden');
+        } else {
+            if (target.classList.contains('cart-promo')) {
+                const textElem = document.querySelector('.cart-promo_text') as HTMLElement; 
 
-        if (target.classList.contains('cart-promo')) {
-            const textElem = document.querySelector('.cart-promo_text') as HTMLElement; 
-
-            if (target.value.toLowerCase() === "rs") {
-                if(textElem) {
-                    textElem.innerHTML = 'Rolling Scopes School - 10%';
+                if (target.value.toLowerCase() === "rs") {
+                    if(textElem) {
+                        textElem.innerHTML = 'Rolling Scopes School - 10%';
+                    }
+                    if(addBtn.classList.contains('hidden')) addBtn.classList.remove('hidden');
+                    document.querySelector('.cart-promo_block')?.classList.add('active');
                 }
-                document.querySelector('.cart-promo_block')?.classList.add('active');
-            }
-
-            if (target.value.toLowerCase() === "epm") {
-                if(textElem) {
-                    textElem.innerHTML = 'EPAM Systems - 10% ';
+    
+                if (target.value.toLowerCase() === "epm") {
+                    if(textElem) {
+                        textElem.innerHTML = 'EPAM Systems - 10% ';
+                    }
+                    if(addBtn.classList.contains('hidden')) addBtn.classList.remove('hidden');
+                    document.querySelector('.cart-promo_block')?.classList.add('active');
                 }
-                document.querySelector('.cart-promo_block')?.classList.add('active');
             }
-        }
+        };
+        
     }
 
     public handleClick(event: Event): void {
@@ -61,7 +69,6 @@ class CartPage extends WFMComponent {
 
         if (target.classList.contains('cart__counter-incr')) {
             const curElem = <HTMLElement> target.previousSibling?.previousSibling;
-            console.log(curElem.id)
             let curNum = Number(curElem?.textContent);
             curNum += 1;
             (curElem as HTMLElement).innerHTML = String(curNum);
@@ -92,52 +99,39 @@ class CartPage extends WFMComponent {
             li.classList.add('cart-applied_block-item');
 
             const promoCode = (document.querySelector('.cart-promo') as HTMLInputElement).value;
-            const promoApplied = document.querySelectorAll('.cart-applied_block-item');
-            if (promoApplied.length >= 1) {
-                const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
-                if(addBtn) (addBtn).style.display = "none";
-            }
+            const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
 
             if (promoCode.toLowerCase() === "rs") {
-                
                 document.querySelector('.cart-promo_block')?.classList.add('active');
                 li.setAttribute('id', 'rs');
                 li.innerHTML = `<p class="cart-applied_text">Rolling Scopes School - 10%</p>
                 <button class="cart-applied_btn">drop</button>
                 `;
-                
-                if(promoApplied.length < 2){
-                    appliedPromoList?.append(li);
-                    promoApplied.forEach(item => {
-                        console.log(item.id)
-                        if(item.id !== 'rs') {
-                            appliedPromoList?.append(li);
-                        } else {
-                            return;
-                        }
-                    }
-                )}
-            }
+                appliedPromoList?.append(li);
+                addBtn.classList.add('hidden');
+            } 
 
             if (promoCode.toLowerCase() === "epm") {
-                
                 document.querySelector('.cart-promo_block')?.classList.add('active');
                 li.setAttribute('id', 'epm');
                 li.innerHTML = `<p class="cart-applied_text">EPAM Systems - 10%</p>
                 <button class="cart-applied_btn">drop</button>
                 `;
-                
-                if(promoApplied.length < 2){
                 appliedPromoList?.append(li);
-                promoApplied.forEach(item => {
-                    console.log(item.id)
-                    if(item.id !== 'epm') {
-                        appliedPromoList?.append(li);
-                    } else {
-                        return;
-                    }
-                })}
+                addBtn.classList.add('hidden');
+            } 
+            const promoContainer = <HTMLElement> document.querySelector('.cart__summary-sum_promo span');
+            const appliedPromoItems = document.querySelectorAll('.cart-applied_block-item');
+            const promoSum1 = (Number(localStorage.getItem('totalSum')) * 0.9).toFixed(2);
+            const promoSum2 = (Number(localStorage.getItem('totalSum')) * 0.8).toFixed(2);
+            console.log(promoSum1);
+            if(appliedPromoItems.length === 1) {
+                promoContainer.innerHTML = String(promoSum1);
             }
+            if(appliedPromoItems.length === 2) {
+                promoContainer.innerHTML = String(promoSum2);
+            }
+            
         }
     }
 }
