@@ -8,53 +8,43 @@ class ProductsContainer extends WFMComponent {
         super(config);
     }
 
-    detailsSelector = '.btn__details';
-    getDetails = (event: Event): void => {
-        const target = event.target;
-        if (!target) return;
-        const id = (target as HTMLElement).getAttribute('id');
-        (target as HTMLElement).setAttribute('href', `#single/${id}`);
-        appRoutes[1].path = `single/${id}`;
-    }
-
     cartProducts: CartItem[] = [];
-    cartSelector = '.btn__to-cart';
+    public handleClick(event: Event): void {
+        const target = event.target as HTMLElement;
+        
+        if(target.classList.contains('btn__details')) {
+            const id = (target as HTMLElement).getAttribute('id');
+            (target as HTMLElement).setAttribute('href', `#single/${id}`);
+            appRoutes[1].path = `single/${id}`;
+        }
 
-    addToCart = (event: Event): void => {
-        const target = event.target;
-        if (!target) return;
-        const id = (target as HTMLElement).getAttribute('id');
+        if(target.classList.contains('btn__to-cart')) {
+            const id = (target as HTMLElement).getAttribute('id');
 
-        if(!id) return;
-        const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+            if(!id) return;
+            const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
 
-        this.cartProducts.push({
-            'product': product,
-            'counter': 1
-        });
-        console.log(this.cartProducts)
-        localStorage.setItem('cart', JSON.stringify(this.cartProducts));
-
-        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        cartArr.forEach(item => (item.product.id === product.id) ? (target as HTMLElement).innerHTML = 'drop from cart' : (target as HTMLElement).innerHTML = 'add to cart');
-        let cartTotalCounter = 0;
-        let cartTotalSum = 0;
-        cartArr.forEach(item => {
-            cartTotalCounter += item.counter;
-            cartTotalSum += (item.product.price * item.counter);
-            localStorage.setItem('totalSum', String(cartTotalSum))
-            localStorage.setItem('totalCounter', String(cartTotalCounter))
-        })
-
-       // не изменяется текстовое значение кнопки ??????????????
-        if((target as HTMLElement).innerHTML === 'drop from cart') {
-            (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'add to cart'
-        } 
-        if((target as HTMLElement).innerHTML === 'add to cart') {
-            (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'drop from cart';
             this.cartProducts.push({
                 'product': product,
                 'counter': 1
+            });
+            console.log(this.cartProducts)
+            localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+
+            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+            cartArr.forEach(item => {
+                if(item.product.id === product.id)  {
+                    (target as HTMLElement).innerHTML = 'drop from cart' 
+                } else { 
+                    (target as HTMLElement).innerHTML = 'add to cart'
+            }});
+            let cartTotalCounter = 0;
+            let cartTotalSum = 0;
+            cartArr.forEach(item => {
+                cartTotalCounter += item.counter;
+                cartTotalSum += (item.product.price * item.counter);
+                localStorage.setItem('totalSum', String(cartTotalSum))
+                localStorage.setItem('totalCounter', String(cartTotalCounter))
             });
         }
     }
@@ -66,11 +56,7 @@ export const productsContainer = new ProductsContainer({
     getTemplate() {   
         
         let cardsTemplate = ``;
-
         productsData.products.forEach((product: Product) => {
-
-            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);  
-
             cardsTemplate += `
                 <div data-category="${product.category}" data-brand="${product.brand}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">

@@ -8,7 +8,57 @@ class CartPage extends WFMComponent {
         super(config);
     }
 
+    public handleClick(event: Event): void {
+        const target = event.target as HTMLElement;
 
+        if (target.classList.contains('cart__counter-decr')) {
+            const curElem = <HTMLElement> target.nextSibling?.nextSibling
+            let curNum = Number(curElem?.textContent);
+
+            if(curNum < 1) {
+                curNum = 0;
+            } else {
+                curNum -= 1;
+                localStorage.setItem('totalCounter', String(curNum))
+            }
+            (curElem as HTMLElement).innerHTML = String(curNum);
+            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+            let cartTotalSum = 0;
+            let cartTotalCounter = 0;
+            cartArr.forEach(item => {
+                if(Number(curElem.id) === Number(item.product.id)) {
+                    item.counter = curNum;
+                }
+                cartTotalSum += (item.product.price * item.counter);
+                cartTotalCounter += item.counter;
+            })
+            localStorage.setItem('cart', JSON.stringify(cartArr));
+            localStorage.setItem('totalSum', String(cartTotalSum));
+            localStorage.setItem('totalCounter', String(cartTotalCounter))
+        }
+
+        if (target.classList.contains('cart__counter-incr')) {
+            const curElem = <HTMLElement> target.previousSibling?.previousSibling;
+            console.log(curElem.id)
+            let curNum = Number(curElem?.textContent);
+            curNum += 1;
+            (curElem as HTMLElement).innerHTML = String(curNum);
+
+            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+            let cartTotalSum = 0;
+            let cartTotalCounter = 0;
+            cartArr.forEach(item => {
+                if(Number(curElem.id) === Number(item.product.id)) {
+                    item.counter = curNum;
+                }
+                cartTotalSum += (item.product.price * item.counter);
+                cartTotalCounter += item.counter;
+            })
+            localStorage.setItem('cart', JSON.stringify(cartArr));
+            localStorage.setItem('totalSum', String(cartTotalSum));
+            localStorage.setItem('totalCounter', String(cartTotalCounter))
+        }
+    }
 }
 
 export const cartPage = new CartPage({
@@ -18,10 +68,13 @@ export const cartPage = new CartPage({
         let cartTemplate = ``;
         let index = 1;
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        let cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
-        let cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
+        const cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
+        const cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
+        if(!cartArr || cartArr.length === 0) {
+            return `<h3>Cart is empty</h3>`
+        }
 
-        cartArr.forEach((item: CartItem) => {
+        cartArr && cartArr.forEach((item: CartItem) => {
             cartTemplate += `
             <div class="cart__products-elem">
                 <p class="cart__products-num">${index++}</p>
@@ -39,18 +92,15 @@ export const cartPage = new CartPage({
                 <div class="cart__products-sum">
                     <p>Stock: <span>${item.product.stock}</span> </p>
                     <div class="cart__counter">
-                        <button> - </button> 
-                        <span>${item.counter}</span> 
-                        <button> + </button>
+                        <button class="cart__counter-decr">-</button> 
+                        <span id=${item.product.id} class="cart__counter-result">${item.counter}</span> 
+                        <button class="cart__counter-incr">+</button>
                     </div>
                     <p>€<span>${item.product.price}</span></p>
                 </div>
             </div>`;
         });
 
-        if(cartArr.length === 0 || cartArr === null) {
-            return `<h3>Cart is empty</h3>`
-        }
         return `<section class="cart">
         <div class="container">
             <div class="cart__products">
