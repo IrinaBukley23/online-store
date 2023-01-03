@@ -15,12 +15,21 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
+            max-height: 200px;
+            overflow-y: scroll;
 
             .form-check {
                 display: flex;
                 align-items: center;
-                gap: 14px;
+                gap: 10px;
                 transition: 0.5s;
+                min-height: auto;
+
+                order: 1;
+
+                &:has(.form-check-input:disabled) {
+                    order: 2;
+                }
 
                 &-input {
                     margin-top: 0;
