@@ -33,6 +33,12 @@ productsData.products.forEach((product: Product) => {
                     <div class="product__description">
                         ${product.description}
                     </div>
+                    <div class="product__stock">
+                        In stock: ${product.stock}
+                    </div>
+                    <div class="product__price">
+                        € ${product.price}
+                    </div>
                     <div class="product__buttons">
                         <button class="button">Add to cart</button>
                         <a id=${product.id} class="button btn__details" href="#single/1">Details</a>

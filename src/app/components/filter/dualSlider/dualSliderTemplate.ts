@@ -7,7 +7,12 @@ export class DualSliderTemplate extends WFMComponent {
     }
 
     public init(): void {
-        function controlFromInput(fromSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement): void {
+        function controlFromInput(
+            fromSlider: HTMLInputElement,
+            fromInput: HTMLInputElement,
+            toInput: HTMLInputElement,
+            controlSlider: HTMLInputElement
+        ): void {
             const [from, to] = getCurrentValues(fromInput, toInput);
             fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
             if (+from > +to) {
@@ -18,7 +23,12 @@ export class DualSliderTemplate extends WFMComponent {
             }
         }
 
-        function controlToInput(toSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement): void {
+        function controlToInput(
+            toSlider: HTMLInputElement,
+            fromInput: HTMLInputElement,
+            toInput: HTMLInputElement,
+            controlSlider: HTMLInputElement
+        ): void {
             const [from, to] = getCurrentValues(fromInput, toInput);
             fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
             setToggleAccessible(toInput);
@@ -30,7 +40,11 @@ export class DualSliderTemplate extends WFMComponent {
             }
         }
 
-        function controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, fromInput: HTMLInputElement): void {
+        function controlFromSlider(
+            fromSlider: HTMLInputElement,
+            toSlider: HTMLInputElement,
+            fromInput: HTMLInputElement
+        ): void {
             const [from, to] = getCurrentValues(fromSlider, toSlider);
             fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
             if (+from > +to) {
@@ -41,7 +55,11 @@ export class DualSliderTemplate extends WFMComponent {
             }
         }
 
-        function controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, toInput: HTMLInputElement): void {
+        function controlToSlider(
+            fromSlider: HTMLInputElement,
+            toSlider: HTMLInputElement,
+            toInput: HTMLInputElement
+        ): void {
             const [from, to] = getCurrentValues(fromSlider, toSlider);
             fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
             setToggleAccessible(toSlider);
@@ -60,29 +78,34 @@ export class DualSliderTemplate extends WFMComponent {
             return [from, to];
         }
 
-        function fillSlider(from: HTMLInputElement, to: HTMLInputElement, sliderColor: string, rangeColor: string, controlSlider: HTMLInputElement): void {
+        function fillSlider(
+            from: HTMLInputElement,
+            to: HTMLInputElement,
+            sliderColor: string,
+            rangeColor: string,
+            controlSlider: HTMLInputElement
+        ): void {
             const rangeDistance = +to.max - +to.min;
             const fromPosition = +from.value - +to.min;
             const toPosition = +to.value - +to.min;
             controlSlider.style.background = `linear-gradient(
                   to right,
                   ${sliderColor} 0%,
-                  ${sliderColor} ${(fromPosition)/(rangeDistance)*100}%,
-                  ${rangeColor} ${((fromPosition)/(rangeDistance))*100}%,
-                  ${rangeColor} ${(toPosition)/(rangeDistance)*100}%, 
-                  ${sliderColor} ${(toPosition)/(rangeDistance)*100}%, 
+                  ${sliderColor} ${(fromPosition / rangeDistance) * 100}%,
+                  ${rangeColor} ${(fromPosition / rangeDistance) * 100}%,
+                  ${rangeColor} ${(toPosition / rangeDistance) * 100}%, 
+                  ${sliderColor} ${(toPosition / rangeDistance) * 100}%, 
                   ${sliderColor} 100%)`;
         }
 
         const setToggleAccessible = (currentTarget: HTMLInputElement): void => {
             const toSlider = document.querySelector(`${this.selector} #toSlider`) as HTMLInputElement;
-            if (+currentTarget.value <= 0 ) {
+            if (+currentTarget.value <= 0) {
                 toSlider.style.zIndex = '2';
-                
             } else {
                 toSlider.style.zIndex = '0';
             }
-        }
+        };
 
         const fromSlider = document.querySelector(`${this.selector} #fromSlider`) as HTMLInputElement;
         const toSlider = document.querySelector(`${this.selector} #toSlider`) as HTMLInputElement;
@@ -93,6 +116,8 @@ export class DualSliderTemplate extends WFMComponent {
 
         fromSlider.addEventListener('input', (): void => controlFromSlider(fromSlider, toSlider, fromInput));
         toSlider.addEventListener('input', (): void => controlToSlider(fromSlider, toSlider, toInput));
+        fromSlider.addEventListener('change', (): void => controlFromSlider(fromSlider, toSlider, fromInput));
+        toSlider.addEventListener('change', (): void => controlToSlider(fromSlider, toSlider, toInput));
         fromInput.addEventListener('input', (): void => controlFromInput(fromSlider, fromInput, toInput, toSlider));
         toInput.addEventListener('input', (): void => controlToInput(toSlider, fromInput, toInput, toSlider));
     }
