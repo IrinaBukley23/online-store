@@ -11,18 +11,22 @@ export interface ModuleConfig {
 export interface ComponentInterface {
     el: HTMLElement | null;
     selector: string;
-    getTemplate: (params?: { [key: string]: string }) => string;
+    template: string;
     innerComponents: null | ComponentInterface[];
+    getTemplate: (params?: {[key: string]: string}) => string;
     render: () => void;
     initInnerComponents: () => void;
     events?: () => { [key: string]: string };
     clickSelector?: string;
-    handleClick?: (e: Event) => void;
+    detailsSelector?: string;
+    cartSelector?: string;
+    getDetails?(e: Event): void;
+    changeCounter?(e: Event): void;
 }
 
 export interface ComponentConfig {
     selector: string;
-    getTemplate: (params?: { [key: string]: string }) => string;
+    getTemplate: (params?: {[key: string]: string}) => string;
     innerComponents: null | ComponentInterface [];
     render?: () => void;
 }
@@ -44,6 +48,11 @@ export interface Product {
     stock: number;
     thumbnail: string;
     title: string;
+}
+
+export interface CartItem {
+    product: Product;
+    counter: number;
 }
 
 export interface ProductsData {

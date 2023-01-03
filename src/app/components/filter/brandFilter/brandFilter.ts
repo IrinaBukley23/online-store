@@ -32,5 +32,5 @@ export const brandFilter = new BrandFilter({
     getTemplate: () => `
         <h5 class="brand-filter__title">Brands</h5>
         <div class="filter__block-options brand-filter__options">${brandFilterTemplate}</div>
-    `,
+      `}
 });

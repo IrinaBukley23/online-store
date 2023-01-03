@@ -1,36 +1,107 @@
 import { WFMComponent } from '../../../routes/index';
-import { ComponentConfig, Product } from '../../../types';
+import { CartItem, ComponentConfig, Product } from '../../../types';
 import { productsData } from '../../../data/productsData';
 import './singlePage.scss';
 
 class SinglePage extends WFMComponent {
-    constructor(config: ComponentConfig) {
-        super(config);
+  constructor(config: ComponentConfig) {
+      super(config);
+  }
+
+  cartProducts: CartItem[] = [];
+  public handleClick(event: Event): void {
+    const target = event.target as HTMLElement;
+
+    if (target.classList.contains('images__list-item_img')) {
+      if(!(target as HTMLElement).classList.contains('images__list-item_img')) return;
+      this.el?.querySelectorAll('.images__list-item_img').forEach((imageItem) => imageItem.classList.remove('active'));
+      if (!target) return;
+      (target as HTMLElement).classList.add('active');
+      if((target as HTMLElement).classList.contains('active')) {
+        const elem = document.querySelector('.images__large');
+        const currentImgSrc = ((target as HTMLElement) as HTMLElement).getAttribute('src')
+        if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
+      }
     }
+
+    if(target.classList.contains('btn__to-cart')) {
+      const id = (target as HTMLElement).getAttribute('id');
+
+      if(!id) return;
+      const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+
+      this.cartProducts.push({
+          'product': product,
+          'counter': 1
+      });
+      console.log(this.cartProducts)
+      localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+
+      const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+      cartArr.forEach(item => (item.product.id === product.id) ? (target as HTMLElement).innerHTML = 'drop from cart' : (target as HTMLElement).innerHTML = 'add to cart');
+      let cartTotalCounter = 0;
+      let cartTotalSum = 0;
+      cartArr.forEach(item => {
+          cartTotalCounter += item.counter;
+          cartTotalSum += (item.product.price * item.counter);
+          localStorage.setItem('totalSum', String(cartTotalSum))
+          localStorage.setItem('totalCounter', String(cartTotalCounter))
+      })
+
+      // не изменяется текстовое значение кнопки ??????????????
+      if((target as HTMLElement).innerHTML === 'drop from cart') {
+          (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'add to cart'
+      }
+      if((target as HTMLElement).innerHTML === 'add to cart') {
+          (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'drop from cart';
+          this.cartProducts.push({
+              'product': product,
+              'counter': 1
+          });
+      }
+   }
+  }
 }
 
-let product = productsData.products[5]
+export const singlePage = new SinglePage({
+  selector: 'single',
+  innerComponents: null,
+  getTemplate: (params?: { [id: string]: string }) => {
+    if (!params?.id) return "";
+    const [product] = productsData.products.filter((product: Product) => product.id === Number(params.id));
+    let imagesCards = '';
+    const largeImg = `<img src=${product.images[0]} alt=${product.title}>`;
 
-const cardDescr = `<section class="cart">
-    <div>"хлебные крошки"</div>
-    <div class="cart__wrapper">
-      <h2 class="cart__title">${product.title}</h2>
-      <div class="cart__info">
-        <div class="cart__info-images">
-          <img src=${product.images[0]} alt=${product.title}>
+    product.images.forEach(img => {
+      imagesCards += `<li class="images__list-item">
+        <img class="images__list-item_img" src=${img} alt='photo'>
+      </li>`;
+    })
+
+    return `<section class="single">
+    <div class="single__crumbs">
+      <ul class="crumbs__list">
+        <li class="crumbs__list-item">Store</li>
+        <li class="crumbs__list-item"> >> </li>
+        <li class="crumbs__list-item">${product.category}</li>
+        <li class="crumbs__list-item"> >> </li>
+        <li class="crumbs__list-item">${product.brand}</li>
+        <li class="crumbs__list-item"> >> </li>
+        <li class="crumbs__list-item">${product.title}</li>
+      </ul>
+    </div>
+    <div class="single__wrapper">
+      <h2 class="single__title">${product.title}</h2>
+      <div class="single__info">
+        <div class="single__info-images">
+          <div class="images__large">
+            ${largeImg}
+          </div>
           <ul class="images__list">
-              <li class="images__list-item">
-                  <img src=${product.images[0]} alt=${product.title}>
-              </li>
-              <li class="images__list-item">
-                  <img src=${product.images[1]} alt=${product.title}>
-              </li>
-              <li class="images__list-item">
-                  <img src=${product.images[2]} alt=${product.title}>
-              </li>
+              ${imagesCards}
           </ul>
         </div>
-        <div class="cart__info-descr">
+        <div class="single__info-descr">
           <ul class="descr__list">
             <li class="descr__list-item">
               <p class="descr__list-item_top">Description:</p>
@@ -58,19 +129,13 @@ const cardDescr = `<section class="cart">
             </li>
           </ul>
         </div>
-        <div class="cart__info-price">
-          <div class="cart__info-price_sum">€${product.price}</div>
-          <button class="cart__info-price_btn">add to cart</button>
-          <button class="cart__info-price_btn">buy now</button>
+        <div class="single__info-price">
+          <div class="single__info-price_sum">€${product.price}</div>
+          <button class="single__info-price_btn">add to cart</button>
+          <button class="single__info-price_btn">buy now</button>
         </div>
       </div>
-    </div>
-  </section>`
-
-export const singlePage = new SinglePage({
-    selector: 'single',
-    innerComponents: null,
-    getTemplate: () => `
-        ${cardDescr}
-    `,
+      </div>
+    </section>`
+  }
 });

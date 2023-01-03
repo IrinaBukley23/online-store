@@ -1,7 +1,15 @@
 @import '../../../scss/abstract/variables';
 
-.cart {
+.single {
     text-align: center;
+    &__crumbs {
+        width: 70%;
+        margin: 10px auto 30px;
+    }
+    .crumbs__list {
+        display: flex;
+        justify-content: space-around;
+    }
     &__wrapper{
     width: 70%;
     margin: 0 auto 80px;
@@ -22,10 +30,28 @@
         &-images {
             width: 40%;
             margin: 0 15px;
+            &__large {
+                width: 300px;
+                height: 300px;
+                img{
+                    width: 100%;
+                }
+            }
             .images__list {
                 display: flex;
+                flex-wrap: wrap;
                 &-item {
                     margin: 10px 10px 0;
+                    width: 50px;
+                    height: 50px;
+                    img{
+                        width: 100%;
+                        padding: 10px;
+                        &.active {
+                            border: 2px solid $color-accent-dark;
+                            border-radius: 8px;
+                        }
+                    }
                 }
             }
         }
