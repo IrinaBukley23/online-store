@@ -126,7 +126,6 @@ class HomePage extends WFMComponent {
 
         if (target.classList.contains('text-search__input')) {
             const inputTarget = target as HTMLInputElement;
-            console.log(inputTarget.value);
 
             this.showChosenCards(inputTarget);
         }
@@ -144,6 +143,8 @@ class HomePage extends WFMComponent {
 
     private showChosenCards(target: HTMLInputElement): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+
+        const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
 
         const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
         const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
@@ -218,6 +219,25 @@ class HomePage extends WFMComponent {
                 if (+card.dataset.price < +minPrice || +card.dataset.price > +maxPrice) {
                     card.classList.add('d-none');
                 }
+            }
+
+            if (textInput.value.trim()) {
+                let includesSearchStr = false;
+                const currentCardId: string | undefined = card.dataset.id;
+
+                if (currentCardId) {
+                    const currentProduct: Product | undefined = productsData.products.find(product => +product.id === +currentCardId)
+
+                    for (let key in currentProduct) {
+                        const typedKey = key as keyof Product;
+                        const value = currentProduct[typedKey].toString().toLowerCase();
+
+                        if (value.includes(textInput.value.trim().toLowerCase())) {
+                            console.log(value);
+                        }
+                    }
+                }
+
             }
         });
     }
