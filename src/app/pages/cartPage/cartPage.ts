@@ -12,7 +12,7 @@ class CartPage extends WFMComponent {
     public handleInput(event: Event): void {
         const target = event.target as HTMLInputElement;
         const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
-        //const promoItems = document.querySelectorAll('.cart-applied_block-item');
+
         if(this.promoArr.length > 1) {
             addBtn.classList.add('hidden');
         } else {
@@ -42,6 +42,7 @@ class CartPage extends WFMComponent {
     public handleClick(event: Event): void {
         const target = event.target as HTMLElement;
 
+        // increase and decrease product amount
         if (target.classList.contains('cart__counter-decr')) {
             const curElem = <HTMLElement> target.nextSibling?.nextSibling
             let curNum = Number(curElem?.textContent);
@@ -65,7 +66,17 @@ class CartPage extends WFMComponent {
             })
             localStorage.setItem('cart', JSON.stringify(cartArr));
             localStorage.setItem('totalSum', String(cartTotalSum));
-            localStorage.setItem('totalCounter', String(cartTotalCounter))
+            localStorage.setItem('totalCounter', String(cartTotalCounter));
+
+            const cartTotalCounterEl = document.querySelector('.cart__summary-subtitle span') as HTMLElement;
+            if(cartTotalCounterEl) {
+                cartTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+            }
+
+            const cartTotalSumEl = document.querySelector('.cart__summary-sum span') as HTMLElement;
+            if(cartTotalSumEl) {
+                cartTotalSumEl.innerHTML = `${cartTotalSum}`;
+            }
         }
 
         if (target.classList.contains('cart__counter-incr')) {
@@ -87,8 +98,19 @@ class CartPage extends WFMComponent {
             localStorage.setItem('cart', JSON.stringify(cartArr));
             localStorage.setItem('totalSum', String(cartTotalSum));
             localStorage.setItem('totalCounter', String(cartTotalCounter))
+
+            const cartTotalCounterEl = document.querySelector('.cart__summary-subtitle span') as HTMLElement;
+            if(cartTotalCounterEl) {
+                cartTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+            }
+
+            const cartTotalSumEl = document.querySelector('.cart__summary-sum span') as HTMLElement;
+            if(cartTotalSumEl) {
+                cartTotalSumEl.innerHTML = `${cartTotalSum}`;
+            }
         }
 
+        // add promo list
         if (target.classList.contains('cart-promo_btn')) {
             const promoCode = (document.querySelector('.cart-promo') as HTMLInputElement).value;
             if (promoCode.toLowerCase() === "rs") {
@@ -100,10 +122,12 @@ class CartPage extends WFMComponent {
             this.renderPromoCodes(this.promoArr);
         }
 
+        // clear promo input
         if (target.classList.contains('cart-clear')) {
             (document.querySelector('.cart-promo') as HTMLInputElement).value = '';
         }
     
+
         if(target.classList.contains('cart-applied_btn')) {
                         
             const promoContainer = <HTMLElement> document.querySelector('.cart__summary-sum_promo span');
@@ -126,9 +150,9 @@ class CartPage extends WFMComponent {
             if(promoBlock) (promoBlock as HTMLElement).innerHTML = '';
             this.renderPromoCodes(this.promoArr);
         }
-        console.log(target)
+
+        // to single page routing
         if (target.classList.contains('cart__products-img img') || target.classList.contains('cart__products-descr') || target.classList.contains('cart__products-title') || target.classList.contains('cart__products-raiting')) {
-            console.log((target as HTMLElement).parentNode?.parentNode)
             const id = (((target as HTMLElement).parentNode as HTMLElement).parentNode as HTMLElement)?.getAttribute('id');
             (((target as HTMLElement).parentNode as HTMLElement).parentNode as HTMLElement).setAttribute('href', `#single/${id}`);
             appRoutes[1].path = `single/${id}`;
