@@ -10,15 +10,17 @@ class SortDropdown extends WFMComponent {
 export const sortDropdown = new SortDropdown({
     selector: 'sort-dropdown',
     innerComponents: null,
-    getTemplate: (options) => `
-                <div class="dropdown">
-                  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown button
+    getTemplate: () => `
+                <div class="dropdown sort">
+                  <button class="sort__title btn btn-secondary btn-lg dropdown-toggle" type="button" id="sortProductDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort products
                   </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <ul class="sort__menu dropdown-menu" aria-labelledby="sortProductDropdown">
+                    <li><a class="dropdown-item sort__item" data-sort="price-desc" href="#">Price ↓</a></li>
+                    <li><a class="dropdown-item sort__item" data-sort="price-asc" href="#">Price ↑</a></li>
+                    <li><a class="dropdown-item sort__item" data-sort="discount-desc" href="#">Discount ↓</a></li>
+                    <li><a class="dropdown-item sort__item" data-sort="discount-asc" href="#">Discount ↑</a></li>
                   </ul>
                 </div>
-    `});
+    `,
+});

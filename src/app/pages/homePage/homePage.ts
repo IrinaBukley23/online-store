@@ -3,7 +3,7 @@ import { ComponentConfig, Product } from '../../../types';
 import { productsContainer } from '../../components/productsContainer/productsContainer';
 import { filter } from '../../components/filter/filter';
 import { productsData } from '../../../data/productsData';
-import {sortDropdown} from '../../components/sortDropdown/sortDropdown';
+import { sortDropdown } from '../../components/sortDropdown/sortDropdown';
 import './homePage.scss';
 
 class HomePage extends WFMComponent {
@@ -48,6 +48,46 @@ class HomePage extends WFMComponent {
         const max = Math.max(...prices);
 
         return String(max);
+    }
+
+    public handleClick(event: Event): void {
+        const target = event.target as HTMLElement;
+
+        if (target.classList.contains('sort__item')) {
+            const sortType: string | undefined = target.dataset.sort;
+
+            if (sortType) {
+                const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+                const sortProductDropdown = document.querySelector('#sortProductDropdown') as HTMLButtonElement;
+
+                const arrayCards = Array.prototype.slice.call(productCards);
+                const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
+
+                if (sortType === 'price-desc') {
+                    const sortedCards = displayedCards.sort((a, b) => +b.dataset.price - +a.dataset.price);
+                    sortedCards.forEach((card, index) => {
+                        card.style.order = `${index + 1}`;
+                    });
+                } else if (sortType === 'price-asc') {
+                    const sortedCards = displayedCards.sort((a, b) => +a.dataset.price - +b.dataset.price);
+                    sortedCards.forEach((card, index) => {
+                        card.style.order = `${index + 1}`;
+                    });
+                } else if (sortType === 'discount-desc') {
+                    const sortedCards = displayedCards.sort((a, b) => +b.dataset.discount - +a.dataset.discount);
+                    sortedCards.forEach((card, index) => {
+                        card.style.order = `${index + 1}`;
+                    });
+                } else if (sortType === 'discount-asc') {
+                    const sortedCards = displayedCards.sort((a, b) => +a.dataset.discount - +b.dataset.discount);
+                    sortedCards.forEach((card, index) => {
+                        card.style.order = `${index + 1}`;
+                    });
+                }
+
+                sortProductDropdown.innerText = target.innerText;
+            }
+        }
     }
 
     public handleInputChange(event: Event): void {
@@ -98,11 +138,6 @@ class HomePage extends WFMComponent {
         const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
         const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
 
-        // const stockFromInput = document.querySelector('dual-slider-stock #fromInput') as HTMLInputElement;
-        // const stockToInput = document.querySelector('dual-slider-stock #toInput') as HTMLInputElement;
-        // const priceFromInput = document.querySelector('dual-slider-price #fromInput') as HTMLInputElement;
-        // const priceToInput = document.querySelector('dual-slider-price #toInput') as HTMLInputElement;
-
         const checkedCategoryInputs = document.querySelectorAll('.category-filter .form-check-input:checked');
         const checkedBrandInputs = document.querySelectorAll('.brand-filter .form-check-input:checked');
         const chosenCategories: (string | undefined)[] = [];
@@ -114,8 +149,6 @@ class HomePage extends WFMComponent {
             target !== stockFromSlider &&
             target !== stockToSlider
         ) {
-            console.log('outside sliders');
-
             priceFromSlider.value = this.minPrice;
             priceToSlider.value = this.maxPrice;
             stockFromSlider.value = this.minStock;
@@ -290,11 +323,9 @@ class HomePage extends WFMComponent {
             if (card.dataset.price && minActiveCardPrice && maxActiveCardPrice) {
                 if (+card.dataset.price < +minActiveCardPrice) {
                     minActiveCardPrice = card.dataset.price;
-                    console.log('min price', minActiveCardPrice);
                 }
                 if (+card.dataset.price > +maxActiveCardPrice) {
                     maxActiveCardPrice = card.dataset.price;
-                    console.log('max price', maxActiveCardPrice);
                 }
             }
 
@@ -336,11 +367,11 @@ export const homePage = new HomePage({
     innerComponents: [productsContainer, filter, sortDropdown],
     getTemplate: () => `
         <filter class="filter"></filter>
-        <div class="main">
+        <main class="main">
             <div class="display-info">
                 <sort-dropdown></sort-dropdown>
             </div>
             <products-container class="product__cards"></products-container>
-        </div>
+        </main>
     `,
 });
