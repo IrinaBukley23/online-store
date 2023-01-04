@@ -24,15 +24,16 @@ class SinglePage extends WFMComponent {
       }
     }
 
-    if(target.classList.contains('btn__to-cart')) {
+    
+    if(target.classList.contains('add-to-cart')) {
       const id = (target as HTMLElement).getAttribute('id');
-
       if(!id) return;
       const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
 
       this.cartProducts.push({
           'product': product,
-          'counter': 1
+          'counter': 1,
+          'flag': true,
       });
       console.log(this.cartProducts)
       localStorage.setItem('cart', JSON.stringify(this.cartProducts));
@@ -48,16 +49,13 @@ class SinglePage extends WFMComponent {
           localStorage.setItem('totalCounter', String(cartTotalCounter))
       })
 
-      // не изменяется текстовое значение кнопки ??????????????
-      if((target as HTMLElement).innerHTML === 'drop from cart') {
-          (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'add to cart'
+      const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+      if(headerTotalCounterEl) {
+          headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
       }
-      if((target as HTMLElement).innerHTML === 'add to cart') {
-          (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'drop from cart';
-          this.cartProducts.push({
-              'product': product,
-              'counter': 1
-          });
+      const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+      if(headerTotalSumEl) {
+          headerTotalSumEl.innerHTML = `${cartTotalSum}`;
       }
    }
   }
@@ -131,7 +129,7 @@ export const singlePage = new SinglePage({
         </div>
         <div class="single__info-price">
           <div class="single__info-price_sum">€${product.price}</div>
-          <button class="single__info-price_btn">add to cart</button>
+          <button id=${product.id} class="single__info-price_btn add-to-cart">add to cart</button>
           <button class="single__info-price_btn">buy now</button>
         </div>
       </div>

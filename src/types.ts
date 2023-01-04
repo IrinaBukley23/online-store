@@ -15,7 +15,6 @@ export interface ComponentInterface {
     getTemplate: (params?: {[key: string]: string}) => string;
     render: () => void;
     initInnerComponents: () => void;
-    events?: () => { [key: string]: string };
     clickSelector?: string;
 }
 
@@ -48,7 +47,7 @@ export interface Product {
 export interface CartItem {
     product: Product;
     counter: number;
-    flag?: boolean;
+    flag: boolean;
 }
 
 export interface ProductsData {

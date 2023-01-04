@@ -9,6 +9,7 @@ class CartPage extends WFMComponent {
         super(config);
     }
     promoArr: string[] = [];
+    newArr: CartItem[] = [];
     public handleInput(event: Event): void {
         const target = event.target as HTMLInputElement;
         const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
@@ -42,19 +43,22 @@ class CartPage extends WFMComponent {
     public handleClick(event: Event): void {
         const target = event.target as HTMLElement;
 
-        // increase and decrease product amount
+        // decrease product amount
         if (target.classList.contains('cart__counter-decr')) {
-            const curElem = <HTMLElement> target.nextSibling?.nextSibling
+            const curElem = <HTMLElement> target.nextSibling?.nextSibling;
+            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
             let curNum = Number(curElem?.textContent);
 
             if(curNum < 1) {
                 curNum = 0;
+                cartArr.filter(elem => elem.counter !== curNum);
+                // как обновить чтобы массив добавленных продуктов перерисовывался динамически ???
             } else {
                 curNum -= 1;
                 localStorage.setItem('totalCounter', String(curNum))
             }
             (curElem as HTMLElement).innerHTML = String(curNum);
-            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+            
             let cartTotalSum = 0;
             let cartTotalCounter = 0;
             cartArr.forEach(item => {
@@ -83,6 +87,7 @@ class CartPage extends WFMComponent {
             }
         }
 
+        // increase product amount
         if (target.classList.contains('cart__counter-incr')) {
             const curElem = <HTMLElement> target.previousSibling?.previousSibling;
             let curNum = Number(curElem?.textContent);
@@ -135,7 +140,7 @@ class CartPage extends WFMComponent {
             (document.querySelector('.cart-promo') as HTMLInputElement).value = '';
         }
     
-
+        // apply new sum with promo codes
         if(target.classList.contains('cart-applied_btn')) {
                         
             const promoContainer = <HTMLElement> document.querySelector('.cart__summary-sum_promo span');
@@ -216,8 +221,9 @@ export const cartPage = new CartPage({
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         const cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
         const cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
+        console.log(cartArr)
         if(!cartArr || cartArr.length === 0) {
-            return `<h3>Cart is empty</h3>`
+            return `<h3>Cart is empty</h3>`;
         }
 
         cartArr && cartArr.forEach((item: CartItem) => {
