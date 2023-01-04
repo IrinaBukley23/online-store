@@ -47,6 +47,7 @@ export interface Product {
 export interface CartItem {
     product: Product;
     counter: number;
+    flag?: boolean;
 }
 
 export interface EventsObject {

@@ -69,13 +69,17 @@ class CartPage extends WFMComponent {
             localStorage.setItem('totalCounter', String(cartTotalCounter));
 
             const cartTotalCounterEl = document.querySelector('.cart__summary-subtitle span') as HTMLElement;
+            const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
             if(cartTotalCounterEl) {
                 cartTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+                headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
             }
 
             const cartTotalSumEl = document.querySelector('.cart__summary-sum span') as HTMLElement;
+            const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
             if(cartTotalSumEl) {
                 cartTotalSumEl.innerHTML = `${cartTotalSum}`;
+                headerTotalSumEl.innerHTML = `${cartTotalSum}`;
             }
         }
 
@@ -100,13 +104,17 @@ class CartPage extends WFMComponent {
             localStorage.setItem('totalCounter', String(cartTotalCounter))
 
             const cartTotalCounterEl = document.querySelector('.cart__summary-subtitle span') as HTMLElement;
+            const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
             if(cartTotalCounterEl) {
                 cartTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+                headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
             }
 
             const cartTotalSumEl = document.querySelector('.cart__summary-sum span') as HTMLElement;
+            const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
             if(cartTotalSumEl) {
                 cartTotalSumEl.innerHTML = `${cartTotalSum}`;
+                headerTotalSumEl.innerHTML = `${cartTotalSum}`;
             }
         }
 

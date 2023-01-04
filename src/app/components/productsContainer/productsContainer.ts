@@ -31,7 +31,8 @@ class ProductsContainer extends WFMComponent {
 
             this.cartProducts.push({
                 'product': product,
-                'counter': 1
+                'counter': 1, 
+                'flag': true,
             });
             console.log(this.cartProducts)
             localStorage.setItem('cart', JSON.stringify(this.cartProducts));
@@ -51,6 +52,14 @@ class ProductsContainer extends WFMComponent {
                 localStorage.setItem('totalSum', String(cartTotalSum))
                 localStorage.setItem('totalCounter', String(cartTotalCounter))
             });
+            const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+            if(headerTotalCounterEl) {
+                headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+            }
+            const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+            if(headerTotalSumEl) {
+                headerTotalSumEl.innerHTML = `${cartTotalSum}`;
+            }
         }
     }
 }
