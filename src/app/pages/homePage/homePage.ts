@@ -7,43 +7,129 @@ import './homePage.scss';
 
 class HomePage extends WFMComponent {
     private productsData: Product[];
+    private minStock: string;
+    private maxStock: string;
+    private minPrice: string;
+    private maxPrice: string;
 
     constructor(config: ComponentConfig) {
         super(config);
         this.productsData = productsData.products;
+        this.minStock = this.getMinStockValue();
+        this.maxStock = this.getMaxStockValue();
+        this.minPrice = this.getMinPriceValue();
+        this.maxPrice = this.getMaxPriceValue();
+    }
+
+    public getMinStockValue(): string {
+        const stock = this.productsData.map((product) => product.stock);
+        const min = Math.min(...stock);
+
+        return String(min);
+    }
+
+    public getMaxStockValue(): string {
+        const stock = this.productsData.map((product) => product.stock);
+        const max = Math.max(...stock);
+
+        return String(max);
+    }
+
+    public getMinPriceValue(): string {
+        const prices = this.productsData.map((product) => product.price);
+        const min = Math.min(...prices);
+
+        return String(min);
+    }
+
+    public getMaxPriceValue(): string {
+        const prices = this.productsData.map((product) => product.price);
+        const max = Math.max(...prices);
+
+        return String(max);
     }
 
     public handleInputChange(event: Event): void {
-        const target = event.target as HTMLElement;
+        const target = event.target as HTMLInputElement;
 
         if (target.classList.contains('category-checkbox')) {
-            console.log('target - category');
-
-            this.handleCategoryCheckbox();
+            this.handleCategoryCheckbox(target);
             this.changeActiveBrandCheckboxes();
         }
 
         if (target.classList.contains('brand-checkbox')) {
-            console.log('target - brand');
-            this.handleBrandCheckbox();
+            this.handleBrandCheckbox(target);
+            this.changeActiveCategoryCheckboxes();
+        }
+
+        const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
+        const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
+        const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+        const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+
+        if (
+            target === stockFromSlider ||
+            target === stockToSlider ||
+            target === priceFromSlider ||
+            target === priceToSlider
+        ) {
+            this.showChosenCards(target);
+            this.changeActiveBrandCheckboxes();
             this.changeActiveCategoryCheckboxes();
         }
     }
 
-    private handleCategoryCheckbox(): void {
-        this.showCheckedCards();
+    private handleCategoryCheckbox(target: HTMLInputElement): void {
+        this.showChosenCards(target);
+        this.changeDualSlidersValues();
     }
 
-    private handleBrandCheckbox(): void {
-        this.showCheckedCards();
+    private handleBrandCheckbox(target: HTMLInputElement): void {
+        this.showChosenCards(target);
+        this.changeDualSlidersValues();
     }
 
-    private showCheckedCards(): void {
+    private showChosenCards(target: HTMLInputElement): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+
+        const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
+        const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
+        const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+        const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+
+        // const stockFromInput = document.querySelector('dual-slider-stock #fromInput') as HTMLInputElement;
+        // const stockToInput = document.querySelector('dual-slider-stock #toInput') as HTMLInputElement;
+        // const priceFromInput = document.querySelector('dual-slider-price #fromInput') as HTMLInputElement;
+        // const priceToInput = document.querySelector('dual-slider-price #toInput') as HTMLInputElement;
+
         const checkedCategoryInputs = document.querySelectorAll('.category-filter .form-check-input:checked');
         const checkedBrandInputs = document.querySelectorAll('.brand-filter .form-check-input:checked');
         const chosenCategories: (string | undefined)[] = [];
         const chosenBrands: (string | undefined)[] = [];
+
+        if (
+            target !== priceFromSlider &&
+            target !== priceToSlider &&
+            target !== stockFromSlider &&
+            target !== stockToSlider
+        ) {
+            console.log('outside sliders');
+
+            priceFromSlider.value = this.minPrice;
+            priceToSlider.value = this.maxPrice;
+            stockFromSlider.value = this.minStock;
+            stockToSlider.value = this.maxStock;
+
+            priceFromSlider.dispatchEvent(new Event('change'));
+            priceToSlider.dispatchEvent(new Event('change'));
+            stockFromSlider.dispatchEvent(new Event('change'));
+            stockToSlider.dispatchEvent(new Event('change'));
+        }
+
+        const minPrice: string = priceFromSlider.value;
+        const maxPrice: string = priceToSlider.value;
+        const minStock: string = stockFromSlider.value;
+        const maxStock: string = stockToSlider.value;
 
         checkedCategoryInputs.forEach((input) => {
             if (input.nextElementSibling) {
@@ -75,6 +161,18 @@ class HomePage extends WFMComponent {
                     card.classList.add('d-none');
                 }
             }
+
+            if (card.dataset.stock) {
+                if (+card.dataset.stock < +minStock || +card.dataset.stock > +maxStock) {
+                    card.classList.add('d-none');
+                }
+            }
+
+            if (card.dataset.price) {
+                if (+card.dataset.price < +minPrice || +card.dataset.price > +maxPrice) {
+                    card.classList.add('d-none');
+                }
+            }
         });
     }
 
@@ -85,12 +183,12 @@ class HomePage extends WFMComponent {
         const chosenCategories: (string | undefined)[] = [];
 
         if (!checkedCategoryInputs.length) {
-            brandCheckboxes.forEach(checkbox => {
+            brandCheckboxes.forEach((checkbox) => {
                 const checkboxInput = checkbox as HTMLInputElement;
                 checkboxInput.disabled = false;
-            })
+            });
 
-            return
+            return;
         }
 
         checkedCategoryInputs.forEach((input) => {
@@ -119,21 +217,20 @@ class HomePage extends WFMComponent {
                     checkboxInput.checked = false;
                 }
             }
-        })
+        });
     }
 
     private changeActiveCategoryCheckboxes(): void {
         const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
 
         const checkedBrandInputs = document.querySelectorAll('.brand-filter .form-check-input:checked');
-        console.log(checkedBrandInputs);
         const chosenBrands: (string | undefined)[] = [];
 
         if (!checkedBrandInputs.length) {
-            categoryCheckboxes.forEach(checkbox => {
+            categoryCheckboxes.forEach((checkbox) => {
                 const checkboxInput = checkbox as HTMLInputElement;
                 checkboxInput.disabled = false;
-            })
+            });
 
             return;
         }
@@ -164,16 +261,82 @@ class HomePage extends WFMComponent {
                     checkboxInput.checked = false;
                 }
             }
-        })
+        });
+    }
+
+    private changeDualSlidersValues(): void {
+        const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+
+        const stockFromInput = document.querySelector('dual-slider-stock #fromInput') as HTMLInputElement;
+        const stockToInput = document.querySelector('dual-slider-stock #toInput') as HTMLInputElement;
+        const priceFromInput = document.querySelector('dual-slider-price #fromInput') as HTMLInputElement;
+        const priceToInput = document.querySelector('dual-slider-price #toInput') as HTMLInputElement;
+
+        const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
+        const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
+        const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+        const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+
+        const arrayCards = Array.prototype.slice.call(productCards);
+        const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
+
+        let minActiveCardPrice = displayedCards[0].dataset.price;
+        let minActiveCardStock = displayedCards[0].dataset.stock;
+        let maxActiveCardPrice = displayedCards[0].dataset.price;
+        let maxActiveCardStock = displayedCards[0].dataset.stock;
+
+        displayedCards.forEach((card) => {
+            if (card.dataset.price && minActiveCardPrice && maxActiveCardPrice) {
+                if (+card.dataset.price < +minActiveCardPrice) {
+                    minActiveCardPrice = card.dataset.price;
+                    console.log('min price', minActiveCardPrice);
+                }
+                if (+card.dataset.price > +maxActiveCardPrice) {
+                    maxActiveCardPrice = card.dataset.price;
+                    console.log('max price', maxActiveCardPrice);
+                }
+            }
+
+            if (card.dataset.stock && minActiveCardStock && maxActiveCardStock) {
+                if (+card.dataset.stock < +minActiveCardStock) {
+                    minActiveCardStock = card.dataset.stock;
+                }
+                if (+card.dataset.stock > +maxActiveCardStock) {
+                    maxActiveCardStock = card.dataset.stock;
+                }
+            }
+        });
+
+        if (minActiveCardPrice && maxActiveCardPrice && minActiveCardStock && maxActiveCardStock) {
+            priceFromSlider.value = minActiveCardPrice;
+            priceToSlider.value = maxActiveCardPrice;
+            stockFromSlider.value = minActiveCardStock;
+            stockToSlider.value = maxActiveCardStock;
+
+            priceFromInput.value = minActiveCardPrice;
+            priceToInput.value = maxActiveCardPrice;
+            stockFromInput.value = minActiveCardStock;
+            stockToInput.value = maxActiveCardStock;
+
+            priceFromSlider.dispatchEvent(new Event('change'));
+            priceToSlider.dispatchEvent(new Event('change'));
+            stockFromSlider.dispatchEvent(new Event('change'));
+            stockToSlider.dispatchEvent(new Event('change'));
+            priceFromInput.dispatchEvent(new Event('change'));
+            priceToInput.dispatchEvent(new Event('change'));
+            stockFromInput.dispatchEvent(new Event('change'));
+            stockToInput.dispatchEvent(new Event('change'));
+        }
+
+        console.log(priceFromSlider.value, priceToSlider.value, stockFromSlider.value, stockToSlider.value);
     }
 }
 
 export const homePage = new HomePage({
     selector: 'home',
     innerComponents: [productsContainer, filter],
-    getTemplate() {
-        return `
+    getTemplate: () => `
         <filter class="filter"></filter>
         <products-container class="product__cards"></products-container>
-    `}
+    `,
 });

@@ -14,12 +14,11 @@ class NotFoundPage extends WFMComponent {
 export const notFoundPage = new NotFoundPage({
     selector: 'notFound',
     innerComponents: null,
-    getTemplate() {
-      return `
+    getTemplate: () => `
       <div class="error">
         <p class="error__text">Page doesn't exist</p>
         <img class="error__image" src=${img} alt="Error"/>
         <a class="error__link" href="#">Back to main page</a>
       </div>
-    `}
+    `,
 });

@@ -1,0 +1,460 @@
+[33mcommit 18278e291de952588bfb3cd50a419e7becda90c9[m[33m ([m[1;36mHEAD -> [m[1;32mdual-sliders[m[33m, [m[1;31morigin/dual-sliders[m[33m)[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Jan 3 17:30:16 2023 +0300
+
+    fix: try to fix merge changes
+
+[33mcommit 67528adf877e63e852661d615f10aece1352d695[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Jan 3 17:12:41 2023 +0300
+
+    feat: make dual sliders works depending on the other filters
+
+[33mcommit 5f526375f72ec2cba5a32ccca0c4a8b6959ed651[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Jan 3 12:35:52 2023 +0300
+
+    feat: improving the display of filter options
+
+[33mcommit 83f285ba7e673eeeb240b6ffc2a4eccbcd5e9667[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Fri Dec 30 13:30:13 2022 +0300
+
+    feat: change cards depending on a slider
+
+[33mcommit 5068eca059be088b08703488f462fee6dec56c11[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 29 17:32:18 2022 +0300
+
+    fix: bugs with dual slider
+
+[33mcommit afc36a484170afc2a7e2a3e3b8b3d22925fafe79[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 29 08:03:32 2022 +0300
+
+    feat: inherit two dual sliders from DualSliderTemplate class, change a static template to a dynamic getTemplate() (in components), change render method in component.ts so as to pass parameters, pass min and max value to a price dual slider and a stock dual slider
+
+[33mcommit d27bd354f2a0040879ab9aa79109a75f99017ecd[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Wed Dec 28 08:04:20 2022 +0300
+
+    fix: more TS errors
+
+[33mcommit 161d3610534ffaf03138a4c8a9bcad7fa4909018[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Dec 27 20:29:27 2022 +0300
+
+    fix: part of  typescript errors
+
+[33mcommit d3bf83fff1599654dd0fd9aeca8f91107317389e[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Dec 27 20:07:39 2022 +0300
+
+    feat: add dual slider
+
+[33mcommit 575ee31591bf3d2ffd5b6af9a46e08cfd9b5c387[m[33m ([m[1;31morigin/category-brand-filter[m[33m, [m[1;32mcategory-brand-filter[m[33m)[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Dec 27 16:21:05 2022 +0300
+
+    fix: some more bugs on filter
+
+[33mcommit d5e14713f5c8ab2c457686093b259bc735091bf1[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Dec 27 08:09:48 2022 +0300
+
+    fix: improve the  logics of the filter
+
+[33mcommit 4bf46c3c165e7d05c7f98b43cff02af9e5b3233d[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 26 17:33:17 2022 +0300
+
+    feat: change events system
+
+[33mcommit e02268dd200ae43e52974a9c5f8aa6ab7da55f23[m
+Merge: 42ddfde3 45806c33
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 26 08:08:25 2022 +0300
+
+    fix: merge a fix for events and fix conflicts
+
+[33mcommit 42ddfde3a7293ce7efba01b1ab7bb428f088fa5b[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 26 07:54:42 2022 +0300
+
+    fix: try to fix errors
+
+[33mcommit 45806c33f3f89187c1927a605928149cd86fd021[m[33m ([m[1;31morigin/single-page-descr[m[33m, [m[1;32msingle-page-descr[m[33m)[m
+Author: Irina <irenserge@mail.ru>
+Date:   Sat Dec 24 15:43:56 2022 +0300
+
+    fix: fix handleClick
+
+[33mcommit 057f63f4c4ae98c02fc62bd5290057c5e3e78fbe[m
+Author: Irina <irenserge@mail.ru>
+Date:   Fri Dec 23 17:09:18 2022 +0300
+
+    fix: fix initEvent function
+
+[33mcommit 4c93acf322c37b8da1eab940bf8ccc139ce4a9cf[m
+Author: Irina <irenserge@mail.ru>
+Date:   Thu Dec 22 22:13:17 2022 +0300
+
+    feat: add events to component
+
+[33mcommit 9cfc7c57ec69c0fef11a81e6a4fa8a8fc1757fe0[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 22 17:34:09 2022 +0300
+
+    fix: try to fix ts] errors
+
+[33mcommit f21c66afda6abe979d7425beaa5cdb9060da55b8[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 22 16:55:03 2022 +0300
+
+    fix: fix issue with this.innerComponents (rename Component interface into ComponentInterface)
+
+[33mcommit f1e6ecf398d40f2e08d85f9cc7da20dda20a91e5[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 22 16:32:18 2022 +0300
+
+    feat: add listener for category filter
+
+[33mcommit e3126b34d746c25cc82583154614c0f4756a1966[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 22 08:13:50 2022 +0300
+
+    feat: prepare components for filters (brand and category)
+
+[33mcommit eab9f8585926cd91b26649f5530d3242b52e185e[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Wed Dec 21 17:28:38 2022 +0300
+
+    feat: create draft component for a filter and include it to home page
+
+[33mcommit a047874d25995c669a6006ff442b5c02d0229b67[m
+Author: Irina <irenserge@mail.ru>
+Date:   Wed Dec 21 15:41:23 2022 +0300
+
+    feat: description layout done
+
+[33mcommit e8ea73208c02a68980add1639d9449ec7f14be91[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Wed Dec 21 13:20:18 2022 +0300
+
+    fix: resolve little conflicts between new changes
+
+[33mcommit 45ab9b1cf3f230805616460a0f561a6d6f7d89a6[m
+Merge: 2ae77a94 b534cbc7
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Wed Dec 21 13:10:56 2022 +0300
+
+    fix: fix conflicts between develop branch and fix-inner-components branch
+
+[33mcommit b534cbc7aa0dd8e26352a40c0a820d2b9c3f0f08[m[33m ([m[1;31morigin/fix-inner-components[m[33m, [m[1;32mfix-inner-components[m[33m)[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Wed Dec 21 12:58:14 2022 +0300
+
+    fix: inner components
+    
+    BREAKING CHANGE: change methods in components.ts and module.ts so as to render inner components in a component
+
+[33mcommit 58f4d423a4666258dae318cf128207358805f848[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Wed Dec 21 11:53:54 2022 +0300
+
+    feat: rename ConfigPage interface into ComponentConfig interface, create new interface - Component (based on ComponentConfig)
+
+[33mcommit e7a9e3a2986f3bf5b07b42b1cebcb4671402d975[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Wed Dec 21 08:11:49 2022 +0300
+
+    feat: add homePage module for support of inner components inside a component
+
+[33mcommit 2ae77a94ce8aa6723950afd704da2e9915aec729[m
+Merge: e308b3b7 67eba297
+Author: IrinaBukley23 <81529149+IrinaBukley23@users.noreply.github.com>
+Date:   Tue Dec 20 19:44:45 2022 +0300
+
+    Merge pull request #21 from IrinaBukley23/cart-page
+    
+    feat: cart routing & cart page add
+
+[33mcommit cae8e7fcc31d5943a54ba4eba757f302ecf0d34e[m[33m ([m[1;31morigin/fix-draft-data[m[33m, [m[1;32mfix-draft-data[m[33m)[m
+Author: Irina <irenserge@mail.ru>
+Date:   Tue Dec 20 19:28:24 2022 +0300
+
+    fix: fix getting cards
+
+[33mcommit 67eba297986d5e37974be9dd744e1cb0a9e2650a[m[33m ([m[1;31morigin/cart-page[m[33m)[m
+Author: Irina <irenserge@mail.ru>
+Date:   Tue Dec 20 17:02:50 2022 +0300
+
+    feat: cart routing & cart page add
+
+[33mcommit b7c2ecc1b3bae257d484c6609da9b52ede929c47[m
+Merge: 536e0249 bc959f1b
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Dec 20 15:44:24 2022 +0300
+
+    fix: fix merge conflicts
+
+[33mcommit 536e02499be14b441af148bd4cc81b57a08f70ea[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Dec 20 15:40:34 2022 +0300
+
+    fix: try to fix products not displaying
+
+[33mcommit aa45f8b13923e8b7dc4809960136cccf99ca820b[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Dec 20 15:15:12 2022 +0300
+
+    fix: try to fix issues with display
+
+[33mcommit 0a98bcd754f7344be5ca7578c09ba7495a0d0fcf[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Tue Dec 20 15:02:18 2022 +0300
+
+    feat: products component
+
+[33mcommit 7a00b14636b9d4290677cfc7c5492c47185c20e3[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 19 17:31:38 2022 +0300
+
+    feat: add productsData.json, products.ts component and basic card template
+
+[33mcommit e308b3b79fff14b56d8a85b7a52aa5fe106ec978[m
+Merge: 22870ef1 ece96644
+Author: IrinaBukley23 <81529149+IrinaBukley23@users.noreply.github.com>
+Date:   Mon Dec 19 20:13:41 2022 +0300
+
+    Merge pull request #19 from IrinaBukley23/header
+    
+    feat: header layout done
+
+[33mcommit ece966446a48177c70b6fd28b3bc0c00a269a505[m
+Merge: 12587ad0 22870ef1
+Author: IrinaBukley23 <81529149+IrinaBukley23@users.noreply.github.com>
+Date:   Mon Dec 19 20:13:27 2022 +0300
+
+    Merge branch 'develop' into header
+
+[33mcommit 22870ef18079e25ac60cd28a70bbf516a6b6c639[m
+Merge: 3df770a3 629b3dab
+Author: dementeyolga <60576661+dementeyolga@users.noreply.github.com>
+Date:   Mon Dec 19 20:10:35 2022 +0300
+
+    Merge pull request #17 from IrinaBukley23/footer
+    
+    Footer
+
+[33mcommit 629b3dabeafd61cd7f16bf0928da68787f271474[m[33m ([m[1;31morigin/footer[m[33m, [m[1;32mfooter[m[33m)[m
+Merge: 5a5373ef 3df770a3
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 19 20:03:13 2022 +0300
+
+    Merge branch 'develop' into footer
+    
+    # Conflicts:
+    #       package-lock.json
+    #       src/index.ts
+    #       src/scss/style.scss
+    #       webpack.config.js
+
+[33mcommit 12587ad03886d42d720706617ab4582ccc08482b[m[33m ([m[1;31morigin/header[m[33m)[m
+Author: Irina <irenserge@mail.ru>
+Date:   Mon Dec 19 19:51:10 2022 +0300
+
+    feat: header layout done
+
+[33mcommit bc959f1b0f315f9dc764066f2db9602362bafd41[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 19 17:31:38 2022 +0300
+
+    feat: add productsData.json, products.ts component and basic card template
+
+[33mcommit 5a5373ef6825424ce5cc6a65002651e11da4d5a4[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 19 17:01:51 2022 +0300
+
+    feat: complete footer layout
+
+[33mcommit b4bdb8ac58c73f37fbfa3593e15df980ee89aa61[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 19 15:34:43 2022 +0300
+
+    fix: import footer styles
+
+[33mcommit 82afacb2c8eb6bcd6712bf6cef15b941405d9ec3[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 19 15:10:25 2022 +0300
+
+    feat: add footer template and add custom module (svg) support
+
+[33mcommit 3df770a36cef43ab6b50348ca1269e5ae6c8a45e[m
+Merge: 4acf5773 2eadbede
+Author: IrinaBukley23 <81529149+IrinaBukley23@users.noreply.github.com>
+Date:   Mon Dec 19 14:54:20 2022 +0300
+
+    Merge pull request #16 from IrinaBukley23/fix-bugs
+    
+    fix: fix bugs
+
+[33mcommit 2eadbedef40226b10326d1af104ef53be33980ef[m
+Author: Irina <irenserge@mail.ru>
+Date:   Mon Dec 19 14:50:03 2022 +0300
+
+    fix: fix игпы
+
+[33mcommit 4acf577339218e3c1fbfd1e15dd2de3673ee5da5[m
+Merge: 8faf82a5 0c65ec40
+Author: IrinaBukley23 <81529149+IrinaBukley23@users.noreply.github.com>
+Date:   Mon Dec 19 14:10:31 2022 +0300
+
+    Merge pull request #11 from IrinaBukley23/page-404
+    
+    feat: page 404 done
+
+[33mcommit 0c65ec4077eb2261f05d19ebab4c4a94d4220d62[m
+Author: Irina <irenserge@mail.ru>
+Date:   Mon Dec 19 14:09:53 2022 +0300
+
+    fix: fix styles
+
+[33mcommit ca96adabf7c33eb7d73b8f75f34c834ce0c99a98[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 19 12:24:51 2022 +0300
+
+    fix: minor changes to package.json
+
+[33mcommit 40aaff304bcf9c372720026c06e849f7e63c8d03[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Mon Dec 19 12:23:00 2022 +0300
+
+    feat: create files for footer
+
+[33mcommit 8faf82a54f1492462cb733f07efa1c11a94e3fa0[m
+Merge: b45de0a4 48b07842
+Author: dementeyolga <60576661+dementeyolga@users.noreply.github.com>
+Date:   Sun Dec 18 19:35:23 2022 +0300
+
+    Merge pull request #10 from IrinaBukley23/basic-styles
+    
+    Basic styles
+
+[33mcommit 48b07842ad282c9af7817c578d0724b3d32476ff[m[33m ([m[1;31morigin/basic-styles[m[33m, [m[1;32mbasic-styles[m[33m)[m
+Merge: 9a001adb b45de0a4
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Sun Dec 18 19:30:53 2022 +0300
+
+    fix: resolve conflicts between basic-styles branch and develop branch
+
+[33mcommit 9a001adbd56affcb829eb0adb199567b5a137f1d[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Sun Dec 18 19:13:45 2022 +0300
+
+    fix: webpack build errors (add eslint config, prettier config)
+
+[33mcommit 5ffce99fbdad7ed628ec0be1ba54433a28b1722b[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Sun Dec 18 18:39:17 2022 +0300
+
+    fix: fix fonts paths
+
+[33mcommit bb2aed92ad1856ed943c33052da571f1beaae98e[m
+Author: Irina <irenserge@mail.ru>
+Date:   Fri Dec 16 17:48:03 2022 +0300
+
+    feat: page 404 done
+
+[33mcommit b45de0a4444a3ce9d9d773ebd315f77ce4ae79f2[m
+Merge: ebe994d5 c790cca0
+Author: IrinaBukley23 <81529149+IrinaBukley23@users.noreply.github.com>
+Date:   Fri Dec 16 17:36:11 2022 +0300
+
+    Merge pull request #9 from IrinaBukley23/routes
+    
+    Routes
+
+[33mcommit c790cca0945bf9e3bff0b68e57ad822ae2174f9c[m
+Author: Irina <irenserge@mail.ru>
+Date:   Fri Dec 16 17:35:05 2022 +0300
+
+    fix: corrected styles
+
+[33mcommit f8b8d45d0c85d8c419158f3d0881392cd43913e0[m
+Author: Irina <irenserge@mail.ru>
+Date:   Fri Dec 16 16:14:17 2022 +0300
+
+    fix: corrected types
+
+[33mcommit 821f27d104cd56b3bc2e9200b92afb0ff4a3c17c[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Fri Dec 16 14:07:20 2022 +0300
+
+    feat: minor style changes
+
+[33mcommit ce4d5457448dee0457248cc7a98b6efd00a5e3ea[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Fri Dec 16 08:06:14 2022 +0300
+
+    feat: add font awesome package
+
+[33mcommit 44e76cedfd40f03830019f73658adb5c9f7bf07e[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 15 20:21:56 2022 +0300
+
+    feat: remove node modules
+
+[33mcommit 3eb0e67791e932fee8a9a0319de40aeed79d3135[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 15 20:20:33 2022 +0300
+
+    feat: add git ignore
+
+[33mcommit a7b068931fe5fdf6b2e7a76cbff058aa8dc90897[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 15 20:17:40 2022 +0300
+
+    feat: install bootstrap
+
+[33mcommit e406fdfa9c07ae06a97023c50ceb48be7156c1f2[m
+Author: Irina <irenserge@mail.ru>
+Date:   Thu Dec 15 20:02:10 2022 +0300
+
+    feat: add routes & 404
+
+[33mcommit f31857f00ea2fda78ee493f3d2835fd520d1844c[m
+Author: IrinaBukley <59374766+IrinaBukley@users.noreply.github.com>
+Date:   Thu Dec 15 18:34:50 2022 +0300
+
+    feat: add loader, navigation
+
+[33mcommit 877830fdc00ac18fe7ed0a823eea04d4a46a332b[m
+Author: Olga Dementey <dementeyolya@gmail.com>
+Date:   Thu Dec 15 17:33:40 2022 +0300
+
+    feat: add scss folders structure with few basic styles (reset.scss, wrapper, some variables)
+
+[33mcommit cdae4ecf76dd14cf53c60110c4a14ff277194cba[m
+Author: Irina <irenserge@mail.ru>
+Date:   Thu Dec 15 16:09:45 2022 +0300
+
+    feat: add core & app component
+
+[33mcommit ebe994d5844fe79a274974179db64cfcea0c0be9[m
+Author: Irina <irenserge@mail.ru>
+Date:   Thu Dec 15 15:26:08 2022 +0300
+
+    feat: add folders
+
+[33mcommit 0ee4b89a02403b2e84819515887fd0f2cf1300ea[m
+Author: Irina <irenserge@mail.ru>
+Date:   Wed Dec 14 15:23:36 2022 +0300
+
+    init: start a project
+
+[33mcommit e0713d13bb78d649cd5e84f1243a28e44ece0b49[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: IrinaBukley23 <81529149+IrinaBukley23@users.noreply.github.com>
+Date:   Tue Dec 13 20:58:44 2022 +0300
+
+    Initial commit

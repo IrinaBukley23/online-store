@@ -17,7 +17,7 @@ export const header = new Header({
       // не обновляется, почему????????
       let headerTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
       let headerTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
-      
+
       return `
       <div class="wrapper"> 
       <a class="header__logo" href="#">

@@ -11,7 +11,7 @@ class ProductsContainer extends WFMComponent {
     cartProducts: CartItem[] = [];
     public handleClick(event: Event): void {
         const target = event.target as HTMLElement;
-        
+
         if(target.classList.contains('btn__details')) {
             const id = (target as HTMLElement).getAttribute('id');
             (target as HTMLElement).setAttribute('href', `#single/${id}`);
@@ -40,8 +40,8 @@ class ProductsContainer extends WFMComponent {
             const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
             cartArr.forEach(item => {
                 if(item.product.id === product.id)  {
-                    (target as HTMLElement).innerHTML = 'drop from cart' 
-                } else { 
+                    (target as HTMLElement).innerHTML = 'drop from cart'
+                } else {
                     (target as HTMLElement).innerHTML = 'add to cart'
             }});
             let cartTotalCounter = 0;
@@ -67,12 +67,12 @@ class ProductsContainer extends WFMComponent {
 export const productsContainer = new ProductsContainer({
     selector: 'products-container',
     innerComponents: null,
-    getTemplate() {   
-        
+    getTemplate() {
+
         let cardsTemplate = ``;
         productsData.products.forEach((product: Product) => {
             cardsTemplate += `
-                <div data-category="${product.category}" data-brand="${product.brand}" class="product col-lg-4 col-md-6 col-12">
+                <div data-category="${product.category}" data-brand="${product.brand}" data-price="${product.price}" data-stock="${product.stock}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">
                     <div class="product__title">
                      ${product.title}
@@ -84,6 +84,12 @@ export const productsContainer = new ProductsContainer({
                     </div>
                     <div class="product__description">
                         ${product.description}
+                    </div>
+                    <div class="product__stock">
+                        In stock: ${product.stock}
+                    </div>
+                    <div class="product__price">
+                        € ${product.price}
                     </div>
                     <div class="product__buttons">
                         <button id=${product.id} class="button btn__to-cart">add to cart</button>

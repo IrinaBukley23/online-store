@@ -6,26 +6,28 @@ export class Component implements ComponentInterface {
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
     clickSelector: string | undefined;
+    public init?(): void;
     public handleClick?(e: Event): void;
     public handleInputChange?(e: Event): void;
     public handleInput?(e: Event): void;
 
     constructor(config: ComponentConfig) {
-        this.getTemplate = config.getTemplate;
+        this.getTemplate= config.getTemplate;
         this.selector = config.selector;
         this.el = null;
         this.innerComponents = config.innerComponents;
     }
 
-    render(): void {
+    render(params?: {[key: string]: string}): void {
         const [_, id] = window.location.hash.split('/');
-        const template = this.getTemplate(id ? { id } : {});
-
+        const template = this.getTemplate(id ? { id } : params);
         this.el = document.querySelector(this.selector);
         if (!this.el) throw new Error(`Component with selector ${this.selector} wasn't found`);
         this.el.innerHTML = template;
+
         if (this.innerComponents) this.initInnerComponents();
 
+        if (this.init) this.init();
         this._initEvents();
     }
 
@@ -52,5 +54,6 @@ export class Component implements ComponentInterface {
             const clickHandler = this.handleClick.bind(this);
             componentElem?.addEventListener('click', clickHandler)
         }
+
     }
 }

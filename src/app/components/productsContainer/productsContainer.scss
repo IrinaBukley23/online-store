@@ -29,6 +29,18 @@
 
     &__description {
         margin-top: 16px;
+        text-transform: unset;
+    }
+
+    &__stock {
+        margin-top: 16px;
+        font-size: 1.6rem;
+    }
+
+    &__price {
+        margin-top: 16px;
+        font-size: 1.8rem;
+        font-weight: bold;
     }
 
     &__title {

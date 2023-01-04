@@ -15,7 +15,7 @@ class SinglePage extends WFMComponent {
     if (target.classList.contains('images__list-item_img')) {
       if(!(target as HTMLElement).classList.contains('images__list-item_img')) return;
       this.el?.querySelectorAll('.images__list-item_img').forEach((imageItem) => imageItem.classList.remove('active'));
-      if (!target) return; 
+      if (!target) return;
       (target as HTMLElement).classList.add('active');
       if((target as HTMLElement).classList.contains('active')) {
         const elem = document.querySelector('.images__large');
@@ -51,7 +51,7 @@ class SinglePage extends WFMComponent {
       // не изменяется текстовое значение кнопки ??????????????
       if((target as HTMLElement).innerHTML === 'drop from cart') {
           (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'add to cart'
-      } 
+      }
       if((target as HTMLElement).innerHTML === 'add to cart') {
           (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'drop from cart';
           this.cartProducts.push({
