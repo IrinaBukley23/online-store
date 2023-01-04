@@ -5,6 +5,7 @@ import { filter } from '../../components/filter/filter';
 import { productsData } from '../../../data/productsData';
 import { sortDropdown } from '../../components/sortDropdown/sortDropdown';
 import './homePage.scss';
+import { textSearch } from '../../components/textSearch/textSearch';
 
 class HomePage extends WFMComponent {
     private productsData: Product[];
@@ -364,12 +365,13 @@ class HomePage extends WFMComponent {
 
 export const homePage = new HomePage({
     selector: 'home',
-    innerComponents: [productsContainer, filter, sortDropdown],
+    innerComponents: [productsContainer, filter, sortDropdown, textSearch],
     getTemplate: () => `
         <filter class="filter"></filter>
         <main class="main">
             <div class="display-info">
                 <sort-dropdown></sort-dropdown>
+                <text-search></text-search>
             </div>
             <products-container class="product__cards"></products-container>
         </main>

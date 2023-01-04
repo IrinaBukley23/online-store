@@ -1,0 +1,14 @@
+.text-search {
+    display: flex;
+
+    &__icon {
+        background: $color-accent-light;
+        border-left: none;
+        padding: 8px 10px;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
