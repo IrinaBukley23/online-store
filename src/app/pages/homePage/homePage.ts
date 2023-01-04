@@ -3,6 +3,7 @@ import { ComponentConfig, Product } from '../../../types';
 import { productsContainer } from '../../components/productsContainer/productsContainer';
 import { filter } from '../../components/filter/filter';
 import { productsData } from '../../../data/productsData';
+import {sortDropdown} from '../../components/sortDropdown/sortDropdown';
 import './homePage.scss';
 
 class HomePage extends WFMComponent {
@@ -327,16 +328,19 @@ class HomePage extends WFMComponent {
             stockFromInput.dispatchEvent(new Event('change'));
             stockToInput.dispatchEvent(new Event('change'));
         }
-
-        console.log(priceFromSlider.value, priceToSlider.value, stockFromSlider.value, stockToSlider.value);
     }
 }
 
 export const homePage = new HomePage({
     selector: 'home',
-    innerComponents: [productsContainer, filter],
+    innerComponents: [productsContainer, filter, sortDropdown],
     getTemplate: () => `
         <filter class="filter"></filter>
-        <products-container class="product__cards"></products-container>
+        <div class="main">
+            <div class="display-info">
+                <sort-dropdown></sort-dropdown>
+            </div>
+            <products-container class="product__cards"></products-container>
+        </div>
     `,
 });
