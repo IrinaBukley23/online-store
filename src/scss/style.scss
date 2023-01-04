@@ -17,6 +17,7 @@
 @import '../app/components/filter/dualSlider/dualSliderTemplate';
 @import '../app/components/productsContainer/productsContainer.scss';
 @import '../app/pages/cartPage/cartPage.scss';
+@import '../app/components/sortDropdown/sortDropdown.scss';
 
 body {
     margin-top: 80px;
@@ -27,7 +28,6 @@ body {
     justify-content: center;
     background-color: $color-main;
     color: $color-text;
-    text-transform: uppercase;
 }
 
 .lds-ripple {
