@@ -35,8 +35,7 @@ class CartPage extends WFMComponent {
                     document.querySelector('.cart-promo_block')?.classList.add('active');
                 }
             }
-        };
-        
+        };  
     }
 
     public handleClick(event: Event): void {
@@ -165,6 +164,22 @@ class CartPage extends WFMComponent {
             (((target as HTMLElement).parentNode as HTMLElement).parentNode as HTMLElement).setAttribute('href', `#single/${id}`);
             appRoutes[1].path = `single/${id}`;
         }
+
+        // pagination
+        if(target.classList.contains('pagination__item')) {
+
+            const limitProdsOnPage = (document.querySelector('.cart__pagination-limit input') as HTMLInputElement)?.value;
+
+            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+            const currentPage = +target.id - 1;
+
+            const start = +limitProdsOnPage * +currentPage;
+
+            const end = start + +limitProdsOnPage;
+            const paginatedData = cartArr.slice(start, end);
+
+            console.log(start, paginatedData);
+        }
     }
 
     renderPromoCodes(arr: string[]) {
@@ -220,6 +235,12 @@ export const cartPage = new CartPage({
             return `<h3>Cart is empty</h3>`
         }
 
+        let paginationBtns = ``;
+        const pagesCount = Math.ceil(cartArr.length / 3);
+        for (let i = 0; i < pagesCount; i++) {
+            paginationBtns += `<li id=${i+1} class="pagination__item">${i+1}</li>`
+        }
+
         cartArr && cartArr.forEach((item: CartItem) => {
             cartTemplate += `
             <div class="cart__products-elem">
@@ -255,17 +276,13 @@ export const cartPage = new CartPage({
                 <div class="cart__title-block">
                     <h3 class="cart__summary-title">Products In Cart</h3>
                     <div class="cart__pagination-block">
-                        <p>LIMIT: <input value="3" type="number"> </p>
-                        <p>PAGE:  
-                            <button> < </button> 
-                            <span>1</span> 
-                            <button> > </button>
+                        <p class="cart__pagination-limit">LIMIT: <input value="3" type="number"> </p>
+                        <p class="pagination">PAGE:  
+                            <ul class="pagination__list">${paginationBtns}</ul>
                         </p>
                     </div>
                 </div>
-                <div class="cart__products-block"> 
-                ${cartTemplate}
-                </div>
+                <div class="cart__products-block">${cartTemplate}</div>
             </div>
             <div class="cart__summary">
                 <h3 class="cart__summary-title">Summary</h3>
