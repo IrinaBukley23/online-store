@@ -121,6 +121,17 @@ class HomePage extends WFMComponent {
         }
     }
 
+    public handleOnInput(event: Event): void {
+        const target = event.target as HTMLElement;
+
+        if (target.classList.contains('text-search__input')) {
+            const inputTarget = target as HTMLInputElement;
+            console.log(inputTarget.value);
+
+            this.showChosenCards(inputTarget);
+        }
+    }
+
     private handleCategoryCheckbox(target: HTMLInputElement): void {
         this.showChosenCards(target);
         this.changeDualSlidersValues();
