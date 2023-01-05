@@ -10,6 +10,17 @@ class Popup extends WFMComponent {
         super(config);
     }
 
+    public handleClick(event: Event): void {
+        const target = event.target as HTMLElement;
+        
+        const closePopupOverlay = target.classList.contains('popup__overlay');
+        if(closePopupOverlay) this.closePopup();
+    }
+    
+    private closePopup() {
+        const popup = document.querySelector('.popup') as HTMLElement;
+        popup.classList.remove('active');
+    }
 }
 
 export const popup = new Popup({

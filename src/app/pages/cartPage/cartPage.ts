@@ -72,6 +72,9 @@ class CartPage extends WFMComponent {
         if (target.classList.contains('cart__products-img img') || target.classList.contains('cart__products-descr') || target.classList.contains('cart__products-title') || target.classList.contains('cart__products-raiting')) {
             this.singlePageRoute(target);
         }
+
+        const openPopupBtn = target.classList.contains('btn__popup');
+        if(openPopupBtn) this.openPopup();
     }
 
     private renderPromoCodes(arr: string[]) {
@@ -233,6 +236,11 @@ class CartPage extends WFMComponent {
         } 
         this.renderPromoCodes(this.promoArr);
     }
+
+    private openPopup() {
+        const popup = document.querySelector('.popup') as HTMLElement;
+        popup.classList.add('active');
+    }
 }
 
 export const cartPage = new CartPage({
@@ -314,7 +322,7 @@ export const cartPage = new CartPage({
                     </div>
                     <label>Promo for test: 'RS', 'EPM'</label>
                 </div>
-                <button class="button">Buy now</button>
+                <button class="button btn__popup">Buy now</button>
             </div>
         </section>`
     }
