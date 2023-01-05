@@ -233,11 +233,14 @@ class HomePage extends WFMComponent {
                         const value = currentProduct[typedKey].toString().toLowerCase();
 
                         if (value.includes(textInput.value.trim().toLowerCase())) {
-                            console.log(value);
+                            includesSearchStr = true;
                         }
                     }
                 }
 
+                if (!includesSearchStr) {
+                    card.classList.add('d-none');
+                }
             }
         });
     }
@@ -346,51 +349,56 @@ class HomePage extends WFMComponent {
         const arrayCards = Array.prototype.slice.call(productCards);
         const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
 
-        let minActiveCardPrice = displayedCards[0].dataset.price;
-        let minActiveCardStock = displayedCards[0].dataset.stock;
-        let maxActiveCardPrice = displayedCards[0].dataset.price;
-        let maxActiveCardStock = displayedCards[0].dataset.stock;
+        if (displayedCards.length) {
+            let minActiveCardPrice = displayedCards[0].dataset.price;
+            let minActiveCardStock = displayedCards[0].dataset.stock;
+            let maxActiveCardPrice = displayedCards[0].dataset.price;
+            let maxActiveCardStock = displayedCards[0].dataset.stock;
 
-        displayedCards.forEach((card) => {
-            if (card.dataset.price && minActiveCardPrice && maxActiveCardPrice) {
-                if (+card.dataset.price < +minActiveCardPrice) {
-                    minActiveCardPrice = card.dataset.price;
+            displayedCards.forEach((card) => {
+                if (card.dataset.price && minActiveCardPrice && maxActiveCardPrice) {
+                    if (+card.dataset.price < +minActiveCardPrice) {
+                        minActiveCardPrice = card.dataset.price;
+                    }
+                    if (+card.dataset.price > +maxActiveCardPrice) {
+                        maxActiveCardPrice = card.dataset.price;
+                    }
                 }
-                if (+card.dataset.price > +maxActiveCardPrice) {
-                    maxActiveCardPrice = card.dataset.price;
+
+                if (card.dataset.stock && minActiveCardStock && maxActiveCardStock) {
+                    if (+card.dataset.stock < +minActiveCardStock) {
+                        minActiveCardStock = card.dataset.stock;
+                    }
+                    if (+card.dataset.stock > +maxActiveCardStock) {
+                        maxActiveCardStock = card.dataset.stock;
+                    }
                 }
+            });
+
+            if (minActiveCardPrice && maxActiveCardPrice && minActiveCardStock && maxActiveCardStock) {
+                priceFromSlider.value = minActiveCardPrice;
+                priceToSlider.value = maxActiveCardPrice;
+                stockFromSlider.value = minActiveCardStock;
+                stockToSlider.value = maxActiveCardStock;
+
+                priceFromInput.value = minActiveCardPrice;
+                priceToInput.value = maxActiveCardPrice;
+                stockFromInput.value = minActiveCardStock;
+                stockToInput.value = maxActiveCardStock;
+
+                priceFromSlider.dispatchEvent(new Event('change'));
+                priceToSlider.dispatchEvent(new Event('change'));
+                stockFromSlider.dispatchEvent(new Event('change'));
+                stockToSlider.dispatchEvent(new Event('change'));
+                priceFromInput.dispatchEvent(new Event('change'));
+                priceToInput.dispatchEvent(new Event('change'));
+                stockFromInput.dispatchEvent(new Event('change'));
+                stockToInput.dispatchEvent(new Event('change'));
             }
-
-            if (card.dataset.stock && minActiveCardStock && maxActiveCardStock) {
-                if (+card.dataset.stock < +minActiveCardStock) {
-                    minActiveCardStock = card.dataset.stock;
-                }
-                if (+card.dataset.stock > +maxActiveCardStock) {
-                    maxActiveCardStock = card.dataset.stock;
-                }
-            }
-        });
-
-        if (minActiveCardPrice && maxActiveCardPrice && minActiveCardStock && maxActiveCardStock) {
-            priceFromSlider.value = minActiveCardPrice;
-            priceToSlider.value = maxActiveCardPrice;
-            stockFromSlider.value = minActiveCardStock;
-            stockToSlider.value = maxActiveCardStock;
-
-            priceFromInput.value = minActiveCardPrice;
-            priceToInput.value = maxActiveCardPrice;
-            stockFromInput.value = minActiveCardStock;
-            stockToInput.value = maxActiveCardStock;
-
-            priceFromSlider.dispatchEvent(new Event('change'));
-            priceToSlider.dispatchEvent(new Event('change'));
-            stockFromSlider.dispatchEvent(new Event('change'));
-            stockToSlider.dispatchEvent(new Event('change'));
-            priceFromInput.dispatchEvent(new Event('change'));
-            priceToInput.dispatchEvent(new Event('change'));
-            stockFromInput.dispatchEvent(new Event('change'));
-            stockToInput.dispatchEvent(new Event('change'));
         }
+
+
+
     }
 }
 
