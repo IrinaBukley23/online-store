@@ -226,15 +226,22 @@ class HomePage extends WFMComponent {
                 const currentCardId: string | undefined = card.dataset.id;
 
                 if (currentCardId) {
-                    const currentProduct: Product | undefined = productsData.products.find(product => +product.id === +currentCardId)
+                    const currentProduct: Product | undefined = productsData.products.find(
+                        (product) => +product.id === +currentCardId
+                    );
 
-                    for (let key in currentProduct) {
-                        const typedKey = key as keyof Product;
-                        const value = currentProduct[typedKey].toString().toLowerCase();
+                    if (currentProduct) {
+                        const currentProductEntries = Object.entries(currentProduct);
 
-                        if (value.includes(textInput.value.trim().toLowerCase())) {
-                            includesSearchStr = true;
-                        }
+                        currentProductEntries.forEach(([key, value]) => {
+                            const strValue = value.toString();
+
+                            if (key !== 'id' && key !== 'thumbnail' && key !== 'images') {
+                                if (strValue.toLowerCase().includes(textInput.value.trim().toLowerCase())) {
+                                    includesSearchStr = true;
+                                }
+                            }
+                        });
                     }
                 }
 
@@ -396,9 +403,6 @@ class HomePage extends WFMComponent {
                 stockToInput.dispatchEvent(new Event('change'));
             }
         }
-
-
-
     }
 }
 
