@@ -11,4 +11,6 @@ const promocodesDescription: PromoCodesText = {
   epm: 'EPAM Systems - 10%' 
 }
 
-export { wfm, promocodesDescription };
+const isOpenPopup = false;
+
+export { wfm, promocodesDescription, isOpenPopup };
