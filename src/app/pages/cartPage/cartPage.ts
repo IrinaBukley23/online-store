@@ -1,5 +1,8 @@
+import { PromoCodes } from '../../../enum';
 import { WFMComponent } from '../../../routes/index';
+import { promocodesDescription } from '../../../routes/tools/utils';
 import { CartItem, ComponentConfig } from '../../../types';
+import { appRoutes } from '../../app.routes';
 
 import './cartPage.scss';
 
@@ -7,57 +10,226 @@ class CartPage extends WFMComponent {
     constructor(config: ComponentConfig) {
         super(config);
     }
+    promoArr: string[] = [];
+    public handleInput(event: Event): void {
+        const target = event.target as HTMLInputElement;
+        
+        const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
+
+        if(this.promoArr.length > 1) {
+            addBtn.classList.add('hidden');
+        } else {
+            if (target.classList.contains('cart-promo')) {
+                const textElem = document.querySelector('.cart-promo_text') as HTMLElement; 
+
+                if (target.value && target.value.toLowerCase() === PromoCodes.RS_PROMO_CODE) {
+                    if(textElem) {
+                        textElem.innerHTML = 'Rolling Scopes School - 10%';
+                    }
+                    if(addBtn.classList.contains('hidden')) addBtn.classList.remove('hidden');
+                    document.querySelector('.cart-promo_block')?.classList.add('active');
+                }
+    
+                if (target.value && target.value.toLowerCase() === PromoCodes.EPAM_PROMO_CODE) {
+                    if(textElem) {
+                        textElem.innerHTML = 'EPAM Systems - 10% ';
+                    }
+                    if(addBtn.classList.contains('hidden')) addBtn.classList.remove('hidden');
+                    document.querySelector('.cart-promo_block')?.classList.add('active');
+                }
+            }
+        };
+        
+    }
 
     public handleClick(event: Event): void {
         const target = event.target as HTMLElement;
 
-        if (target.classList.contains('cart__counter-decr')) {
-            const curElem = <HTMLElement> target.nextSibling?.nextSibling
-            let curNum = Number(curElem?.textContent);
+        // decrease product amount
+        const decrCounterBtn = target.classList.contains('cart__counter-decr');
+        if (decrCounterBtn) this.decrCounter(target);
 
-            if(curNum < 1) {
-                curNum = 0;
-            } else {
-                curNum -= 1;
-                localStorage.setItem('totalCounter', String(curNum))
+        // increase product amount
+        const incrCounterBtn = target.classList.contains('cart__counter-incr');
+        if (incrCounterBtn) this.incrCounter(target);
+
+        // add promo list
+        const isAddPromoBtn = target.classList.contains('cart-promo_btn');
+        if (isAddPromoBtn) this.renderPromoList();
+
+        // clear input
+        const isClearInputBtn = target.classList.contains('cart-clear');
+        if (isClearInputBtn) {
+            (document.querySelector('.cart-promo') as HTMLInputElement).value = '';
+        }
+    
+        const isDropBtn = target.classList.contains('cart-applied_btn');
+        if (isDropBtn) this.applyPromo(target);  
+
+        // to single page routing
+        if (target.classList.contains('cart__products-img img') || target.classList.contains('cart__products-descr') || target.classList.contains('cart__products-title') || target.classList.contains('cart__products-raiting')) {
+            this.singlePageRoute(target);
+        }
+    }
+
+    private renderPromoCodes(arr: string[]) {
+        document.querySelector('.cart-applied')?.classList.add('active');
+        document.querySelector('.cart__summary-sum')?.classList.add('active');
+        document.querySelector('.cart__summary-sum_promo')?.classList.add('active');
+
+        const appliedPromoList = document.querySelector('.cart-applied_block');
+        const li = document.createElement('li');
+        li.classList.add('cart-applied_block-item');
+        const addBtn = document.querySelector('.cart-promo_btn') as HTMLElement;
+        if (arr.length === 0) {
+            const promoBlock = <HTMLElement>document.querySelector('.cart-applied');
+            promoBlock.classList.remove('active');
+            const promoSum = <HTMLElement>document.querySelector('.cart__summary-sum_promo');
+            const totalSum = <HTMLElement>document.querySelector('.cart__summary-sum');
+            promoSum.classList.remove('active');
+            totalSum.classList.remove('active');
+        }
+        const uniqArr = [... new Set(arr)];
+        uniqArr.forEach((item) => {
+            document.querySelector('.cart-promo_block')?.classList.add('active');
+            li.setAttribute('data-id', item)
+            if(item === PromoCodes.RS_PROMO_CODE) {
+                li.innerHTML = `<p class="cart-applied_text">${ promocodesDescription[PromoCodes.RS_PROMO_CODE]}</p>
+                <button class="cart-applied_btn">drop</button>
+            `;}
+            if(item === PromoCodes.EPAM_PROMO_CODE) {
+                li.innerHTML = `<p class="cart-applied_text">${ promocodesDescription[PromoCodes.EPAM_PROMO_CODE]}</p>
+            <button class="cart-applied_btn">drop</button>
+            `;}
+            appliedPromoList?.append(li);
+            addBtn.classList.add('hidden');
+        })
+
+        const promoContainer = <HTMLElement> document.querySelector('.cart__summary-sum_promo span');
+        const appliedPromoItems = document.querySelectorAll('.cart-applied_block-item');
+        const promoSum1 = (Number(localStorage.getItem('totalSum')) * 0.9).toFixed(2);
+        const promoSum2 = (Number(localStorage.getItem('totalSum')) * 0.8).toFixed(2);
+        if(appliedPromoItems.length === 1) {
+            promoContainer.innerHTML = String(promoSum1);
+        }
+        if(appliedPromoItems.length === 2) {
+            promoContainer.innerHTML = String(promoSum2);
+        }
+    }
+
+    private incrCounter(elem: HTMLElement) {
+        const curElem = <HTMLElement> elem.previousSibling?.previousSibling;
+        let curNum = Number(curElem?.textContent);
+        curNum += 1;
+        (curElem as HTMLElement).innerHTML = String(curNum);
+
+        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        let cartTotalSum = 0;
+        let cartTotalCounter = 0;
+        cartArr.forEach(item => {
+            if(Number(curElem.id) === Number(item.product.id)) {
+                item.counter = curNum;
             }
-            (curElem as HTMLElement).innerHTML = String(curNum);
-            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-            let cartTotalSum = 0;
-            let cartTotalCounter = 0;
-            cartArr.forEach(item => {
-                if(Number(curElem.id) === Number(item.product.id)) {
-                    item.counter = curNum;
-                }
-                cartTotalSum += (item.product.price * item.counter);
-                cartTotalCounter += item.counter;
-            })
-            localStorage.setItem('cart', JSON.stringify(cartArr));
-            localStorage.setItem('totalSum', String(cartTotalSum));
-            localStorage.setItem('totalCounter', String(cartTotalCounter))
+            cartTotalSum += (item.product.price * item.counter);
+            cartTotalCounter += item.counter;
+        })
+        localStorage.setItem('cart', JSON.stringify(cartArr));
+        localStorage.setItem('totalSum', String(cartTotalSum));
+        localStorage.setItem('totalCounter', String(cartTotalCounter))
+
+        const cartTotalCounterEl = document.querySelector('.cart__summary-subtitle span') as HTMLElement;
+        const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+        if(cartTotalCounterEl) {
+            cartTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+            headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
         }
 
-        if (target.classList.contains('cart__counter-incr')) {
-            const curElem = <HTMLElement> target.previousSibling?.previousSibling;
-            console.log(curElem.id)
-            let curNum = Number(curElem?.textContent);
-            curNum += 1;
-            (curElem as HTMLElement).innerHTML = String(curNum);
-
-            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-            let cartTotalSum = 0;
-            let cartTotalCounter = 0;
-            cartArr.forEach(item => {
-                if(Number(curElem.id) === Number(item.product.id)) {
-                    item.counter = curNum;
-                }
-                cartTotalSum += (item.product.price * item.counter);
-                cartTotalCounter += item.counter;
-            })
-            localStorage.setItem('cart', JSON.stringify(cartArr));
-            localStorage.setItem('totalSum', String(cartTotalSum));
-            localStorage.setItem('totalCounter', String(cartTotalCounter))
+        const cartTotalSumEl = document.querySelector('.cart__summary-sum span') as HTMLElement;
+        const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+        if(cartTotalSumEl) {
+            cartTotalSumEl.innerHTML = `${cartTotalSum}`;
+            headerTotalSumEl.innerHTML = `${cartTotalSum}`;
         }
+    }
+
+    private decrCounter(elem: HTMLElement) {
+        const curElem = <HTMLElement> elem.nextSibling?.nextSibling
+        let curNum = Number(curElem?.textContent);
+
+        if(curNum < 1) {
+            curNum = 0;
+        } else {
+            curNum -= 1;
+            localStorage.setItem('totalCounter', String(curNum))
+        }
+        (curElem as HTMLElement).innerHTML = String(curNum);
+        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        let cartTotalSum = 0;
+        let cartTotalCounter = 0;
+        cartArr.forEach(item => {
+            if(Number(curElem.id) === Number(item.product.id)) {
+                item.counter = curNum;
+            }
+            cartTotalSum += (item.product.price * item.counter);
+            cartTotalCounter += item.counter;
+        })
+        localStorage.setItem('cart', JSON.stringify(cartArr));
+        localStorage.setItem('totalSum', String(cartTotalSum));
+        localStorage.setItem('totalCounter', String(cartTotalCounter));
+
+        const cartTotalCounterEl = document.querySelector('.cart__summary-subtitle span') as HTMLElement;
+        const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+        if(cartTotalCounterEl) {
+            cartTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+            headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+        }
+
+        const cartTotalSumEl = document.querySelector('.cart__summary-sum span') as HTMLElement;
+        const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+        if(cartTotalSumEl) {
+            cartTotalSumEl.innerHTML = `${cartTotalSum}`;
+            headerTotalSumEl.innerHTML = `${cartTotalSum}`;
+        }
+    }
+
+    private singlePageRoute(elem: HTMLElement) {
+        const id = (((elem as HTMLElement).parentNode as HTMLElement).parentNode as HTMLElement)?.getAttribute('id');
+        (((elem as HTMLElement).parentNode as HTMLElement).parentNode as HTMLElement).setAttribute('href', `#single/${id}`);
+        appRoutes[1].path = `single/${id}`;
+    }
+
+    private applyPromo(elem: HTMLElement) {
+        const promoContainer = <HTMLElement> document.querySelector('.cart__summary-sum_promo span');
+            const promoSum1 = (Number(localStorage.getItem('totalSum')) * 0.9).toFixed(2);
+            const promoSum2 = (Number(localStorage.getItem('totalSum')) * 0.8).toFixed(2);
+            if(this.promoArr.length === 0) {
+                document.querySelector('.cart__summary-sum_promo')?.classList.remove('active');
+            }
+            if(this.promoArr.length === 1) {
+                promoContainer.innerHTML = String(promoSum1);
+            }
+            if(this.promoArr.length === 2) {
+                promoContainer.innerHTML = String(promoSum2);
+            }
+
+            const i = this.promoArr.indexOf(((elem.parentNode as HTMLElement)?.dataset.id) as string);
+            this.promoArr.splice(i, 1);
+            const promoBlock = document.querySelector('.cart-applied');
+            promoBlock?.classList.add('active');
+            const promocodesList= document.querySelector('.cart-applied_block')
+            if(promocodesList) (promocodesList as HTMLElement).innerHTML = '';
+            this.renderPromoCodes(this.promoArr);
+    }
+
+    private renderPromoList() {
+        const promoCode = (document.querySelector('.cart-promo') as HTMLInputElement).value;
+        if (promoCode.toLowerCase() === PromoCodes.RS_PROMO_CODE) {
+            this.promoArr.push('rs')
+        } 
+        if (promoCode.toLowerCase() === PromoCodes.EPAM_PROMO_CODE) {
+            this.promoArr.push('epm')
+        } 
+        this.renderPromoCodes(this.promoArr);
     }
 }
 
@@ -78,17 +250,19 @@ export const cartPage = new CartPage({
             cartTemplate += `
             <div class="cart__products-elem">
                 <p class="cart__products-num">${index++}</p>
-                <div class="cart__products-img">
-                    <img src=${item.product.images[0]}> 
-                </div>
-                <div  class="cart__products-description">
-                    <h3 class="cart__products-title">${item.product.title}</h3>
-                    <p class="cart__products-descr"> ${item.product.description}</p>
-                    <div class="cart__products-raiting">
-                        <p>Rating: <span>${item.product.rating}</span> </p>
-                        <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
+                <a class="cart__products-link" id=${item.product.id} href="#single/1">
+                    <div class="cart__products-img">
+                        <img src=${item.product.images[0]}> 
                     </div>
-                </div>
+                    <div  class="cart__products-description">
+                        <h3 class="cart__products-title">${item.product.title}</h3>
+                        <p class="cart__products-descr"> ${item.product.description}</p>
+                        <div class="cart__products-raiting">
+                            <p>Rating: <span>${item.product.rating}</span> </p>
+                            <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
+                        </div>
+                    </div>
+                </a>
                 <div class="cart__products-sum">
                     <p>Stock: <span>${item.product.stock}</span> </p>
                     <div class="cart__counter">
@@ -122,9 +296,19 @@ export const cartPage = new CartPage({
             <div class="cart__summary">
                 <h3 class="cart__summary-title">Summary</h3>
                 <h4 class="cart__summary-subtitle">Products: <span>${cartTotalCounter}</span> </h4>
-                <h4 class="cart__summary-subtitle">Total: €<span>${cartTotalSum}</span> </h4>
+                <h4 class="cart__summary-sum">Total: €<span>${cartTotalSum}</span> </h4>
+                <h4 class="cart__summary-sum_promo">Total: €<span>0</span> </h4>
+                <div class="cart-applied">
+                    <h5 class="cart-applied_title">Applied codes</h5>
+                    <ul class="cart-applied_block"></ul>
+                </div>
                 <div class="cart__summary-promo">
-                    <input type="text" placeholder="Enter promo code">
+                    <input class="cart-promo" type="text" placeholder="Enter promo code">
+                    <span class="cart-clear">×</span>
+                    <div class="cart-promo_block">
+                        <p class="cart-promo_text">Rolling Scopes School - 10%</p>
+                        <button class="cart-promo_btn">add</button>
+                    </div>
                     <label>Promo for test: 'RS', 'EPM'</label>
                 </div>
                 <button class="button">Buy now</button>

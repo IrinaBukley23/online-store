@@ -17,10 +17,6 @@ export interface ComponentInterface {
     initInnerComponents: () => void;
     events?: () => { [key: string]: string };
     clickSelector?: string;
-    detailsSelector?: string;
-    cartSelector?: string;
-    getDetails?(e: Event): void;
-    changeCounter?(e: Event): void;
 }
 
 export interface ComponentConfig {
@@ -52,11 +48,18 @@ export interface Product {
 export interface CartItem {
     product: Product;
     counter: number;
+    flag?: boolean;
 }
 
 export interface ProductsData {
-    products: Product[],
-    total: number,
-    skip: number,
+    products: Product[];
+    total: number;
+    skip: number;
     limit: number
+}
+
+
+export interface PromoCodesText {
+    rs: string; 
+    epm: string;
 }

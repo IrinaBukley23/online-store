@@ -9,6 +9,13 @@
     .crumbs__list {
         display: flex;
         justify-content: space-around;
+        &-item {
+            a{
+                &:hover {
+                    color: #252120;
+                }
+            } 
+        }
     }
     &__wrapper{
     width: 70%;
