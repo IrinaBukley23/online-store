@@ -11,6 +11,7 @@ class CartPage extends WFMComponent {
         super(config);
     }
     promoArr: string[] = [];
+    newArr: CartItem[] = [];
     public handleInput(event: Event): void {
         const target = event.target as HTMLInputElement;
         
@@ -63,6 +64,7 @@ class CartPage extends WFMComponent {
             (document.querySelector('.cart-promo') as HTMLInputElement).value = '';
         }
     
+        // apply new sum with promo codes
         const isDropBtn = target.classList.contains('cart-applied_btn');
         if (isDropBtn) this.applyPromo(target);  
 
@@ -242,8 +244,9 @@ export const cartPage = new CartPage({
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         const cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
         const cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
+        console.log(cartArr)
         if(!cartArr || cartArr.length === 0) {
-            return `<h3>Cart is empty</h3>`
+            return `<h3>Cart is empty</h3>`;
         }
 
         cartArr && cartArr.forEach((item: CartItem) => {

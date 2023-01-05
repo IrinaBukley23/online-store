@@ -69,8 +69,18 @@ export const productsContainer = new ProductsContainer({
     selector: 'products-container',
     innerComponents: null,
     getTemplate() {
+        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        let btnToCartText = 'add to cart';
         let cardsTemplate = ``;
+
         productsData.products.forEach((product: Product) => {
+            cartArr?.forEach(prod => {
+                if(prod.product.id === product.id){
+                    btnToCartText = 'drop from cart';
+                } else {
+                    btnToCartText = 'add to cart';
+                }
+            })
             cardsTemplate += `
                 <div data-id="${product.id}" data-category="${product.category}" data-brand="${product.brand}" data-price="${product.price}" data-stock="${product.stock}"  data-discount="${product.discountPercentage}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">
@@ -98,7 +108,7 @@ export const productsContainer = new ProductsContainer({
                         Rating: ${product.rating}/5
                     </div>
                     <div class="product__buttons">
-                        <button id=${product.id} class="button btn__to-cart">add to cart</button>
+                        <button id=${product.id} class="button btn__to-cart">${btnToCartText}</button>
                         <a id=${product.id} class="button btn__details" href="#single/1">Details</a>
                     </div>
                 </div>
