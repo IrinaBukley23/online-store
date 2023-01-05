@@ -15,11 +15,12 @@
 @import '../app/components/filter/brandFilter/brandFilter';
 @import '../app/components/productsContainer/productsContainer';
 @import '../app/components/filter/dualSlider/dualSliderTemplate';
-@import '../app/components/productsContainer/productsContainer.scss';
-@import '../app/pages/cartPage/cartPage.scss';
+@import '../app/components/productsContainer/productsContainer';
+@import '../app/pages/cartPage/cartPage';
+@import '../app/components/sortDropdown/sortDropdown';
+@import '../app/components/textSearch/textSearch';
 
 body {
-    margin-top: 80px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -27,7 +28,6 @@ body {
     justify-content: center;
     background-color: $color-main;
     color: $color-text;
-    text-transform: uppercase;
 }
 
 .lds-ripple {

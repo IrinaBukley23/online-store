@@ -1,5 +1,4 @@
 .filter {
-    padding: 30px 0;
     flex: 1 1 20%;
 
     display: flex;
@@ -29,6 +28,10 @@
 
                 &:has(.form-check-input:disabled) {
                     order: 2;
+                }
+
+                &-label {
+                    text-transform: capitalize;
                 }
 
                 &-input {

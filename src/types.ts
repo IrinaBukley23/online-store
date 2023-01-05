@@ -51,8 +51,14 @@ export interface CartItem {
 }
 
 export interface ProductsData {
-    products: Product[],
-    total: number,
-    skip: number,
+    products: Product[];
+    total: number;
+    skip: number;
     limit: number
+}
+
+
+export interface PromoCodesText {
+    rs: string; 
+    epm: string;
 }
