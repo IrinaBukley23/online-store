@@ -53,7 +53,10 @@ type PartialProduct = Partial<Product>;
 
 export type QueryParamsRequired = Record<keyof PartialProduct, string>;
 
-export type QueryParams = Partial<QueryParamsRequired>;
+export type QueryParams = Partial<QueryParamsRequired> & {
+    sort?: string;
+    search?: string;
+}
 
 export interface CartItem {
     product: Product;

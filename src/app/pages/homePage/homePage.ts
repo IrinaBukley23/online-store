@@ -15,7 +15,7 @@ class HomePage extends WFMComponent {
     private minPrice: string;
     private maxPrice: string;
     private URL: string;
-    private queryParams: URLSearchParams;
+    private queryParams: QueryParams;
 
     constructor(config: ComponentConfig) {
         super(config);
@@ -31,23 +31,18 @@ class HomePage extends WFMComponent {
     private getQueryParamsFromURL(URLstr: string) {
         const URLObject = new URL(URLstr);
         const searchParams = new URLSearchParams(URLObject.searchParams);
-
-        searchParams.set('filter', 'sth');
-        console.log(searchParams.toString());
-        return searchParams;
+        return Object.fromEntries(searchParams.entries());
     }
 
     private setQueryParams(params: QueryParams) {
+        this.queryParams = params;
         const currentURL = new URL(document.URL);
-        console.log(currentURL);
-
         const searchParamsObj = new URLSearchParams(params);
-        console.log(searchParamsObj.toString());
 
         currentURL.search = searchParamsObj.toString();
-        console.log(currentURL);
+        console.log(searchParamsObj.toString(),currentURL);
 
-        history.pushState(null, null, '/page2.php');
+        history.pushState('', '', currentURL);
     }
 
     public getMinStockValue(): string {
@@ -153,7 +148,24 @@ class HomePage extends WFMComponent {
         const chosenCategories: (string | undefined)[] = [];
         const chosenBrands: (string | undefined)[] = [];
 
-        const queryParams: QueryParams = { price: '100-120', brand: 'Samsung_Apple' };
+        const minPrice: string = priceFromSlider.value;
+        const maxPrice: string = priceToSlider.value;
+        const minStock: string = stockFromSlider.value;
+        const maxStock: string = stockToSlider.value;
+
+        const queryParams: QueryParams = {};
+
+        if (minPrice !== this.minPrice || maxPrice !== this.maxPrice) {
+            queryParams.price = `${minPrice}-${maxPrice}`;
+        }
+
+        if (minStock !== this.minStock || maxStock !== this.maxStock) {
+            queryParams.stock = `${minStock}-${maxStock}`;
+        }
+
+        if (textInput.value.trim()) {
+            queryParams.search = textInput.value.trim();
+        }
 
         if (
             target !== priceFromSlider &&
@@ -172,11 +184,6 @@ class HomePage extends WFMComponent {
             stockToSlider.dispatchEvent(new Event('change'));
         }
 
-        const minPrice: string = priceFromSlider.value;
-        const maxPrice: string = priceToSlider.value;
-        const minStock: string = stockFromSlider.value;
-        const maxStock: string = stockToSlider.value;
-
         checkedCategoryInputs.forEach((input) => {
             if (input.nextElementSibling) {
                 const labelText = input.nextElementSibling.textContent?.trim();
@@ -184,12 +191,20 @@ class HomePage extends WFMComponent {
             }
         });
 
+        if (chosenCategories.length) {
+            queryParams.category = chosenCategories.join('_');
+        }
+
         checkedBrandInputs.forEach((input) => {
             if (input.nextElementSibling) {
                 const labelText = input.nextElementSibling.textContent?.trim();
                 chosenBrands.push(labelText);
             }
         });
+
+        if (chosenBrands.length) {
+            queryParams.brand = chosenBrands.join('_');
+        }
 
         productCards.forEach((card) => {
             card.classList.remove('d-none');
@@ -408,12 +423,14 @@ class HomePage extends WFMComponent {
     }
 
     private sortProducts(target: HTMLElement, sortType: string | undefined): void {
+        this.queryParams.sort = sortType;
+        this.setQueryParams(this.queryParams);
+
         if (sortType) {
             const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
             const sortProductDropdown = document.querySelector('#sortProductDropdown') as HTMLButtonElement;
 
             const arrayCards = Array.prototype.slice.call(productCards);
-            // const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
 
             if (arrayCards.length) {
                 if (sortType === 'price-desc') {
