@@ -12,7 +12,7 @@ class ProductsContainer extends WFMComponent {
     public handleClick(event: Event): void {
         const target = event.target as HTMLElement;
 
-        if(target.classList.contains('btn__details')) {
+        if (target.classList.contains('btn__details')) {
             const id = (target as HTMLElement).getAttribute('id');
             (target as HTMLElement).setAttribute('href', `#single/${id}`);
             appRoutes[1].path = `single/${id}`;
@@ -23,10 +23,10 @@ class ProductsContainer extends WFMComponent {
             appRoutes[1].path = `single/${id}`;
         }
 
-        if(target.classList.contains('btn__to-cart')) {
+        if (target.classList.contains('btn__to-cart')) {
             const id = (target as HTMLElement).getAttribute('id');
 
-            if(!id) return;
+            if (!id) return;
             const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
 
             this.cartProducts.push({
@@ -34,23 +34,24 @@ class ProductsContainer extends WFMComponent {
                 'counter': 1, 
                 'flag': true,
             });
-            console.log(this.cartProducts)
+            console.log(this.cartProducts);
             localStorage.setItem('cart', JSON.stringify(this.cartProducts));
 
             const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-            cartArr.forEach(item => {
-                if(item.product.id === product.id)  {
-                    (target as HTMLElement).innerHTML = 'drop from cart'
+            cartArr.forEach((item) => {
+                if (item.product.id === product.id) {
+                    (target as HTMLElement).innerHTML = 'drop from cart';
                 } else {
-                    (target as HTMLElement).innerHTML = 'add to cart'
-            }});
+                    (target as HTMLElement).innerHTML = 'add to cart';
+                }
+            });
             let cartTotalCounter = 0;
             let cartTotalSum = 0;
-            cartArr.forEach(item => {
+            cartArr.forEach((item) => {
                 cartTotalCounter += item.counter;
-                cartTotalSum += (item.product.price * item.counter);
-                localStorage.setItem('totalSum', String(cartTotalSum))
-                localStorage.setItem('totalCounter', String(cartTotalCounter))
+                cartTotalSum += item.product.price * item.counter;
+                localStorage.setItem('totalSum', String(cartTotalSum));
+                localStorage.setItem('totalCounter', String(cartTotalCounter));
             });
             const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
             if(headerTotalCounterEl) {
@@ -68,11 +69,10 @@ export const productsContainer = new ProductsContainer({
     selector: 'products-container',
     innerComponents: null,
     getTemplate() {
-
         let cardsTemplate = ``;
         productsData.products.forEach((product: Product) => {
             cardsTemplate += `
-                <div data-category="${product.category}" data-brand="${product.brand}" data-price="${product.price}" data-stock="${product.stock}" class="product col-lg-4 col-md-6 col-12">
+                <div data-id="${product.id}" data-category="${product.category}" data-brand="${product.brand}" data-price="${product.price}" data-stock="${product.stock}"  data-discount="${product.discountPercentage}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">
                     <div class="product__title">
                      ${product.title}
@@ -91,6 +91,12 @@ export const productsContainer = new ProductsContainer({
                     <div class="product__price">
                         € ${product.price}
                     </div>
+                    <div class="product__discount">
+                        Discount: ${product.discountPercentage}%
+                    </div>
+                    <div class="product__rating">
+                        Rating: ${product.rating}/5
+                    </div>
                     <div class="product__buttons">
                         <button id=${product.id} class="button btn__to-cart">add to cart</button>
                         <a id=${product.id} class="button btn__details" href="#single/1">Details</a>
@@ -98,11 +104,10 @@ export const productsContainer = new ProductsContainer({
                 </div>
             </div>
             `;
-        }
-    );
+        });
 
-    return `
+        return `
     ${cardsTemplate}
     `;
-    }
+    },
 });
