@@ -1,5 +1,5 @@
 import { WFMComponent } from '../../../routes/index';
-import { ComponentConfig, Product } from '../../../types';
+import { ComponentConfig, Product, QueryParams } from '../../../types';
 import { productsContainer } from '../../components/productsContainer/productsContainer';
 import { filter } from '../../components/filter/filter';
 import { productsData } from '../../../data/productsData';
@@ -14,6 +14,8 @@ class HomePage extends WFMComponent {
     private maxStock: string;
     private minPrice: string;
     private maxPrice: string;
+    private URL: string;
+    private queryParams: URLSearchParams;
 
     constructor(config: ComponentConfig) {
         super(config);
@@ -22,6 +24,30 @@ class HomePage extends WFMComponent {
         this.maxStock = this.getMaxStockValue();
         this.minPrice = this.getMinPriceValue();
         this.maxPrice = this.getMaxPriceValue();
+        this.URL = document.URL;
+        this.queryParams = this.getQueryParamsFromURL(this.URL);
+    }
+
+    private getQueryParamsFromURL(URLstr: string) {
+        const URLObject = new URL(URLstr);
+        const searchParams = new URLSearchParams(URLObject.searchParams);
+
+        searchParams.set('filter', 'sth');
+        console.log(searchParams.toString());
+        return searchParams;
+    }
+
+    private setQueryParams(params: QueryParams) {
+        const currentURL = new URL(document.URL);
+        console.log(currentURL);
+
+        const searchParamsObj = new URLSearchParams(params);
+        console.log(searchParamsObj.toString());
+
+        currentURL.search = searchParamsObj.toString();
+        console.log(currentURL);
+
+        history.pushState(null, null, '/page2.php');
     }
 
     public getMinStockValue(): string {
@@ -92,7 +118,7 @@ class HomePage extends WFMComponent {
         }
     }
 
-    public handleOnInput(event: Event): void {
+    public handleInput(event: Event): void {
         const target = event.target as HTMLElement;
 
         if (target.classList.contains('text-search__input')) {
@@ -126,6 +152,8 @@ class HomePage extends WFMComponent {
         const checkedBrandInputs = document.querySelectorAll('.brand-filter .form-check-input:checked');
         const chosenCategories: (string | undefined)[] = [];
         const chosenBrands: (string | undefined)[] = [];
+
+        const queryParams: QueryParams = { price: '100-120', brand: 'Samsung_Apple' };
 
         if (
             target !== priceFromSlider &&
@@ -223,6 +251,7 @@ class HomePage extends WFMComponent {
         });
 
         this.showProductQuantity();
+        this.setQueryParams(queryParams);
     }
 
     private changeActiveBrandCheckboxes(): void {
