@@ -1,7 +1,7 @@
 import { ComponentConfig, ComponentInterface } from '../../types';
 
 export class Component implements ComponentInterface {
-    getTemplate: (params?: {[key: string]: string}) => string;
+    getTemplate: (params?: { [key: string]: string }) => string;
     selector: string;
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
@@ -14,15 +14,16 @@ export class Component implements ComponentInterface {
     public init?(): void;
     public handleClick?(e: Event): void;
     public handleInputChange?(e: Event): void;
+    public handleOnInput?(e: Event): void;
 
     constructor(config: ComponentConfig) {
-        this.getTemplate= config.getTemplate;
+        this.getTemplate = config.getTemplate;
         this.selector = config.selector;
         this.el = null;
         this.innerComponents = config.innerComponents;
     }
 
-    render(params?: {[key: string]: string}): void {
+    render(params?: { [key: string]: string }): void {
         const [_, id] = window.location.hash.split('/');
         const template = this.getTemplate(id ? { id } : params);
         this.el = document.querySelector(this.selector);
@@ -47,11 +48,17 @@ export class Component implements ComponentInterface {
             componentElem?.addEventListener('change', inputChangeHandler);
         }
 
+        // Add on input handler
+        if (this.handleOnInput) {
+            const onInputHandler = this.handleOnInput.bind(this);
+            componentElem?.addEventListener('input', onInputHandler);
+        }
+
         // Add click handler
 
-        if(this.handleClick) {
+        if (this.handleClick) {
             const clickHandler = this.handleClick.bind(this);
-            componentElem?.addEventListener('click', clickHandler)
+            componentElem?.addEventListener('click', clickHandler);
         }
 
         const cartSelector = this.cartSelector;
@@ -84,6 +91,5 @@ export class Component implements ComponentInterface {
                 btn.addEventListener('click', listenerGetDetails);
             }
         });
-
     }
 }

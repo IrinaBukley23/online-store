@@ -5,6 +5,7 @@ import { filter } from '../../components/filter/filter';
 import { productsData } from '../../../data/productsData';
 import { sortDropdown } from '../../components/sortDropdown/sortDropdown';
 import './homePage.scss';
+import { textSearch } from '../../components/textSearch/textSearch';
 
 class HomePage extends WFMComponent {
     private productsData: Product[];
@@ -120,6 +121,16 @@ class HomePage extends WFMComponent {
         }
     }
 
+    public handleOnInput(event: Event): void {
+        const target = event.target as HTMLElement;
+
+        if (target.classList.contains('text-search__input')) {
+            const inputTarget = target as HTMLInputElement;
+
+            this.showChosenCards(inputTarget);
+        }
+    }
+
     private handleCategoryCheckbox(target: HTMLInputElement): void {
         this.showChosenCards(target);
         this.changeDualSlidersValues();
@@ -132,6 +143,8 @@ class HomePage extends WFMComponent {
 
     private showChosenCards(target: HTMLInputElement): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+
+        const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
 
         const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
         const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
@@ -204,6 +217,35 @@ class HomePage extends WFMComponent {
 
             if (card.dataset.price) {
                 if (+card.dataset.price < +minPrice || +card.dataset.price > +maxPrice) {
+                    card.classList.add('d-none');
+                }
+            }
+
+            if (textInput.value.trim()) {
+                let includesSearchStr = false;
+                const currentCardId: string | undefined = card.dataset.id;
+
+                if (currentCardId) {
+                    const currentProduct: Product | undefined = productsData.products.find(
+                        (product) => +product.id === +currentCardId
+                    );
+
+                    if (currentProduct) {
+                        const currentProductEntries = Object.entries(currentProduct);
+
+                        currentProductEntries.forEach(([key, value]) => {
+                            const strValue = value.toString();
+
+                            if (key !== 'id' && key !== 'thumbnail' && key !== 'images') {
+                                if (strValue.toLowerCase().includes(textInput.value.trim().toLowerCase())) {
+                                    includesSearchStr = true;
+                                }
+                            }
+                        });
+                    }
+                }
+
+                if (!includesSearchStr) {
                     card.classList.add('d-none');
                 }
             }
@@ -314,62 +356,65 @@ class HomePage extends WFMComponent {
         const arrayCards = Array.prototype.slice.call(productCards);
         const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
 
-        let minActiveCardPrice = displayedCards[0].dataset.price;
-        let minActiveCardStock = displayedCards[0].dataset.stock;
-        let maxActiveCardPrice = displayedCards[0].dataset.price;
-        let maxActiveCardStock = displayedCards[0].dataset.stock;
+        if (displayedCards.length) {
+            let minActiveCardPrice = displayedCards[0].dataset.price;
+            let minActiveCardStock = displayedCards[0].dataset.stock;
+            let maxActiveCardPrice = displayedCards[0].dataset.price;
+            let maxActiveCardStock = displayedCards[0].dataset.stock;
 
-        displayedCards.forEach((card) => {
-            if (card.dataset.price && minActiveCardPrice && maxActiveCardPrice) {
-                if (+card.dataset.price < +minActiveCardPrice) {
-                    minActiveCardPrice = card.dataset.price;
+            displayedCards.forEach((card) => {
+                if (card.dataset.price && minActiveCardPrice && maxActiveCardPrice) {
+                    if (+card.dataset.price < +minActiveCardPrice) {
+                        minActiveCardPrice = card.dataset.price;
+                    }
+                    if (+card.dataset.price > +maxActiveCardPrice) {
+                        maxActiveCardPrice = card.dataset.price;
+                    }
                 }
-                if (+card.dataset.price > +maxActiveCardPrice) {
-                    maxActiveCardPrice = card.dataset.price;
+
+                if (card.dataset.stock && minActiveCardStock && maxActiveCardStock) {
+                    if (+card.dataset.stock < +minActiveCardStock) {
+                        minActiveCardStock = card.dataset.stock;
+                    }
+                    if (+card.dataset.stock > +maxActiveCardStock) {
+                        maxActiveCardStock = card.dataset.stock;
+                    }
                 }
+            });
+
+            if (minActiveCardPrice && maxActiveCardPrice && minActiveCardStock && maxActiveCardStock) {
+                priceFromSlider.value = minActiveCardPrice;
+                priceToSlider.value = maxActiveCardPrice;
+                stockFromSlider.value = minActiveCardStock;
+                stockToSlider.value = maxActiveCardStock;
+
+                priceFromInput.value = minActiveCardPrice;
+                priceToInput.value = maxActiveCardPrice;
+                stockFromInput.value = minActiveCardStock;
+                stockToInput.value = maxActiveCardStock;
+
+                priceFromSlider.dispatchEvent(new Event('change'));
+                priceToSlider.dispatchEvent(new Event('change'));
+                stockFromSlider.dispatchEvent(new Event('change'));
+                stockToSlider.dispatchEvent(new Event('change'));
+                priceFromInput.dispatchEvent(new Event('change'));
+                priceToInput.dispatchEvent(new Event('change'));
+                stockFromInput.dispatchEvent(new Event('change'));
+                stockToInput.dispatchEvent(new Event('change'));
             }
-
-            if (card.dataset.stock && minActiveCardStock && maxActiveCardStock) {
-                if (+card.dataset.stock < +minActiveCardStock) {
-                    minActiveCardStock = card.dataset.stock;
-                }
-                if (+card.dataset.stock > +maxActiveCardStock) {
-                    maxActiveCardStock = card.dataset.stock;
-                }
-            }
-        });
-
-        if (minActiveCardPrice && maxActiveCardPrice && minActiveCardStock && maxActiveCardStock) {
-            priceFromSlider.value = minActiveCardPrice;
-            priceToSlider.value = maxActiveCardPrice;
-            stockFromSlider.value = minActiveCardStock;
-            stockToSlider.value = maxActiveCardStock;
-
-            priceFromInput.value = minActiveCardPrice;
-            priceToInput.value = maxActiveCardPrice;
-            stockFromInput.value = minActiveCardStock;
-            stockToInput.value = maxActiveCardStock;
-
-            priceFromSlider.dispatchEvent(new Event('change'));
-            priceToSlider.dispatchEvent(new Event('change'));
-            stockFromSlider.dispatchEvent(new Event('change'));
-            stockToSlider.dispatchEvent(new Event('change'));
-            priceFromInput.dispatchEvent(new Event('change'));
-            priceToInput.dispatchEvent(new Event('change'));
-            stockFromInput.dispatchEvent(new Event('change'));
-            stockToInput.dispatchEvent(new Event('change'));
         }
     }
 }
 
 export const homePage = new HomePage({
     selector: 'home',
-    innerComponents: [productsContainer, filter, sortDropdown],
+    innerComponents: [productsContainer, filter, sortDropdown, textSearch],
     getTemplate: () => `
         <filter class="filter"></filter>
         <main class="main">
             <div class="display-info">
                 <sort-dropdown></sort-dropdown>
+                <text-search></text-search>
             </div>
             <products-container class="product__cards"></products-container>
         </main>

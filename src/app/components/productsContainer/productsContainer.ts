@@ -58,7 +58,7 @@ export const productsContainer = new ProductsContainer({
         let cardsTemplate = ``;
         productsData.products.forEach((product: Product) => {
             cardsTemplate += `
-                <div data-category="${product.category}" data-brand="${product.brand}" data-price="${product.price}" data-stock="${product.stock}"  data-discount="${product.discountPercentage}" class="product col-lg-4 col-md-6 col-12">
+                <div data-id="${product.id}" data-category="${product.category}" data-brand="${product.brand}" data-price="${product.price}" data-stock="${product.stock}"  data-discount="${product.discountPercentage}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">
                     <div class="product__title">
                      ${product.title}
