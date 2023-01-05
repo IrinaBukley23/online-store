@@ -36,6 +36,11 @@ class CartPage extends WFMComponent {
                 }
             }
         };  
+
+        if (target.classList.contains('cart__pagination-limit input')) {
+            const limitValueEl = document.querySelector('.cart__pagination-limit input') as HTMLInputElement;
+            if(limitValueEl) limitValueEl.value = target.value;
+        }
     }
 
     public handleClick(event: Event): void {
@@ -168,7 +173,8 @@ class CartPage extends WFMComponent {
         // pagination
         if(target.classList.contains('pagination__item')) {
 
-            const limitProdsOnPage = (document.querySelector('.cart__pagination-limit input') as HTMLInputElement)?.value;
+            let limitProdsOnPage = (document.querySelector('.cart__pagination-limit input') as HTMLInputElement)?.value;
+            if(+limitProdsOnPage > 3) limitProdsOnPage = '3';
 
             const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
             const currentPage = +target.id - 1;
