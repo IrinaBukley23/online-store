@@ -58,39 +58,7 @@ class HomePage extends WFMComponent {
         if (target.classList.contains('sort__item')) {
             const sortType: string | undefined = target.dataset.sort;
 
-            if (sortType) {
-                const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
-                const sortProductDropdown = document.querySelector('#sortProductDropdown') as HTMLButtonElement;
-
-                const arrayCards = Array.prototype.slice.call(productCards);
-                const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
-
-                if (displayedCards.length) {
-                    if (sortType === 'price-desc') {
-                        const sortedCards = displayedCards.sort((a, b) => +b.dataset.price - +a.dataset.price);
-                        sortedCards.forEach((card, index) => {
-                            card.style.order = `${index + 1}`;
-                        });
-                    } else if (sortType === 'price-asc') {
-                        const sortedCards = displayedCards.sort((a, b) => +a.dataset.price - +b.dataset.price);
-                        sortedCards.forEach((card, index) => {
-                            card.style.order = `${index + 1}`;
-                        });
-                    } else if (sortType === 'discount-desc') {
-                        const sortedCards = displayedCards.sort((a, b) => +b.dataset.discount - +a.dataset.discount);
-                        sortedCards.forEach((card, index) => {
-                            card.style.order = `${index + 1}`;
-                        });
-                    } else if (sortType === 'discount-asc') {
-                        const sortedCards = displayedCards.sort((a, b) => +a.dataset.discount - +b.dataset.discount);
-                        sortedCards.forEach((card, index) => {
-                            card.style.order = `${index + 1}`;
-                        });
-                    }
-
-                    sortProductDropdown.innerText = target.innerText;
-                }
-            }
+            this.sortProducts(target, sortType);
         }
     }
 
@@ -406,6 +374,42 @@ class HomePage extends WFMComponent {
                 priceToInput.dispatchEvent(new Event('change'));
                 stockFromInput.dispatchEvent(new Event('change'));
                 stockToInput.dispatchEvent(new Event('change'));
+            }
+        }
+    }
+
+    private sortProducts(target: HTMLElement, sortType: string | undefined): void {
+        if (sortType) {
+            const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+            const sortProductDropdown = document.querySelector('#sortProductDropdown') as HTMLButtonElement;
+
+            const arrayCards = Array.prototype.slice.call(productCards);
+            // const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
+
+            if (arrayCards.length) {
+                if (sortType === 'price-desc') {
+                    const sortedCards = arrayCards.sort((a, b) => +b.dataset.price - +a.dataset.price);
+                    sortedCards.forEach((card, index) => {
+                        card.style.order = `${index + 1}`;
+                    });
+                } else if (sortType === 'price-asc') {
+                    const sortedCards = arrayCards.sort((a, b) => +a.dataset.price - +b.dataset.price);
+                    sortedCards.forEach((card, index) => {
+                        card.style.order = `${index + 1}`;
+                    });
+                } else if (sortType === 'discount-desc') {
+                    const sortedCards = arrayCards.sort((a, b) => +b.dataset.discount - +a.dataset.discount);
+                    sortedCards.forEach((card, index) => {
+                        card.style.order = `${index + 1}`;
+                    });
+                } else if (sortType === 'discount-asc') {
+                    const sortedCards = arrayCards.sort((a, b) => +a.dataset.discount - +b.dataset.discount);
+                    sortedCards.forEach((card, index) => {
+                        card.style.order = `${index + 1}`;
+                    });
+                }
+
+                sortProductDropdown.innerText = target.innerText;
             }
         }
     }
