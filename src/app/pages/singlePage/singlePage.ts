@@ -145,7 +145,7 @@ export const singlePage = new SinglePage({
         <div class="single__info-price">
           <div class="single__info-price_sum">€${product.price}</div>
           <button id=${product.id} class="single__info-price_btn add-to-cart">add to cart</button>
-          <a  id=${product.id} href="#cart" class="single__info-price_btn fast_purchase">buy now</a>
+          <a id=${product.id} href="#cart" class="single__info-price_btn fast_purchase">buy now</a>
         </div>
       </div>
       </div>
