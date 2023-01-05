@@ -6,6 +6,7 @@ import { productsData } from '../../../data/productsData';
 import { sortDropdown } from '../../components/sortDropdown/sortDropdown';
 import './homePage.scss';
 import { textSearch } from '../../components/textSearch/textSearch';
+import { foundProductQuantity } from '../../components/foundProductQuantity/foundProductQuantity';
 
 class HomePage extends WFMComponent {
     private productsData: Product[];
@@ -64,29 +65,31 @@ class HomePage extends WFMComponent {
                 const arrayCards = Array.prototype.slice.call(productCards);
                 const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
 
-                if (sortType === 'price-desc') {
-                    const sortedCards = displayedCards.sort((a, b) => +b.dataset.price - +a.dataset.price);
-                    sortedCards.forEach((card, index) => {
-                        card.style.order = `${index + 1}`;
-                    });
-                } else if (sortType === 'price-asc') {
-                    const sortedCards = displayedCards.sort((a, b) => +a.dataset.price - +b.dataset.price);
-                    sortedCards.forEach((card, index) => {
-                        card.style.order = `${index + 1}`;
-                    });
-                } else if (sortType === 'discount-desc') {
-                    const sortedCards = displayedCards.sort((a, b) => +b.dataset.discount - +a.dataset.discount);
-                    sortedCards.forEach((card, index) => {
-                        card.style.order = `${index + 1}`;
-                    });
-                } else if (sortType === 'discount-asc') {
-                    const sortedCards = displayedCards.sort((a, b) => +a.dataset.discount - +b.dataset.discount);
-                    sortedCards.forEach((card, index) => {
-                        card.style.order = `${index + 1}`;
-                    });
-                }
+                if (displayedCards.length) {
+                    if (sortType === 'price-desc') {
+                        const sortedCards = displayedCards.sort((a, b) => +b.dataset.price - +a.dataset.price);
+                        sortedCards.forEach((card, index) => {
+                            card.style.order = `${index + 1}`;
+                        });
+                    } else if (sortType === 'price-asc') {
+                        const sortedCards = displayedCards.sort((a, b) => +a.dataset.price - +b.dataset.price);
+                        sortedCards.forEach((card, index) => {
+                            card.style.order = `${index + 1}`;
+                        });
+                    } else if (sortType === 'discount-desc') {
+                        const sortedCards = displayedCards.sort((a, b) => +b.dataset.discount - +a.dataset.discount);
+                        sortedCards.forEach((card, index) => {
+                            card.style.order = `${index + 1}`;
+                        });
+                    } else if (sortType === 'discount-asc') {
+                        const sortedCards = displayedCards.sort((a, b) => +a.dataset.discount - +b.dataset.discount);
+                        sortedCards.forEach((card, index) => {
+                            card.style.order = `${index + 1}`;
+                        });
+                    }
 
-                sortProductDropdown.innerText = target.innerText;
+                    sortProductDropdown.innerText = target.innerText;
+                }
             }
         }
     }
@@ -250,6 +253,8 @@ class HomePage extends WFMComponent {
                 }
             }
         });
+
+        this.showProductQuantity();
     }
 
     private changeActiveBrandCheckboxes(): void {
@@ -404,19 +409,37 @@ class HomePage extends WFMComponent {
             }
         }
     }
+
+    private showProductQuantity(): void {
+        const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+        const foundProductsQuantityDisplay = document.querySelector('found-product-quantity') as HTMLElement;
+        const nothingFoundDisclaimer = document.querySelector('.nothing-found') as HTMLDivElement;
+
+        const arrayCards = Array.prototype.slice.call(productCards);
+        const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
+        foundProductsQuantityDisplay.innerText = `Products found: ${displayedCards.length}`;
+
+        if (displayedCards.length) {
+            nothingFoundDisclaimer.classList.add('d-none');
+        } else {
+            nothingFoundDisclaimer.classList.remove('d-none');
+        }
+    }
 }
 
 export const homePage = new HomePage({
     selector: 'home',
-    innerComponents: [productsContainer, filter, sortDropdown, textSearch],
+    innerComponents: [productsContainer, filter, sortDropdown, textSearch, foundProductQuantity],
     getTemplate: () => `
         <filter class="filter"></filter>
         <main class="main">
             <div class="display-info">
                 <sort-dropdown></sort-dropdown>
+                <found-product-quantity></found-product-quantity>
                 <text-search></text-search>
             </div>
             <products-container class="product__cards"></products-container>
+            <div class="nothing-found">No products found.</div>
         </main>
     `,
 });
