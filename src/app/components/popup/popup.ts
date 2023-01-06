@@ -35,6 +35,11 @@ class Popup extends WFMComponent {
       if(target.classList.contains('popup__email')) {
         this.validationEmail(target);
       } 
+
+      if(target.classList.contains('popup__cvv')) {
+        this.validationCardCvv(target);
+      } 
+
     }
 
     private closePopup(): void {
@@ -139,7 +144,18 @@ class Popup extends WFMComponent {
       }
     }
 
-
+    private validationCardCvv(elem: HTMLInputElement): void {
+      const cvvErr = document.querySelector('.error__cvv') as HTMLLabelElement;
+      if(+elem.value.length !== 3) {
+        cvvErr.classList.add('active');
+      } else {
+        if (isNaN(+elem.value)){
+          cvvErr.classList.add('active');
+        }else {
+          cvvErr.classList.remove('active');
+        }
+      }
+    }
 }
 
 export const popup = new Popup({
@@ -174,16 +190,16 @@ export const popup = new Popup({
                 <div class="popup__card">
                     <div class="popup__card-number">
                         <label class="popup__card-pay"><img src="${paysys}" alt="card"></label>
-                        <input class="popup__card-num" type="number" placeholder="Card number">
+                        <input class="popup__card-num popup__card-number" type="number" placeholder="Card number">
                     </div>
-                    <label class="popup__card-label">Valid:</label>
+                    <label class="popup__card-label popup__true">Valid:</label>
                     <input class="popup__card-input" type="number" placeholder="Valid True">
                     <label class="popup__card-label">CVV:</label>
-                    <input class="popup__card-input" type="number" placeholder="Code">
+                    <input class="popup__card-input  popup__cvv" type="number" placeholder="Code" maxlength="3">
                 </div>
-                <label class="error">Card number - error</label>
-                <label class="error">Card valid true - error</label>
-                <label class="error">Card CVV - error</label>
+                <label class="error error__card-number">Card number - error</label>
+                <label class="error error__true">Card valid true - error</label>
+                <label class="error error__cvv">Card CVV - error</label>
                 <input class="popup__btn" type="submit" value="confirm">
               </form>
             </div>

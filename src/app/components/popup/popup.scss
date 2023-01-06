@@ -100,7 +100,7 @@
     &__btn {
         padding: 12px 16px;
         display: flex;
-        margin: 0 auto;
+        margin: 10px auto;
         align-items: center;
         justify-content: center;
         border: none;
@@ -117,7 +117,13 @@
     .error {
         height: auto;
     }
-    .error__name, .error__phone, .error__address, .error__email {
+    .error__name, 
+    .error__phone, 
+    .error__address, 
+    .error__email,
+    .error__card-number,
+    .error__true,
+    .error__cvv {
         display: none;
         &.active {
             display: block;
@@ -126,7 +132,10 @@
             font-size: 1.6rem;
         }
     }
-    .name_block, .phone_block, .address_block, .email_block {
+    .name_block, 
+    .phone_block, 
+    .address_block, 
+    .email_block {
         display: block;
         &.active {
             display: flex;
@@ -136,7 +145,10 @@
             margin: 0 auto;
         }
     }
-    .popup_name, .popup__phone, .popup__address, .popup__email {
+    .popup_name, 
+    .popup__phone, 
+    .popup__address, 
+    .popup__email {
         &.active {
             width: 150%;
         }
