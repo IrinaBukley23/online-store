@@ -40,7 +40,7 @@ class HomePage extends WFMComponent {
         const searchParamsObj = new URLSearchParams(params);
 
         currentURL.search = searchParamsObj.toString();
-        console.log(searchParamsObj.toString(),currentURL);
+        console.log(searchParamsObj.toString(), currentURL);
 
         history.pushState('', '', currentURL);
     }
@@ -148,20 +148,7 @@ class HomePage extends WFMComponent {
         const chosenCategories: (string | undefined)[] = [];
         const chosenBrands: (string | undefined)[] = [];
 
-        const minPrice: string = priceFromSlider.value;
-        const maxPrice: string = priceToSlider.value;
-        const minStock: string = stockFromSlider.value;
-        const maxStock: string = stockToSlider.value;
-
         const queryParams: QueryParams = {};
-
-        if (minPrice !== this.minPrice || maxPrice !== this.maxPrice) {
-            queryParams.price = `${minPrice}-${maxPrice}`;
-        }
-
-        if (minStock !== this.minStock || maxStock !== this.maxStock) {
-            queryParams.stock = `${minStock}-${maxStock}`;
-        }
 
         if (textInput.value.trim()) {
             queryParams.search = textInput.value.trim();
@@ -184,9 +171,24 @@ class HomePage extends WFMComponent {
             stockToSlider.dispatchEvent(new Event('change'));
         }
 
+        // !!! Those variables (minPrice, maxPrice, minStock, maxStock) are declared after above values might have changed (if this function is triggered not by dual sliders)
+
+        const minPrice: string = priceFromSlider.value;
+        const maxPrice: string = priceToSlider.value;
+        const minStock: string = stockFromSlider.value;
+        const maxStock: string = stockToSlider.value;
+
+        if (minPrice !== this.minPrice || maxPrice !== this.maxPrice) {
+            queryParams.price = `${minPrice}-${maxPrice}`;
+        }
+
+        if (minStock !== this.minStock || maxStock !== this.maxStock) {
+            queryParams.stock = `${minStock}-${maxStock}`;
+        }
+
         checkedCategoryInputs.forEach((input) => {
             if (input.nextElementSibling) {
-                const labelText = input.nextElementSibling.textContent?.trim();
+                const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
                 chosenCategories.push(labelText);
             }
         });
@@ -197,7 +199,7 @@ class HomePage extends WFMComponent {
 
         checkedBrandInputs.forEach((input) => {
             if (input.nextElementSibling) {
-                const labelText = input.nextElementSibling.textContent?.trim();
+                const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
                 chosenBrands.push(labelText);
             }
         });
@@ -210,15 +212,18 @@ class HomePage extends WFMComponent {
             card.classList.remove('d-none');
 
             if (chosenCategories.length && chosenBrands.length) {
-                if (!chosenCategories.includes(card.dataset.category) || !chosenBrands.includes(card.dataset.brand)) {
+                if (
+                    !chosenCategories.includes(card.dataset.category?.trim().toLowerCase()) ||
+                    !chosenBrands.includes(card.dataset.brand?.trim().toLowerCase())
+                ) {
                     card.classList.add('d-none');
                 }
             } else if (chosenCategories.length) {
-                if (!chosenCategories.includes(card.dataset.category)) {
+                if (!chosenCategories.includes(card.dataset.category?.trim().toLowerCase())) {
                     card.classList.add('d-none');
                 }
             } else if (chosenBrands.length) {
-                if (!chosenBrands.includes(card.dataset.brand)) {
+                if (!chosenBrands.includes(card.dataset.brand?.trim().toLowerCase())) {
                     card.classList.add('d-none');
                 }
             }
@@ -248,10 +253,10 @@ class HomePage extends WFMComponent {
                         const currentProductEntries = Object.entries(currentProduct);
 
                         currentProductEntries.forEach(([key, value]) => {
-                            const strValue = value.toString();
+                            const strValue = value.toString().trim().toLowerCase();
 
                             if (key !== 'id' && key !== 'thumbnail' && key !== 'images') {
-                                if (strValue.toLowerCase().includes(textInput.value.trim().toLowerCase())) {
+                                if (strValue.includes(textInput.value.trim().toLowerCase())) {
                                     includesSearchStr = true;
                                 }
                             }
@@ -286,7 +291,7 @@ class HomePage extends WFMComponent {
 
         checkedCategoryInputs.forEach((input) => {
             if (input.nextElementSibling) {
-                const labelText = input.nextElementSibling.textContent?.trim();
+                const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
                 chosenCategories.push(labelText);
             }
         });
@@ -294,8 +299,8 @@ class HomePage extends WFMComponent {
         const activeBrands: Set<string> = new Set();
 
         this.productsData.forEach((product: Product) => {
-            if (chosenCategories.includes(product.category)) {
-                activeBrands.add(product.brand);
+            if (chosenCategories.includes(product.category.trim().toLowerCase())) {
+                activeBrands.add(product.brand.trim().toLowerCase());
             }
         });
 
@@ -303,9 +308,8 @@ class HomePage extends WFMComponent {
             const checkboxInput = checkbox as HTMLInputElement;
 
             if (checkbox.nextElementSibling) {
-                const brandCheckboxText = checkbox.nextElementSibling.textContent as string;
-                const trimmedBrandCheckboxText = brandCheckboxText.trim();
-                checkboxInput.disabled = !activeBrands.has(trimmedBrandCheckboxText);
+                const brandCheckboxText = checkbox.nextElementSibling.textContent?.trim().toLowerCase() as string;
+                checkboxInput.disabled = !activeBrands.has(brandCheckboxText);
                 if (checkboxInput.disabled && checkboxInput.checked) {
                     checkboxInput.checked = false;
                 }
@@ -330,7 +334,7 @@ class HomePage extends WFMComponent {
 
         checkedBrandInputs.forEach((input) => {
             if (input.nextElementSibling) {
-                const labelText = input.nextElementSibling.textContent?.trim();
+                const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
                 chosenBrands.push(labelText);
             }
         });
@@ -338,8 +342,8 @@ class HomePage extends WFMComponent {
         const activeCategories: Set<string> = new Set();
 
         this.productsData.forEach((product: Product) => {
-            if (chosenBrands.includes(product.brand)) {
-                activeCategories.add(product.category);
+            if (chosenBrands.includes(product.brand.trim().toLowerCase())) {
+                activeCategories.add(product.category.trim().toLowerCase());
             }
         });
 
@@ -347,9 +351,8 @@ class HomePage extends WFMComponent {
             if (checkbox.nextElementSibling) {
                 const checkboxInput = checkbox as HTMLInputElement;
 
-                const categoryCheckboxText = checkbox.nextElementSibling.textContent as string;
-                const trimmedCategoryCheckboxText = categoryCheckboxText.trim();
-                checkboxInput.disabled = !activeCategories.has(trimmedCategoryCheckboxText);
+                const categoryCheckboxText = checkbox.nextElementSibling.textContent?.trim().toLowerCase() as string;
+                checkboxInput.disabled = !activeCategories.has(categoryCheckboxText);
                 if (checkboxInput.disabled && checkboxInput.checked) {
                     checkboxInput.checked = false;
                 }
