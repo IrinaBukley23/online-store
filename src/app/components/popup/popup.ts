@@ -20,7 +20,7 @@ class Popup extends WFMComponent {
     public handleBlur(event: Event): void {
       const target = event.target as HTMLInputElement;
 
-      if(target.classList.contains('popup_name')) {
+      if(target.classList.contains('popup__name')) {
         this.validationName(target);
       }
 
@@ -44,7 +44,7 @@ class Popup extends WFMComponent {
 
     private validationName (elem: HTMLInputElement): void {
       const nameErr = document.querySelector('.error__name') as HTMLLabelElement;
-      const nameEl = document.querySelector('.popup_name') as HTMLInputElement;
+      const nameEl = document.querySelector('.popup__name') as HTMLInputElement;
       const nameBlock = document.querySelector('.name_block') as HTMLDivElement;
     
       let valueArr = elem.value.split(' ');
@@ -154,7 +154,7 @@ export const popup = new Popup({
                 <h6 class="popup__title">Personal details</h6>
                 <div class="popup__personal">
                     <div class="name_block">
-                      <input class="popup__personal-input popup_name" type="text" placeholder="Name">
+                      <input class="popup__personal-input popup__name" type="text" placeholder="Name">
                       <label class="error error__name">error</label>
                     </div>
                     <div class="phone_block">
