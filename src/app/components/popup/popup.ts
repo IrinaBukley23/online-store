@@ -75,25 +75,20 @@ class Popup extends WFMComponent {
       const phoneBlock = document.querySelector('.phone_block') as HTMLDivElement;
       
       if(+elem.value.length < 9 || elem.value[0] !== '+') {
-        let phone = elem.value.substring(1);
-    
-        console.log(!isNaN(Number(phone)), phone)
-        if(!phone) {
-          phoneErr.classList.add('active');
-          phoneEl.classList.add('active');
-          phoneBlock.classList.add('active');
-        }else{
-          phoneErr.classList.remove('active');
-          phoneEl.classList.remove('active');
-          phoneBlock.classList.remove('active');
-        }
         phoneErr.classList.add('active');
         phoneEl.classList.add('active');
         phoneBlock.classList.add('active');
       } else {
-        phoneErr.classList.remove('active');
-        phoneEl.classList.remove('active');
-        phoneBlock.classList.remove('active');
+        let phone = elem.value.substring(1);
+        if (isNaN(+phone)){
+          phoneErr.classList.add('active');
+          phoneEl.classList.add('active');
+          phoneBlock.classList.add('active');
+        }else {
+          phoneErr.classList.remove('active');
+          phoneEl.classList.remove('active');
+          phoneBlock.classList.remove('active');
+         }
       }
     }
 }
