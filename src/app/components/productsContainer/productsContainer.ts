@@ -12,55 +12,69 @@ class ProductsContainer extends WFMComponent {
     public handleClick(event: Event): void {
         const target = event.target as HTMLElement;
 
-        if (target.classList.contains('btn__details')) {
-            const id = (target as HTMLElement).getAttribute('id');
-            (target as HTMLElement).setAttribute('href', `#single/${id}`);
-            appRoutes[1].path = `single/${id}`;
-        }
+        const isShowDetails = target.classList.contains('btn__details');
+        if (isShowDetails) this.showDetails(target);
+
         if(target.classList.contains('product__image-link')) {
             const id = ((target as HTMLElement).parentNode as HTMLElement)?.getAttribute('id');
             ((target as HTMLElement).parentNode as HTMLElement).setAttribute('href', `#single/${id}`);
             appRoutes[1].path = `single/${id}`;
         }
 
-        if (target.classList.contains('btn__to-cart')) {
-            const id = (target as HTMLElement).getAttribute('id');
+        console.log(target)
+        // if (target.product.id === product.id) {
+        //     elem.innerHTML = 'drop from cart';
+        // } else {
+        //     elem.innerHTML = 'add to cart';
+        // }
+        const addToCartBtn = target.classList.contains('btn__to-cart');
+        if (addToCartBtn) this.addToCart(target);
+    }
 
-            if (!id) return;
-            const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+    private showDetails(elem: HTMLElement) {
+        const id = (elem).getAttribute('id');
+        (elem).setAttribute('href', `#single/${id}`);
+        appRoutes[1].path = `single/${id}`;
+    }
 
-            this.cartProducts.push({
-                'product': product,
-                'counter': 1, 
-                'flag': true,
-            });
-            console.log(this.cartProducts);
-            localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+    private addToCart(elem: HTMLElement) {
+        const id = elem.getAttribute('id');
 
-            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-            cartArr.forEach((item) => {
-                if (item.product.id === product.id) {
-                    (target as HTMLElement).innerHTML = 'drop from cart';
-                } else {
-                    (target as HTMLElement).innerHTML = 'add to cart';
-                }
-            });
-            let cartTotalCounter = 0;
-            let cartTotalSum = 0;
-            cartArr.forEach((item) => {
-                cartTotalCounter += item.counter;
-                cartTotalSum += item.product.price * item.counter;
-                localStorage.setItem('totalSum', String(cartTotalSum));
-                localStorage.setItem('totalCounter', String(cartTotalCounter));
-            });
-            const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
-            if(headerTotalCounterEl) {
-                headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+        if (!id) return;
+        const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+
+        this.cartProducts.push({
+            'product': product,
+            'counter': 1, 
+            'flag': true,
+        });
+
+        console.log(this.cartProducts);
+        localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+
+        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        cartArr.forEach((item) => {
+            if (item.product.id === product.id) {
+                elem.innerHTML = 'drop from cart';
+            } else {
+                elem.innerHTML = 'add to cart';
             }
-            const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
-            if(headerTotalSumEl) {
-                headerTotalSumEl.innerHTML = `${cartTotalSum}`;
-            }
+        });
+        let cartTotalCounter = 0;
+        let cartTotalSum = 0;
+        cartArr.forEach((item) => {
+            cartTotalCounter += item.counter;
+            cartTotalSum += item.product.price * item.counter;
+            localStorage.setItem('totalSum', String(cartTotalSum));
+            localStorage.setItem('totalCounter', String(cartTotalCounter));
+        });
+        const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+        if(headerTotalCounterEl) {
+            headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+        }
+        const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+        if(headerTotalSumEl) {
+            headerTotalSumEl.innerHTML = `${cartTotalSum}`;
         }
     }
 }
