@@ -57,7 +57,7 @@
     }
     &__card {
         width: 60%;
-        margin: 0 auto 30px;
+        margin: 0 auto 10px;
         padding: 10px 10px 35px;
         border-radius: 10px;
         border: 2px solid $color-accent-dark;
@@ -130,6 +130,7 @@
             color: red;
             height: auto;
             font-size: 1.6rem;
+            margin: 10px auto;
         }
     }
     .name_block, 

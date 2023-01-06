@@ -26,10 +26,19 @@ class Popup extends WFMComponent {
         } 
         if(target.value[0] === '5') {
           if(bankCard) bankCard.innerHTML = ` <img src="${mastercard}" alt="mastercard">`;
-      }  
+        }  
         if(target.value[0] === '6') {
           if(bankCard) bankCard.innerHTML = ` <img src="${pease}" alt="pease">`;
         }
+        const cardNumInput = document.querySelector('.popup__card-num') as HTMLInputElement;
+
+        cardNumInput.value.split(/(\d{4})/).filter(item => item !== '').join(' ');
+      }
+
+      if(target.classList.contains('popup__true')) {
+        target.value = target.value.substr(0, 4);
+        const cardTrueInput = document.querySelector('.popup__true') as HTMLInputElement;
+        cardTrueInput.value.split(/(\d{2})/).filter(item => item !== '').join('/');
       }
     }
 
@@ -60,11 +69,11 @@ class Popup extends WFMComponent {
       } 
 
       if(target.classList.contains('popup__card-num')) {
-        // this.validationCardCvv(target);
+        this.validationCardNumber(target);
       } 
 
       if(target.classList.contains('popup__true')) {
-        // this.validationCardCvv(target);
+        this.validationCardTrue(target);
       } 
 
       if(target.classList.contains('popup__cvv')) {
@@ -175,6 +184,26 @@ class Popup extends WFMComponent {
       }
     }
 
+    private validationCardNumber(elem: HTMLInputElement): void {
+      const cardNumErr = document.querySelector('.error__card-number') as HTMLLabelElement;
+
+      if (elem.value.length < 16) {
+        cardNumErr.classList.add('active');
+      } else {
+        cardNumErr.classList.remove('active');
+      }
+    }
+
+    private validationCardTrue(elem: HTMLInputElement): void {
+      const cardNumErr = document.querySelector('.error__true') as HTMLLabelElement;
+
+      if (elem.value.length < 4) {
+        cardNumErr.classList.add('active');
+      } else {
+        cardNumErr.classList.remove('active');
+      }
+    }
+
     private validationCardCvv(elem: HTMLInputElement): void {
       const cvvErr = document.querySelector('.error__cvv') as HTMLLabelElement;
       if(+elem.value.length !== 3) {
@@ -223,7 +252,7 @@ export const popup = new Popup({
                         <label class="popup__card-pay">
                           <img src="${paysys}" alt="card">
                         </label>
-                        <input class="popup__card-num" type="number" placeholder="Card number" required>
+                        <input class="popup__card-num" type="number" placeholder="Card number" pattern="[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}" required>
                     </div>
                     <label class="popup__card-label">Valid:</label>
                     <input class="popup__card-input popup__true" type="number" placeholder="Valid True" required>
