@@ -11,7 +11,7 @@ export class Component implements ComponentInterface {
     public handleInputChange?(e: Event): void;
     public handleInput?(e: Event): void;
     public handleOnInput?(e: Event): void;
-
+    public handleBlur?(e: Event): void;
 
     constructor(config: ComponentConfig) {
         this.getTemplate = config.getTemplate;
@@ -61,6 +61,12 @@ export class Component implements ComponentInterface {
         if (this.handleClick) {
             const clickHandler = this.handleClick.bind(this);
             componentElem?.addEventListener('click', clickHandler);
+        }
+
+        // Add blur handler
+        if (this.handleBlur) {
+            const blurHandler = this.handleBlur.bind(this);
+            componentElem?.addEventListener('focusout', blurHandler);
         }
     }
 }
