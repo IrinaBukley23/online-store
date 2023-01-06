@@ -29,7 +29,7 @@ class Popup extends WFMComponent {
       } 
 
       if(target.classList.contains('popup__address')) {
-        // this.validationPerson(target, '.error__address', '.popup__address', '.address_block');
+        this.validationAddress(target);
       } 
 
       if(target.classList.contains('popup__email')) {
@@ -66,7 +66,6 @@ class Popup extends WFMComponent {
           }
         });
       }
-      
     }
 
     private validationPhone(elem: HTMLInputElement) {
@@ -88,7 +87,33 @@ class Popup extends WFMComponent {
           phoneErr.classList.remove('active');
           phoneEl.classList.remove('active');
           phoneBlock.classList.remove('active');
-         }
+        }
+      }
+    }
+
+    private validationAddress (elem: HTMLInputElement) {
+      const addressErr = document.querySelector('.error__address') as HTMLLabelElement;
+      const addressEl = document.querySelector('.popup__address') as HTMLInputElement;
+      const addressBlock = document.querySelector('.address_block') as HTMLDivElement;
+    
+      let valueArr = elem.value.split(' ');
+
+      if(valueArr.length < 3) {
+        addressErr.classList.add('active');
+        addressEl.classList.add('active');
+        addressBlock.classList.add('active');
+      } else {
+        valueArr.forEach(elem => {
+          if(elem.length < 5) {
+            addressErr.classList.add('active');
+            addressEl.classList.add('active');
+            addressBlock.classList.add('active');
+          } else {
+            addressErr.classList.remove('active');
+            addressEl.classList.remove('active');
+            addressBlock.classList.remove('active');
+          }
+        });
       }
     }
 }
