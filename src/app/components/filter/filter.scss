@@ -30,6 +30,10 @@
                     order: 2;
                 }
 
+                // &:has(.form-check-input:checked) {
+                //     order: 1;
+                // }
+
                 &-label {
                     text-transform: capitalize;
                 }
