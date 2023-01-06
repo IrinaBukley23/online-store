@@ -32,13 +32,13 @@ class Popup extends WFMComponent {
         }
         const cardNumInput = document.querySelector('.popup__card-num') as HTMLInputElement;
 
-        cardNumInput.value.split(/(\d{4})/).filter(item => item !== '').join(' ');
+        cardNumInput.value.split(/\d{4}/).filter(item => item !== '').join(' ');
       }
 
-      if(target.classList.contains('popup__true')) {
-        target.value = target.value.substr(0, 4);
+      if(target.classList.contains('month') || target.classList.contains('year')) {
+        target.value = target.value.substr(0, 2);
         const cardTrueInput = document.querySelector('.popup__true') as HTMLInputElement;
-        cardTrueInput.value.split(/(\d{2})/).filter(item => item !== '').join('/');
+        //cardTrueInput.value.split(/\d{2}/).filter(item => item !== '').join('/');
       }
     }
 
@@ -197,7 +197,7 @@ class Popup extends WFMComponent {
     private validationCardTrue(elem: HTMLInputElement): void {
       const cardNumErr = document.querySelector('.error__true') as HTMLLabelElement;
 
-      if (elem.value.length < 4) {
+      if (elem.value.length < 2) {
         cardNumErr.classList.add('active');
       } else {
         cardNumErr.classList.remove('active');
@@ -252,12 +252,14 @@ export const popup = new Popup({
                         <label class="popup__card-pay">
                           <img src="${paysys}" alt="card">
                         </label>
-                        <input class="popup__card-num" type="number" placeholder="Card number" pattern="[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}" required>
+                        <input class="popup__card-num" type="number" placeholder="Card number" required>
                     </div>
                     <label class="popup__card-label">Valid:</label>
-                    <input class="popup__card-input popup__true" type="number" placeholder="Valid True" required>
+                    <input class="popup__card-input popup__true month" type="number" placeholder="Valid True" required> <span> / </span>
+                    <input class="popup__card-input popup__true year" type="number" placeholder="Valid True" required>
                     <label class="popup__card-label">CVV:</label>
                     <input class="popup__card-input  popup__cvv" type="number" placeholder="Code" maxlength="3" required>
+                    <p class="popup__card-label_true">month<span> / </span>year</p>
                 </div>
                 <label class="error error__card-number">Card number - error</label>
                 <label class="error error__true">Card valid true - error</label>
