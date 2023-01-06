@@ -33,16 +33,16 @@ class Popup extends WFMComponent {
       } 
 
       if(target.classList.contains('popup__email')) {
-        // this.validationPerson(target, '.error__email', '.popup__email', '.email_block');
+        this.validationEmail(target);
       } 
     }
 
-    private closePopup() {
+    private closePopup(): void {
         const popup = document.querySelector('.popup') as HTMLElement;
         popup.classList.remove('active');
     }
 
-    private validationName (elem: HTMLInputElement) {
+    private validationName (elem: HTMLInputElement): void {
       const nameErr = document.querySelector('.error__name') as HTMLLabelElement;
       const nameEl = document.querySelector('.popup_name') as HTMLInputElement;
       const nameBlock = document.querySelector('.name_block') as HTMLDivElement;
@@ -68,7 +68,7 @@ class Popup extends WFMComponent {
       }
     }
 
-    private validationPhone(elem: HTMLInputElement) {
+    private validationPhone(elem: HTMLInputElement): void {
       const phoneErr = document.querySelector('.error__phone') as HTMLLabelElement;
       const phoneEl = document.querySelector('.popup__phone') as HTMLInputElement;
       const phoneBlock = document.querySelector('.phone_block') as HTMLDivElement;
@@ -91,7 +91,7 @@ class Popup extends WFMComponent {
       }
     }
 
-    private validationAddress (elem: HTMLInputElement) {
+    private validationAddress (elem: HTMLInputElement): void {
       const addressErr = document.querySelector('.error__address') as HTMLLabelElement;
       const addressEl = document.querySelector('.popup__address') as HTMLInputElement;
       const addressBlock = document.querySelector('.address_block') as HTMLDivElement;
@@ -116,6 +116,30 @@ class Popup extends WFMComponent {
         });
       }
     }
+
+    private validationEmail(elem: HTMLInputElement): void {
+      const emailErr = document.querySelector('.error__email') as HTMLLabelElement;
+      const emailEl = document.querySelector('.popup__email') as HTMLInputElement;
+      const emailBlock = document.querySelector('.email_block') as HTMLDivElement;
+
+      const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+
+      if (!isEmailValid(elem.value)) {
+        emailErr.classList.add('active');
+        emailEl.classList.add('active');
+        emailBlock.classList.add('active');
+      } else {
+        emailErr.classList.remove('active');
+        emailEl.classList.remove('active');
+        emailBlock.classList.remove('active');
+      }
+
+      function isEmailValid(value: string) {
+        return EMAIL_REGEXP.test(value);
+      }
+    }
+
+
 }
 
 export const popup = new Popup({
