@@ -26,12 +26,96 @@ class HomePage extends WFMComponent {
         this.maxPrice = this.getMaxPriceValue();
         this.URL = document.URL;
         this.queryParams = this.getQueryParamsFromURL(this.URL);
+        this.queryParams = this.getQueryParamsFromURL(this.URL);
     }
 
-    private getQueryParamsFromURL(URLstr: string) {
+    public render(): void {
+        super.render();
+        this.initFilterAndSearchFromQueryParams(this.queryParams);
+        // this.initSortFromQueryParams(this.queryParams);
+    }
+
+    private getQueryParamsFromURL(URLstr: string): QueryParams {
         const URLObject = new URL(URLstr);
         const searchParams = new URLSearchParams(URLObject.searchParams);
         return Object.fromEntries(searchParams.entries());
+    }
+
+    private initFilterAndSearchFromQueryParams(params: QueryParams): void {
+        if (params.category) {
+            const paramCategories = params.category.split('_');
+            const categoryInputs = document.querySelectorAll('.category-filter .form-check-input');
+
+            const categoryLabels: (string | undefined)[] = [];
+
+            categoryInputs.forEach((input) => {
+                if (input.nextElementSibling) {
+                    const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
+                    categoryLabels.push(labelText);
+                }
+            });
+
+            categoryLabels.forEach((label, index) => {
+                if (label) {
+                    if (paramCategories.includes(label?.trim().toLowerCase())) {
+                        const input = categoryInputs[index] as HTMLInputElement;
+                        input.checked = true;
+                    }
+                }
+            });
+
+            console.log(paramCategories);
+        }
+
+        if (params.brand) {
+            const paramBrands = params.brand.split('_');
+            const brandInputs = document.querySelectorAll('.brand-filter .form-check-input');
+
+            const brandLabels: (string | undefined)[] = [];
+
+            brandInputs.forEach((input) => {
+                if (input.nextElementSibling) {
+                    const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
+                    brandLabels.push(labelText);
+                }
+            });
+
+            brandLabels.forEach((label, index) => {
+                if (label) {
+                    if (paramBrands.includes(label?.trim().toLowerCase())) {
+                        const input = brandInputs[index] as HTMLInputElement;
+                        input.checked = true;
+                    }
+                }
+            });
+
+            console.log(paramBrands);
+        }
+
+        if (params.stock) {
+            const [minStock, maxStock] = params.stock.split('_');
+
+            const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
+            const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
+
+            stockFromSlider.value = minStock;
+            stockToSlider.value = maxStock;
+
+            stockFromSlider.dispatchEvent(new Event('change'));
+            stockToSlider.dispatchEvent(new Event('change'));
+        }
+
+        // if (params.price) {
+        // const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+        // const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+        // }
+
+        if (params.search) {
+            const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
+            textInput.value = params.search;
+            console.log('succ');
+        }
+        console.log(params);
     }
 
     private setQueryParams(params: QueryParams) {
