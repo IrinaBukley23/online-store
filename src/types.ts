@@ -15,12 +15,7 @@ export interface ComponentInterface {
     getTemplate: (params?: { [key: string]: string }) => string;
     render: () => void;
     initInnerComponents: () => void;
-    events?: () => { [key: string]: string };
     clickSelector?: string;
-    detailsSelector?: string;
-    cartSelector?: string;
-    getDetails?(e: Event): void;
-    changeCounter?(e: Event): void;
 }
 
 export interface ComponentConfig {
@@ -61,6 +56,7 @@ export type QueryParams = Partial<QueryParamsRequired> & {
 export interface CartItem {
     product: Product;
     counter: number;
+    flag: boolean;
 }
 
 export interface ProductsData {
@@ -68,4 +64,10 @@ export interface ProductsData {
     total: number;
     skip: number;
     limit: number;
+}
+
+
+export interface PromoCodesText {
+    rs: string; 
+    epm: string;
 }
