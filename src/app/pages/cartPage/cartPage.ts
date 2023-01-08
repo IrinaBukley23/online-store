@@ -5,7 +5,6 @@ import { CartItem, ComponentConfig } from '../../../types';
 import { appRoutes } from '../../app.routes';
 
 import './cartPage.scss';
-import { ids } from 'webpack';
 
 class CartPage extends WFMComponent {
     constructor(config: ComponentConfig) {

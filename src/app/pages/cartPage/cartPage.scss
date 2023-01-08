@@ -180,10 +180,11 @@
             border-radius: 10px;
             background: $color-accent-dark;
             color: $color-main;
-            text-transform: uppercase;
-            transition: all 0.8s ease-in-out;
+            text-transform: capitalize;
+            transition: all 0.3s;
             &:hover {
-                box-shadow: 5px 5px 5px black;
+                background: #046948;
+                box-shadow: 0 0 2px 3px #0000001a;
             }
             &.hidden {
                 display: none;
@@ -226,11 +227,11 @@
             border-radius: 10px;
             background: $color-accent-dark;
             color: $color-main;
-            font-size: 1.25rem;
-            text-transform: uppercase;
-            transition: all 0.8s ease-in-out;
+            text-transform: capitalize;
+            transition: all 0.3s;
             &:hover {
-                box-shadow: 5px 5px 5px black;
+                background: #046948;
+                box-shadow: 0 0 2px 3px #0000001a;
             }
         }
     }
