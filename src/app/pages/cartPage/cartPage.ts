@@ -5,6 +5,7 @@ import { CartItem, ComponentConfig } from '../../../types';
 import { appRoutes } from '../../app.routes';
 
 import './cartPage.scss';
+import { ids } from 'webpack';
 
 class CartPage extends WFMComponent {
     constructor(config: ComponentConfig) {
@@ -39,8 +40,22 @@ class CartPage extends WFMComponent {
                     document.querySelector('.cart-promo_block')?.classList.add('active');
                 }
             }
-        };
-        
+        };  
+
+        if (target.classList.contains('cart__pagination-limit input')) {
+            const limitValueEl = document.querySelector('.cart__pagination-limit input') as HTMLInputElement;
+            if(limitValueEl) limitValueEl.value = target.value;
+        }
+
+        if(target.classList.contains('limit-on-page')) {
+            let limitValueEl = document.querySelector('.cart__pagination-limit input') as HTMLInputElement;
+            const pages = document.querySelectorAll('.pagination__item') as NodeListOf<HTMLLIElement>;
+            if(Number(limitValueEl) > 3) {
+                limitValueEl.value = '3';
+                pages.forEach(page => this.pagination(page));
+            }
+            pages.forEach(page => this.pagination(page));
+        }
     }
 
     public handleClick(event: Event): void {
@@ -73,8 +88,73 @@ class CartPage extends WFMComponent {
             this.singlePageRoute(target);
         }
 
+        // pagination
+        if(target.classList.contains('pagination__item')) {
+            this.pagination(target);
+            this.renderPaginationBtns();
+        }
+
+        // open popup
         const openPopupBtn = target.classList.contains('btn__popup');
         if(openPopupBtn) this.openPopup();
+    }
+
+    private renderPaginationBtns() {
+        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        let limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
+        const btnsBlock = document.querySelector('.pagination__list');
+        if(btnsBlock) btnsBlock.innerHTML = '';
+        let paginationBtns = ``;
+        const pagesCount = Math.ceil(cartArr.length / +limitProdsOnPage);
+        for (let i = 0; i < pagesCount; i++) {
+            let paginationBtn = document.createElement('li');
+            paginationBtn.classList.add('pagination__item');
+            paginationBtn.setAttribute('id', `${i+1}`);
+            paginationBtn.innerHTML = `${i+1}`;
+            btnsBlock?.append(paginationBtn);
+        }
+    }
+
+    private pagination(elem: HTMLElement) {
+        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        let limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
+        const currentPage = +elem.id - 1;
+        const start = +limitProdsOnPage * +currentPage;
+        const end = start + +limitProdsOnPage;
+        const paginatedData = cartArr.slice(start, end);
+        const productsContainer = document.querySelector('.cart__products-block');
+        if(productsContainer) productsContainer.innerHTML = '';
+        let index = start + 1;
+        paginatedData && paginatedData.forEach(item => {
+            let cartTemplate = document.createElement('div');
+            cartTemplate.classList.add('cart__products-elem');
+            cartTemplate.innerHTML = `
+                <p class="cart__products-num">${index++}</p>
+                <a class="cart__products-link" id=${item.product.id} href="#single/1">
+                    <div class="cart__products-img">
+                        <img src=${item.product.images[0]}> 
+                    </div>
+                    <div  class="cart__products-description">
+                        <h3 class="cart__products-title">${item.product.title}</h3>
+                        <p class="cart__products-descr"> ${item.product.description}</p>
+                        <div class="cart__products-raiting">
+                            <p>Rating: <span>${item.product.rating}</span> </p>
+                            <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
+                        </div>
+                    </div>
+                </a>
+                <div class="cart__products-sum">
+                    <p>Stock: <span>${item.product.stock}</span> </p>
+                    <div class="cart__counter">
+                        <button class="cart__counter-decr">-</button> 
+                        <span id=${item.product.id} class="cart__counter-result">${item.counter}</span> 
+                        <button class="cart__counter-incr">+</button>
+                    </div>
+                    <p>€<span>${item.product.price}</span></p>
+                </div>`;
+            productsContainer?.append(cartTemplate);
+        });
+        this.renderPaginationBtns();
     }
 
     private renderPromoCodes(arr: string[]) {
@@ -161,11 +241,12 @@ class CartPage extends WFMComponent {
         const curElem = <HTMLElement> elem.nextSibling?.nextSibling
         let curNum = Number(curElem?.textContent);
 
-        if(curNum < 1) {
-            curNum = 0;
-        } else {
+        if(curNum >= 1) {
             curNum -= 1;
             localStorage.setItem('totalCounter', String(curNum))
+        } else {
+            this.dropProduct();
+            this.pagination(elem);
         }
         (curElem as HTMLElement).innerHTML = String(curNum);
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
@@ -195,6 +276,53 @@ class CartPage extends WFMComponent {
             cartTotalSumEl.innerHTML = `${cartTotalSum}`;
             headerTotalSumEl.innerHTML = `${cartTotalSum}`;
         }
+    }
+
+    private dropProduct() {
+        let cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        const productsContainer = document.querySelector('.cart__products-block');
+        if(productsContainer) productsContainer.innerHTML = '';
+        
+        cartArr.forEach(prod => {
+            if(prod.counter === 0) {
+                const filteredArr = cartArr.filter((product: CartItem) => product.counter !== 0);
+                let index = 1;
+                localStorage.setItem('cart', JSON.stringify(filteredArr));
+                cartArr = JSON.parse(localStorage.getItem('cart') as string);
+                cartArr && cartArr.forEach((item: CartItem) => {
+                    let cartTemplate = document.createElement('div');
+                    cartTemplate.classList.add('cart__products-elem');
+                    cartTemplate.innerHTML = `
+                        <p class="cart__products-num">${index++}</p>
+                        <a class="cart__products-link" id=${item.product.id} href="#single/1">
+                            <div class="cart__products-img">
+                                <img src=${item.product.images[0]}> 
+                            </div>
+                            <div  class="cart__products-description">
+                                <h3 class="cart__products-title">${item.product.title}</h3>
+                                <p class="cart__products-descr"> ${item.product.description}</p>
+                                <div class="cart__products-raiting">
+                                    <p>Rating: <span>${item.product.rating}</span> </p>
+                                    <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="cart__products-sum">
+                            <p>Stock: <span>${item.product.stock}</span> </p>
+                            <div class="cart__counter">
+                                <button class="cart__counter-decr">-</button> 
+                                <span id=${item.product.id} class="cart__counter-result">${item.counter}</span> 
+                                <button class="cart__counter-incr">+</button>
+                            </div>
+                            <p>€<span>${item.product.price}</span></p>
+                        </div>`;
+                    productsContainer?.append(cartTemplate);
+                })
+                if(!cartArr || cartArr.length === 0) {
+                    if(productsContainer) productsContainer.innerHTML = `<h3>Cart is empty</h3>`;
+                }
+            }
+        })
     }
 
     private singlePageRoute(elem: HTMLElement) {
@@ -252,12 +380,20 @@ export const cartPage = new CartPage({
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         const cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
         const cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
-        console.log(cartArr)
         if(!cartArr || cartArr.length === 0) {
             return `<h3>Cart is empty</h3>`;
         }
 
-        cartArr && cartArr.forEach((item: CartItem) => {
+        let paginationBtns = ``;
+        const pagesCount = Math.ceil(cartArr.length / 3);
+        for (let i = 0; i < pagesCount; i++) {
+            paginationBtns += `<li id=${i+1} class="pagination__item">${i+1}</li>`
+        }
+        const start = 0;
+        const end = 3;
+        const paginatedData = cartArr.slice(start, end);
+
+        paginatedData && paginatedData.forEach((item: CartItem) => {
             cartTemplate += `
             <div class="cart__products-elem">
                 <p class="cart__products-num">${index++}</p>
@@ -292,17 +428,15 @@ export const cartPage = new CartPage({
                 <div class="cart__title-block">
                     <h3 class="cart__summary-title">Products In Cart</h3>
                     <div class="cart__pagination-block">
-                        <p>LIMIT: <input value="3" type="number"> </p>
-                        <p>PAGE:  
-                            <button> < </button> 
-                            <span>1</span> 
-                            <button> > </button>
+                        <p class="cart__pagination-limit">LIMIT: 
+                            <input type="number" class="limit-on-page" value="3">
+                        </p>
+                        <p class="pagination">PAGE:  
+                            <ul class="pagination__list">${paginationBtns}</ul>
                         </p>
                     </div>
                 </div>
-                <div class="cart__products-block"> 
-                ${cartTemplate}
-                </div>
+                <div class="cart__products-block">${cartTemplate}</div>
             </div>
             <div class="cart__summary">
                 <h3 class="cart__summary-title">Summary</h3>

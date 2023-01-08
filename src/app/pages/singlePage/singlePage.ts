@@ -18,10 +18,13 @@ class SinglePage extends WFMComponent {
     const addToCartBtn = target.classList.contains('add-to-cart');
     if(addToCartBtn) this.addToCart(target);
 
+    const dropFromCart = target.classList.contains('btn__drop');
+    if(dropFromCart) this.dropProduct(target);
+
     const fastPurchaseBtn = target.classList.contains('fast_purchase');
     if(fastPurchaseBtn) {
       this.openPopup();
-      this.addToCart(target); // do not work?????
+      this.addToCart(target);
     }
   }
 
@@ -37,17 +40,34 @@ class SinglePage extends WFMComponent {
     }
   }
 
+  private dropProduct(elem: HTMLElement) {
+    let cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+    const productsContainer = document.querySelector('.cart__products-block');
+    elem.classList.remove('btn__drop');
+    elem.classList.add('btn__to-cart');
+    elem.innerHTML = 'add to cart';
+    if(productsContainer) productsContainer.innerHTML = '';
+    cartArr.forEach(prod => {
+      if(prod.counter === 0) {
+        const filteredArr = cartArr.filter((product: CartItem) => product.product.id !== +elem.id);
+        localStorage.setItem('cart', JSON.stringify(filteredArr));
+        cartArr = JSON.parse(localStorage.getItem('cart') as string);
+      }
+    })
+}
+
   private addToCart(elem: HTMLElement) {
     const id = (elem).getAttribute('id');
     if(!id) return;
     const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
-
+    elem.classList.add('btn__drop');
+    elem.classList.remove('btn__to-cart');
+    elem.innerHTML = 'drop from cart';
     this.cartProducts.push({
         'product': product,
         'counter': 1,
         'flag': true,
     });
-    console.log(this.cartProducts)
     localStorage.setItem('cart', JSON.stringify(this.cartProducts));
 
     const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
@@ -68,6 +88,14 @@ class SinglePage extends WFMComponent {
     if(headerTotalSumEl) {
         headerTotalSumEl.innerHTML = `${cartTotalSum}`;
     }
+
+    cartArr.forEach((item) => {
+        if (item.product.id === product.id) {
+            elem.innerHTML = 'drop from cart';
+        } else {
+            elem.innerHTML = 'add to cart';
+        }
+    });
   }
 
   private openPopup() {

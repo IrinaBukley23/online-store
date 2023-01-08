@@ -264,6 +264,7 @@
     }
     &__pagination-block {
         display: flex;
+        align-items: center;
         input {
             width: 35px;
             border: none;
@@ -276,4 +277,19 @@
             }
         }
     }
+    .pagination {
+        &__list {
+            display: flex;
+            align-items: center;
+            list-style-type: none;  
+        }
+        &__item {
+            padding: 5px;
+            margin: 8px;
+            cursor: pointer;
+            &.active {
+                border-bottom: 2px solid #ffffff;
+            }
+        }
+    }    
 }
