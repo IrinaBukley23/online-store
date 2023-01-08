@@ -20,13 +20,6 @@ class ProductsContainer extends WFMComponent {
             ((target as HTMLElement).parentNode as HTMLElement).setAttribute('href', `#single/${id}`);
             appRoutes[1].path = `single/${id}`;
         }
-
-        console.log(target)
-        // if (target.product.id === product.id) {
-        //     elem.innerHTML = 'drop from cart';
-        // } else {
-        //     elem.innerHTML = 'add to cart';
-        // }
         const addToCartBtn = target.classList.contains('btn__to-cart');
         if (addToCartBtn) this.addToCart(target);
     }

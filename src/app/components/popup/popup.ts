@@ -1,5 +1,5 @@
 import { WFMComponent } from '../../../routes';
-import { ComponentConfig } from '../../../types';
+import { ComponentConfig, CartItem } from '../../../types';
 import visa from '../../../../public/visa.jpg';
 import mastercard from '../../../../public/master-card.jpg';
 import pease from '../../../../public/peace.jpg';
@@ -87,7 +87,34 @@ class Popup extends WFMComponent {
           const cvvValidity = document.querySelector('.popup__cvv') as HTMLInputElement;
           
           if(!this.validationName(nameValidity) && !this.validationEmail(emailValidity) && !this.validationPhone(phoneValidity) && !this.validationAddress(addressValidity) && !this.validationCardNumber(cardNumValidity) && !this.validationCardTrue(trueValidity) && !this.validationCardCvv(cvvValidity)) {
-            this.closePopup();
+            const content = document.querySelector('.popup__content') as HTMLElement;
+            const form = document.querySelector('.popup__content form') as HTMLFormElement;
+
+            if(form) form.innerHTML = '';
+
+            if(content) content.innerHTML = `<h3 class="order__message"> Thanks for your order. You will redirect to the store after 3 sec.<h3>`;
+
+            setTimeout(() => {
+              this.closePopup();
+            }, 3000);
+
+            const cartArr: CartItem[] = [];
+            localStorage.setItem('cart', JSON.stringify(cartArr));
+            localStorage.setItem('totalSum', '0');
+            localStorage.setItem('totalCounter', '0');
+
+            const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+            if(headerTotalCounterEl) {
+                headerTotalCounterEl.innerHTML = `0`;
+            }
+    
+            const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+            if(headerTotalSumEl) {
+                headerTotalSumEl.innerHTML = `0`;
+            }
+
+            const cartEl = document.querySelector('.cart') as HTMLElement;
+            if(cartEl) cartEl.innerHTML = `<h3>Cart is empty</h3>`;
           } else {
             this.validationName(nameValidity);
             this.validationPhone(phoneValidity);
@@ -133,8 +160,8 @@ class Popup extends WFMComponent {
     }
 
     private closePopup(): void {
-        const popup = document.querySelector('.popup') as HTMLElement;
-        popup.classList.remove('active');
+      const popup = document.querySelector('.popup') as HTMLElement;
+      popup.classList.remove('active');
     }
 
     private validationName (elem: HTMLInputElement): boolean {
