@@ -80,19 +80,50 @@ class CartPage extends WFMComponent {
 
         // pagination
         if(target.classList.contains('pagination__item')) {
-
-            let limitProdsOnPage = (document.querySelector('.cart__pagination-limit input') as HTMLInputElement)?.value;
-            if(+limitProdsOnPage > 3) limitProdsOnPage = '3';
-
             const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+            let limitProdsOnPage  = (document.querySelector('.cart__pagination-limit select') as HTMLSelectElement)?.value;
             const currentPage = +target.id - 1;
-
             const start = +limitProdsOnPage * +currentPage;
-
+            let startValue = target.id;
             const end = start + +limitProdsOnPage;
             const paginatedData = cartArr.slice(start, end);
+            //const start = +startValue * +limitProdsOnPage ;
+            // const end = +start + +limitProdsOnPage ;
+            // const paginatedData = cartArr.slice(start, end);
+            console.log(start, startValue, paginatedData)
 
-            console.log(start, paginatedData);
+            const productsContainer = document.querySelector('.cart__products-block');
+            if(productsContainer) productsContainer.innerHTML = '';
+            let index = start;
+            paginatedData && paginatedData.forEach(item => {
+                let cartTemplate = document.createElement('div');
+                cartTemplate.classList.add('cart__products-elem');
+                cartTemplate.innerHTML = `
+                    <p class="cart__products-num">${index++}</p>
+                    <a class="cart__products-link" id=${item.product.id} href="#single/1">
+                        <div class="cart__products-img">
+                            <img src=${item.product.images[0]}> 
+                        </div>
+                        <div  class="cart__products-description">
+                            <h3 class="cart__products-title">${item.product.title}</h3>
+                            <p class="cart__products-descr"> ${item.product.description}</p>
+                            <div class="cart__products-raiting">
+                                <p>Rating: <span>${item.product.rating}</span> </p>
+                                <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="cart__products-sum">
+                        <p>Stock: <span>${item.product.stock}</span> </p>
+                        <div class="cart__counter">
+                            <button class="cart__counter-decr">-</button> 
+                            <span id=${item.product.id} class="cart__counter-result">${item.counter}</span> 
+                            <button class="cart__counter-incr">+</button>
+                        </div>
+                        <p>€<span>${item.product.price}</span></p>
+                    </div>`;
+                productsContainer?.append(cartTemplate);
+            })
         }
 
         // open popup
@@ -322,7 +353,6 @@ export const cartPage = new CartPage({
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         const cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
         const cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
-        console.log(cartArr)
         if(!cartArr || cartArr.length === 0) {
             return `<h3>Cart is empty</h3>`;
         }
@@ -332,8 +362,11 @@ export const cartPage = new CartPage({
         for (let i = 0; i < pagesCount; i++) {
             paginationBtns += `<li id=${i+1} class="pagination__item">${i+1}</li>`
         }
+        const start = 0;
+        const end = 3;
+        const paginatedData = cartArr.slice(start, end);
 
-        cartArr && cartArr.forEach((item: CartItem) => {
+        paginatedData && paginatedData.forEach((item: CartItem) => {
             cartTemplate += `
             <div class="cart__products-elem">
                 <p class="cart__products-num">${index++}</p>
@@ -368,7 +401,13 @@ export const cartPage = new CartPage({
                 <div class="cart__title-block">
                     <h3 class="cart__summary-title">Products In Cart</h3>
                     <div class="cart__pagination-block">
-                        <p class="cart__pagination-limit">LIMIT: <input value="3" type="number"> </p>
+                        <p class="cart__pagination-limit">LIMIT: 
+                            <select>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3" selected>3</option>
+                            </select>
+                        </p>
                         <p class="pagination">PAGE:  
                             <ul class="pagination__list">${paginationBtns}</ul>
                         </p>
