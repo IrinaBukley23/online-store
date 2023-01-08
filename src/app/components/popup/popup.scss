@@ -56,7 +56,7 @@
         }
     }
     &__card {
-        width: 60%;
+        width: 65%;
         margin: 0 auto 10px;
         padding: 10px 8px 35px;
         border-radius: 10px;
@@ -83,9 +83,19 @@
         &-input {
             width: 30%;
             margin: 15px auto 8px;
-            border-radius: 15px;
+            border-radius: 5px;
             border: 1px solid $color-accent-dark;
             padding: 4px;
+            input[type="number"]::-webkit-outer-spin-button,
+            input[type="number"]::-webkit-inner-spin-button {
+                -webkit-appearance: none; // Yeah, yeah everybody write about it
+            }
+            input[type='number'],
+            input[type="number"]:hover,
+            input[type="number"]:focus {
+                appearance: none;
+                -moz-appearance: textfield;
+            }
             text-align: center;
             &::placeholder {
                 text-align: center;
@@ -103,7 +113,10 @@
         }
     }
     &__true {
-        width: 30px;
+        width: 45px;
+    }
+    &__cvv {
+        width: 65px;
     }
     &__btn {
         padding: 12px 16px;
@@ -161,5 +174,9 @@
         &.active {
             width: 150%;
         }
+    }
+    .order__message {
+        font-size: 2rem;
+        padding: 30px;
     }
 }
