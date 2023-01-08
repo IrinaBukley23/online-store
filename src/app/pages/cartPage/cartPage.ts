@@ -184,11 +184,11 @@ class CartPage extends WFMComponent {
         const curElem = <HTMLElement> elem.nextSibling?.nextSibling
         let curNum = Number(curElem?.textContent);
 
-        if(curNum < 1) {
-            this.dropProduct();
-        } else {
+        if(curNum >= 1) {
             curNum -= 1;
             localStorage.setItem('totalCounter', String(curNum))
+        } else {
+            this.dropProduct();
         }
         (curElem as HTMLElement).innerHTML = String(curNum);
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
