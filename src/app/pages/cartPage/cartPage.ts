@@ -80,55 +80,65 @@ class CartPage extends WFMComponent {
 
         // pagination
         if(target.classList.contains('pagination__item')) {
-            const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-            let limitProdsOnPage  = (document.querySelector('.cart__pagination-limit select') as HTMLSelectElement)?.value;
-            const currentPage = +target.id - 1;
-            const start = +limitProdsOnPage * +currentPage;
-            let startValue = target.id;
-            const end = start + +limitProdsOnPage;
-            const paginatedData = cartArr.slice(start, end);
-            //const start = +startValue * +limitProdsOnPage ;
-            // const end = +start + +limitProdsOnPage ;
-            // const paginatedData = cartArr.slice(start, end);
-            console.log(start, startValue, paginatedData)
-
-            const productsContainer = document.querySelector('.cart__products-block');
-            if(productsContainer) productsContainer.innerHTML = '';
-            let index = start;
-            paginatedData && paginatedData.forEach(item => {
-                let cartTemplate = document.createElement('div');
-                cartTemplate.classList.add('cart__products-elem');
-                cartTemplate.innerHTML = `
-                    <p class="cart__products-num">${index++}</p>
-                    <a class="cart__products-link" id=${item.product.id} href="#single/1">
-                        <div class="cart__products-img">
-                            <img src=${item.product.images[0]}> 
-                        </div>
-                        <div  class="cart__products-description">
-                            <h3 class="cart__products-title">${item.product.title}</h3>
-                            <p class="cart__products-descr"> ${item.product.description}</p>
-                            <div class="cart__products-raiting">
-                                <p>Rating: <span>${item.product.rating}</span> </p>
-                                <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="cart__products-sum">
-                        <p>Stock: <span>${item.product.stock}</span> </p>
-                        <div class="cart__counter">
-                            <button class="cart__counter-decr">-</button> 
-                            <span id=${item.product.id} class="cart__counter-result">${item.counter}</span> 
-                            <button class="cart__counter-incr">+</button>
-                        </div>
-                        <p>€<span>${item.product.price}</span></p>
-                    </div>`;
-                productsContainer?.append(cartTemplate);
-            })
+            this.pagination(target);
         }
 
         // open popup
         const openPopupBtn = target.classList.contains('btn__popup');
         if(openPopupBtn) this.openPopup();
+    }
+
+    private pagination(elem: HTMLElement) {
+        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        let limitProdsOnPage  = (document.querySelector('.cart__pagination-limit select') as HTMLSelectElement)?.value;
+        const currentPage = +elem.id - 1;
+        const start = +limitProdsOnPage * +currentPage;
+        const end = start + +limitProdsOnPage;
+        const paginatedData = cartArr.slice(start, end);
+        const productsContainer = document.querySelector('.cart__products-block');
+        if(productsContainer) productsContainer.innerHTML = '';
+        let index = start;
+        paginatedData && paginatedData.forEach(item => {
+            let cartTemplate = document.createElement('div');
+            cartTemplate.classList.add('cart__products-elem');
+            cartTemplate.innerHTML = `
+                <p class="cart__products-num">${index++}</p>
+                <a class="cart__products-link" id=${item.product.id} href="#single/1">
+                    <div class="cart__products-img">
+                        <img src=${item.product.images[0]}> 
+                    </div>
+                    <div  class="cart__products-description">
+                        <h3 class="cart__products-title">${item.product.title}</h3>
+                        <p class="cart__products-descr"> ${item.product.description}</p>
+                        <div class="cart__products-raiting">
+                            <p>Rating: <span>${item.product.rating}</span> </p>
+                            <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
+                        </div>
+                    </div>
+                </a>
+                <div class="cart__products-sum">
+                    <p>Stock: <span>${item.product.stock}</span> </p>
+                    <div class="cart__counter">
+                        <button class="cart__counter-decr">-</button> 
+                        <span id=${item.product.id} class="cart__counter-result">${item.counter}</span> 
+                        <button class="cart__counter-incr">+</button>
+                    </div>
+                    <p>€<span>${item.product.price}</span></p>
+                </div>`;
+            productsContainer?.append(cartTemplate);
+        })
+
+        const btnsBlock = document.querySelector('.pagination__list');
+        if(btnsBlock) btnsBlock.innerHTML = '';
+        let paginationBtns = ``;
+        const pagesCount = Math.ceil(cartArr.length / +limitProdsOnPage);
+        for (let i = 0; i < pagesCount; i++) {
+            let paginationBtn = document.createElement('li');
+            paginationBtn.classList.add('pagination__item');
+            paginationBtn.setAttribute('id', `${i+1}`);
+            paginationBtn.innerHTML = `${i+1}`;
+            btnsBlock?.append(paginationBtn);
+        }
     }
 
     private renderPromoCodes(arr: string[]) {
