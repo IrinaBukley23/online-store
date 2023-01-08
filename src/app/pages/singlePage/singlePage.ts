@@ -68,6 +68,14 @@ class SinglePage extends WFMComponent {
     if(headerTotalSumEl) {
         headerTotalSumEl.innerHTML = `${cartTotalSum}`;
     }
+
+    cartArr.forEach((item) => {
+        if (item.product.id === product.id) {
+            elem.innerHTML = 'drop from cart';
+        } else {
+            elem.innerHTML = 'add to cart';
+        }
+    });
   }
 
   private openPopup() {
