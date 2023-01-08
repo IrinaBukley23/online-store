@@ -46,6 +46,16 @@ class CartPage extends WFMComponent {
             const limitValueEl = document.querySelector('.cart__pagination-limit input') as HTMLInputElement;
             if(limitValueEl) limitValueEl.value = target.value;
         }
+
+        if(target.classList.contains('limit-on-page')) {
+            let limitValueEl = document.querySelector('.cart__pagination-limit input') as HTMLInputElement;
+            const pages = document.querySelectorAll('.pagination__item') as NodeListOf<HTMLLIElement>;
+            if(Number(limitValueEl) > 3) {
+                limitValueEl.value = '3';
+                pages.forEach(page => this.pagination(page));
+            }
+            pages.forEach(page => this.pagination(page));
+        }
     }
 
     public handleClick(event: Event): void {
@@ -81,6 +91,7 @@ class CartPage extends WFMComponent {
         // pagination
         if(target.classList.contains('pagination__item')) {
             this.pagination(target);
+            this.renderPaginationBtns();
         }
 
         // open popup
@@ -88,9 +99,25 @@ class CartPage extends WFMComponent {
         if(openPopupBtn) this.openPopup();
     }
 
+    private renderPaginationBtns() {
+        const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+        let limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
+        const btnsBlock = document.querySelector('.pagination__list');
+        if(btnsBlock) btnsBlock.innerHTML = '';
+        let paginationBtns = ``;
+        const pagesCount = Math.ceil(cartArr.length / +limitProdsOnPage);
+        for (let i = 0; i < pagesCount; i++) {
+            let paginationBtn = document.createElement('li');
+            paginationBtn.classList.add('pagination__item');
+            paginationBtn.setAttribute('id', `${i+1}`);
+            paginationBtn.innerHTML = `${i+1}`;
+            btnsBlock?.append(paginationBtn);
+        }
+    }
+
     private pagination(elem: HTMLElement) {
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        let limitProdsOnPage  = (document.querySelector('.cart__pagination-limit select') as HTMLSelectElement)?.value;
+        let limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
         const currentPage = +elem.id - 1;
         const start = +limitProdsOnPage * +currentPage;
         const end = start + +limitProdsOnPage;
@@ -126,19 +153,8 @@ class CartPage extends WFMComponent {
                     <p>€<span>${item.product.price}</span></p>
                 </div>`;
             productsContainer?.append(cartTemplate);
-        })
-
-        const btnsBlock = document.querySelector('.pagination__list');
-        if(btnsBlock) btnsBlock.innerHTML = '';
-        let paginationBtns = ``;
-        const pagesCount = Math.ceil(cartArr.length / +limitProdsOnPage);
-        for (let i = 0; i < pagesCount; i++) {
-            let paginationBtn = document.createElement('li');
-            paginationBtn.classList.add('pagination__item');
-            paginationBtn.setAttribute('id', `${i+1}`);
-            paginationBtn.innerHTML = `${i+1}`;
-            btnsBlock?.append(paginationBtn);
-        }
+        });
+        this.renderPaginationBtns();
     }
 
     private renderPromoCodes(arr: string[]) {
@@ -230,6 +246,7 @@ class CartPage extends WFMComponent {
             localStorage.setItem('totalCounter', String(curNum))
         } else {
             this.dropProduct();
+            this.pagination(elem);
         }
         (curElem as HTMLElement).innerHTML = String(curNum);
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
@@ -412,11 +429,7 @@ export const cartPage = new CartPage({
                     <h3 class="cart__summary-title">Products In Cart</h3>
                     <div class="cart__pagination-block">
                         <p class="cart__pagination-limit">LIMIT: 
-                            <select>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3" selected>3</option>
-                            </select>
+                            <input type="number" class="limit-on-page" value="3">
                         </p>
                         <p class="pagination">PAGE:  
                             <ul class="pagination__list">${paginationBtns}</ul>
