@@ -97,7 +97,7 @@ class CartPage extends WFMComponent {
         const paginatedData = cartArr.slice(start, end);
         const productsContainer = document.querySelector('.cart__products-block');
         if(productsContainer) productsContainer.innerHTML = '';
-        let index = start;
+        let index = start + 1;
         paginatedData && paginatedData.forEach(item => {
             let cartTemplate = document.createElement('div');
             cartTemplate.classList.add('cart__products-elem');
