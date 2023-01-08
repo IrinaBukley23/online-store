@@ -48,44 +48,11 @@ class SinglePage extends WFMComponent {
     elem.innerHTML = 'add to cart';
     if(productsContainer) productsContainer.innerHTML = '';
     cartArr.forEach(prod => {
-        if(prod.counter === 0) {
-            const filteredArr = cartArr.filter((product: CartItem) => product.counter !== 0);
-            let index = 1;
-            localStorage.setItem('cart', JSON.stringify(filteredArr));
-            cartArr = JSON.parse(localStorage.getItem('cart') as string);
-            cartArr && cartArr.forEach((item: CartItem) => {
-                let cartTemplate = document.createElement('div');
-                cartTemplate.classList.add('cart__products-elem');
-                cartTemplate.innerHTML = `
-                    <p class="cart__products-num">${index++}</p>
-                    <a class="cart__products-link" id=${item.product.id} href="#single/1">
-                        <div class="cart__products-img">
-                            <img src=${item.product.images[0]}> 
-                        </div>
-                        <div  class="cart__products-description">
-                            <h3 class="cart__products-title">${item.product.title}</h3>
-                            <p class="cart__products-descr"> ${item.product.description}</p>
-                            <div class="cart__products-raiting">
-                                <p>Rating: <span>${item.product.rating}</span> </p>
-                                <p>Discount: <span>${item.product.discountPercentage}</span>% </p>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="cart__products-sum">
-                        <p>Stock: <span>${item.product.stock}</span> </p>
-                        <div class="cart__counter">
-                            <button class="cart__counter-decr">-</button> 
-                            <span id=${item.product.id} class="cart__counter-result">${item.counter}</span> 
-                            <button class="cart__counter-incr">+</button>
-                        </div>
-                        <p>€<span>${item.product.price}</span></p>
-                    </div>`;
-                productsContainer?.append(cartTemplate);
-            })
-            if(!cartArr || cartArr.length === 0) {
-                if(productsContainer) productsContainer.innerHTML = `<h3>Cart is empty</h3>`;
-            }
-        }
+      if(prod.counter === 0) {
+        const filteredArr = cartArr.filter((product: CartItem) => product.product.id !== +elem.id);
+        localStorage.setItem('cart', JSON.stringify(filteredArr));
+        cartArr = JSON.parse(localStorage.getItem('cart') as string);
+      }
     })
 }
 
