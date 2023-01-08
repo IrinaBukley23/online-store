@@ -13,10 +13,8 @@ export const header = new Header({
     selector: 'app-header',
     innerComponents: null,
     getTemplate() {
-
-      // не обновляется, почему????????
-      let headerTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
-      let headerTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
+      const headerTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
+      const headerTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
 
       return `
       <div class="wrapper"> 

@@ -1,4 +1,4 @@
-import { Route } from '../../types';
+import { PromoCodesText, Route } from '../../types';
 
 const wfm = {
   isUndefined(d: Route): boolean {
@@ -6,4 +6,9 @@ const wfm = {
   },
 };
 
-export { wfm };
+const promocodesDescription: PromoCodesText = {
+  rs: 'Rolling Scopes School - 10%', 
+  epm: 'EPAM Systems - 10%' 
+}
+
+export { wfm, promocodesDescription };

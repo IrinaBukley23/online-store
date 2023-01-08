@@ -12,55 +12,68 @@ class SinglePage extends WFMComponent {
   public handleClick(event: Event): void {
     const target = event.target as HTMLElement;
 
-    if (target.classList.contains('images__list-item_img')) {
-      if(!(target as HTMLElement).classList.contains('images__list-item_img')) return;
-      this.el?.querySelectorAll('.images__list-item_img').forEach((imageItem) => imageItem.classList.remove('active'));
-      if (!target) return;
-      (target as HTMLElement).classList.add('active');
-      if((target as HTMLElement).classList.contains('active')) {
-        const elem = document.querySelector('.images__large');
-        const currentImgSrc = ((target as HTMLElement) as HTMLElement).getAttribute('src')
-        if(elem) elem.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
-      }
+    const smallImage = target.classList.contains('images__list-item_img');
+    if (smallImage) this.imageChange(target);
+    
+    const addToCartBtn = target.classList.contains('add-to-cart');
+    if(addToCartBtn) this.addToCart(target);
+
+    const fastPurchaseBtn = target.classList.contains('fast_purchase');
+    if(fastPurchaseBtn) {
+      this.openPopup();
+      this.addToCart(target); // do not work?????
     }
-
-    if(target.classList.contains('btn__to-cart')) {
-      const id = (target as HTMLElement).getAttribute('id');
-
-      if(!id) return;
-      const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
-
-      this.cartProducts.push({
-          'product': product,
-          'counter': 1
-      });
-      console.log(this.cartProducts)
-      localStorage.setItem('cart', JSON.stringify(this.cartProducts));
-
-      const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-      cartArr.forEach(item => (item.product.id === product.id) ? (target as HTMLElement).innerHTML = 'drop from cart' : (target as HTMLElement).innerHTML = 'add to cart');
-      let cartTotalCounter = 0;
-      let cartTotalSum = 0;
-      cartArr.forEach(item => {
-          cartTotalCounter += item.counter;
-          cartTotalSum += (item.product.price * item.counter);
-          localStorage.setItem('totalSum', String(cartTotalSum))
-          localStorage.setItem('totalCounter', String(cartTotalCounter))
-      })
-
-      // не изменяется текстовое значение кнопки ??????????????
-      if((target as HTMLElement).innerHTML === 'drop from cart') {
-          (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'add to cart'
-      }
-      if((target as HTMLElement).innerHTML === 'add to cart') {
-          (document.querySelector('.btn__to-cart') as HTMLElement).innerHTML = 'drop from cart';
-          this.cartProducts.push({
-              'product': product,
-              'counter': 1
-          });
-      }
-   }
   }
+
+  private imageChange(elem: HTMLElement) {
+    if(!(elem).classList.contains('images__list-item_img')) return;
+    this.el?.querySelectorAll('.images__list-item_img').forEach((imageItem) => imageItem.classList.remove('active'));
+    if (!elem) return;
+    (elem).classList.add('active');
+    if((elem).classList.contains('active')) {
+      const imgLarge = document.querySelector('.images__large');
+      const currentImgSrc = ((elem) as HTMLElement).getAttribute('src')
+      if(imgLarge) imgLarge.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
+    }
+  }
+
+  private addToCart(elem: HTMLElement) {
+    const id = (elem).getAttribute('id');
+    if(!id) return;
+    const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+
+    this.cartProducts.push({
+        'product': product,
+        'counter': 1,
+        'flag': true,
+    });
+    console.log(this.cartProducts)
+    localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+
+    const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
+    let cartTotalCounter = 0;
+    let cartTotalSum = 0;
+    cartArr.forEach(item => {
+        cartTotalCounter += item.counter;
+        cartTotalSum += (item.product.price * item.counter);
+        localStorage.setItem('totalSum', String(cartTotalSum))
+        localStorage.setItem('totalCounter', String(cartTotalCounter))
+    })
+
+    const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+    if(headerTotalCounterEl) {
+        headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
+    }
+    const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+    if(headerTotalSumEl) {
+        headerTotalSumEl.innerHTML = `${cartTotalSum}`;
+    }
+  }
+
+  private openPopup() {
+    const popup = document.querySelector('.popup') as HTMLElement;
+    popup.classList.add('active');
+}
 }
 
 export const singlePage = new SinglePage({
@@ -131,8 +144,8 @@ export const singlePage = new SinglePage({
         </div>
         <div class="single__info-price">
           <div class="single__info-price_sum">€${product.price}</div>
-          <button class="single__info-price_btn">add to cart</button>
-          <button class="single__info-price_btn">buy now</button>
+          <button id=${product.id} class="single__info-price_btn add-to-cart">add to cart</button>
+          <a id=${product.id} href="#cart" class="single__info-price_btn fast_purchase">buy now</a>
         </div>
       </div>
       </div>

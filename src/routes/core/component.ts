@@ -1,7 +1,7 @@
 import { ComponentConfig, ComponentInterface } from '../../types';
 
 export class Component implements ComponentInterface {
-    getTemplate: (params?: {[key: string]: string}) => string;
+    getTemplate: (params?: { [key: string]: string }) => string;
     selector: string;
     el: HTMLElement | null;
     innerComponents: ComponentInterface[] | null;
@@ -10,15 +10,16 @@ export class Component implements ComponentInterface {
     public handleClick?(e: Event): void;
     public handleInputChange?(e: Event): void;
     public handleInput?(e: Event): void;
+    public handleBlur?(e: Event): void;
 
     constructor(config: ComponentConfig) {
-        this.getTemplate= config.getTemplate;
+        this.getTemplate = config.getTemplate;
         this.selector = config.selector;
         this.el = null;
         this.innerComponents = config.innerComponents;
     }
 
-    render(params?: {[key: string]: string}): void {
+    render(params?: { [key: string]: string }): void {
         const [_, id] = window.location.hash.split('/');
         const template = this.getTemplate(id ? { id } : params);
         this.el = document.querySelector(this.selector);
@@ -38,6 +39,7 @@ export class Component implements ComponentInterface {
     _initEvents(): void {
         // Add input change handler
         const componentElem = this.el;
+        
         if (this.handleInputChange) {
             const inputChangeHandler = this.handleInputChange.bind(this);
             componentElem?.addEventListener('change', inputChangeHandler);
@@ -50,10 +52,15 @@ export class Component implements ComponentInterface {
         }
 
         // Add click handler
-        if(this.handleClick) {
+        if (this.handleClick) {
             const clickHandler = this.handleClick.bind(this);
-            componentElem?.addEventListener('click', clickHandler)
+            componentElem?.addEventListener('click', clickHandler);
         }
 
+        // Add blur handler
+        if (this.handleBlur) {
+            const blurHandler = this.handleBlur.bind(this);
+            componentElem?.addEventListener('focusout', blurHandler);
+        }
     }
 }

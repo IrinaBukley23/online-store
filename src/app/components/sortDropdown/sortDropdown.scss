@@ -1,0 +1,40 @@
+.sort {
+    width: min-content;
+    font-size: 1.6rem;
+
+    &__title {
+        padding: 12px 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 3px;
+        font-size: inherit;
+        line-height: normal;
+        border-radius: 10px;
+        background: $color-accent-dark;
+        border: none;
+
+        &.show,
+        &:active,
+        &.btn:first-child:active {
+            background: #046948;
+        }
+
+        &:hover {
+            background: #046948;
+        }
+    }
+
+    &__menu {
+        padding: 0;
+        width: 100%;
+        font-size: inherit;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+    }
+}
