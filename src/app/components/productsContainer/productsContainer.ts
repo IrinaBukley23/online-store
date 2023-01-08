@@ -22,14 +22,10 @@ class ProductsContainer extends WFMComponent {
         }
 
         const addToCartBtn = target.classList.contains('btn__to-cart');
-        if(addToCartBtn) {
-            this.addToCart(target);
-        }
+        if(addToCartBtn) this.addToCart(target);
 
         const dropFromCart = target.classList.contains('btn__drop');
-        if(dropFromCart) {
-            this.dropProduct(target);
-        }
+        if(dropFromCart) this.dropProduct(target);
     }
 
     private showDetails(elem: HTMLElement) {
@@ -99,7 +95,6 @@ class ProductsContainer extends WFMComponent {
             'counter': 1, 
             'flag': true,
         });
-        console.log(this.cartProducts);
         localStorage.setItem('cart', JSON.stringify(this.cartProducts));
 
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
