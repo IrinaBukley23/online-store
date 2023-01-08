@@ -1,13 +1,45 @@
 import { WFMComponent } from '../../../routes';
 import { ComponentConfig } from '../../../types';
 import visa from '../../../../public/visa.jpg';
-import mastercard from '../../../../public/masret-card.jpg';
+import mastercard from '../../../../public/master-card.jpg';
 import pease from '../../../../public/peace.jpg';
 import paysys from '../../../../public/pay-sys.jpg';
 
 class Popup extends WFMComponent {
     constructor(config: ComponentConfig) {
         super(config);
+    }
+
+    public handleInput(event: Event): void {
+      const target = event.target as HTMLInputElement;
+
+      if(target.classList.contains('popup__cvv')) {
+        target.value = target.value.substr(0, 3);
+      }
+
+      const cardNumInput = target.classList.contains('popup__card-num');
+      if(cardNumInput) {
+        const bankCard = document.querySelector('.popup__card-pay');
+        target.value = target.value.substr(0, 16);
+        if(target.value[0] === '4'){
+          if(bankCard) bankCard.innerHTML = ` <img src="${visa}" alt="visa">`;
+        } 
+        if(target.value[0] === '5') {
+          if(bankCard) bankCard.innerHTML = ` <img src="${mastercard}" alt="mastercard">`;
+        }  
+        if(target.value[0] === '6') {
+          if(bankCard) bankCard.innerHTML = ` <img src="${pease}" alt="pease">`;
+        }
+        const cardNumInput = document.querySelector('.popup__card-num') as HTMLInputElement;
+
+        cardNumInput.value.split(/\d{4}/).filter(item => item !== '').join(' ');
+      }
+
+      if(target.classList.contains('month') || target.classList.contains('year')) {
+        target.value = target.value.substr(0, 2);
+        const cardTrueInput = document.querySelector('.popup__true') as HTMLInputElement;
+        //cardTrueInput.value.split(/\d{2}/).filter(item => item !== '').join('/');
+      }
     }
 
     public handleClick(event: Event): void {
@@ -34,6 +66,14 @@ class Popup extends WFMComponent {
 
       if(target.classList.contains('popup__email')) {
         this.validationEmail(target);
+      } 
+
+      if(target.classList.contains('popup__card-num')) {
+        this.validationCardNumber(target);
+      } 
+
+      if(target.classList.contains('popup__true')) {
+        this.validationCardTrue(target);
       } 
 
       if(target.classList.contains('popup__cvv')) {
@@ -144,6 +184,26 @@ class Popup extends WFMComponent {
       }
     }
 
+    private validationCardNumber(elem: HTMLInputElement): void {
+      const cardNumErr = document.querySelector('.error__card-number') as HTMLLabelElement;
+
+      if (elem.value.length < 16) {
+        cardNumErr.classList.add('active');
+      } else {
+        cardNumErr.classList.remove('active');
+      }
+    }
+
+    private validationCardTrue(elem: HTMLInputElement): void {
+      const cardNumErr = document.querySelector('.error__true') as HTMLLabelElement;
+
+      if (elem.value.length < 2) {
+        cardNumErr.classList.add('active');
+      } else {
+        cardNumErr.classList.remove('active');
+      }
+    }
+
     private validationCardCvv(elem: HTMLInputElement): void {
       const cvvErr = document.querySelector('.error__cvv') as HTMLLabelElement;
       if(+elem.value.length !== 3) {
@@ -170,32 +230,36 @@ export const popup = new Popup({
                 <h6 class="popup__title">Personal details</h6>
                 <div class="popup__personal">
                     <div class="name_block">
-                      <input class="popup__personal-input popup__name" type="text" placeholder="Name">
+                      <input class="popup__personal-input popup__name" type="text" placeholder="Name" required>
                       <label class="error error__name">error</label>
                     </div>
                     <div class="phone_block">
-                      <input class="popup__personal-input popup__phone" type="tel" placeholder="Phone number" maxlength="13">
+                      <input class="popup__personal-input popup__phone" type="tel" placeholder="Phone number" maxlength="13" required>
                       <label class="error error__phone">error</label>
                     </div>
                     <div class="address_block">
-                      <input class="popup__personal-input popup__address" type="text" placeholder="Delivery address">
+                      <input class="popup__personal-input popup__address" type="text" placeholder="Delivery address" required>
                       <label class="error error__address">error</label>
                     </div>
                     <div class="email_block">
-                      <input class="popup__personal-input popup__email" type="email" placeholder="E-mail">
+                      <input class="popup__personal-input popup__email" type="email" placeholder="E-mail" required>
                       <label class="error error__email">error</label>
                     </div>
                 </div>
                 <h6 class="popup__title">Credit card details</h6>
                 <div class="popup__card">
                     <div class="popup__card-number">
-                        <label class="popup__card-pay"><img src="${paysys}" alt="card"></label>
-                        <input class="popup__card-num popup__card-number" type="number" placeholder="Card number">
+                        <label class="popup__card-pay">
+                          <img src="${paysys}" alt="card">
+                        </label>
+                        <input class="popup__card-num" type="number" placeholder="Card number" required>
                     </div>
-                    <label class="popup__card-label popup__true">Valid:</label>
-                    <input class="popup__card-input" type="number" placeholder="Valid True">
+                    <label class="popup__card-label">Valid:</label>
+                    <input class="popup__card-input popup__true month" type="number" placeholder="Valid True" required> <span> / </span>
+                    <input class="popup__card-input popup__true year" type="number" placeholder="Valid True" required>
                     <label class="popup__card-label">CVV:</label>
-                    <input class="popup__card-input  popup__cvv" type="number" placeholder="Code" maxlength="3">
+                    <input class="popup__card-input  popup__cvv" type="number" placeholder="Code" maxlength="3" required>
+                    <p class="popup__card-label_true">month<span> / </span>year</p>
                 </div>
                 <label class="error error__card-number">Card number - error</label>
                 <label class="error error__true">Card valid true - error</label>
