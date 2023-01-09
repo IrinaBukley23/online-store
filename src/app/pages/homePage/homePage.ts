@@ -28,10 +28,112 @@ class HomePage extends WFMComponent {
         this.queryParams = this.getQueryParamsFromURL(this.URL);
     }
 
-    private getQueryParamsFromURL(URLstr: string) {
-        const URLObject = new URL(URLstr);
+    public render(): void {
+        super.render();
+        this.initFilterSearchSortFromQueryParams(this.queryParams);
+    }
+
+    private getQueryParamsFromURL(URLStr: string): QueryParams {
+        const URLObject = new URL(URLStr);
         const searchParams = new URLSearchParams(URLObject.searchParams);
         return Object.fromEntries(searchParams.entries());
+    }
+
+    private initFilterSearchSortFromQueryParams(params: QueryParams): void {
+        if (params.category) {
+            const paramCategories = params.category.split('_');
+            const categoryInputs = document.querySelectorAll('.category-filter .form-check-input');
+
+            const categoryLabels: (string | undefined)[] = [];
+
+            categoryInputs.forEach((input) => {
+                if (input.nextElementSibling) {
+                    const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
+                    categoryLabels.push(labelText);
+                }
+            });
+
+            categoryLabels.forEach((label, index) => {
+                if (label) {
+                    if (paramCategories.includes(label?.trim().toLowerCase())) {
+                        const input = categoryInputs[index] as HTMLInputElement;
+                        input.checked = true;
+                    }
+                }
+            });
+
+            console.log(paramCategories);
+        }
+
+        if (params.brand) {
+            const paramBrands = params.brand.split('_');
+            const brandInputs = document.querySelectorAll('.brand-filter .form-check-input');
+
+            const brandLabels: (string | undefined)[] = [];
+
+            brandInputs.forEach((input) => {
+                if (input.nextElementSibling) {
+                    const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
+                    brandLabels.push(labelText);
+                }
+            });
+
+            brandLabels.forEach((label, index) => {
+                if (label) {
+                    if (paramBrands.includes(label?.trim().toLowerCase())) {
+                        const input = brandInputs[index] as HTMLInputElement;
+                        input.checked = true;
+                    }
+                }
+            });
+
+            console.log(paramBrands);
+        }
+
+        // if (params.stock) {
+        //     const [minStock, maxStock] = params.stock.split('_');
+
+        //     const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
+        //     const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
+
+        //     stockFromSlider.value = minStock;
+        //     stockToSlider.value = maxStock;
+
+        //     stockFromSlider.dispatchEvent(new Event('change'));
+        //     stockToSlider.dispatchEvent(new Event('change'));
+        // }
+
+        // if (params.price) {
+        //     const [minPrice, maxPrice] = params.price.split('_');
+
+        //     const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+        //     const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+
+        //     priceFromSlider.value = minPrice;
+        //     priceToSlider.value = maxPrice;
+
+        //     priceFromSlider.dispatchEvent(new Event('change'));
+        //     priceToSlider.dispatchEvent(new Event('change'));
+        // }
+
+        if (params.search) {
+            const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
+            textInput.value = params.search;
+        }
+
+        if (params.sort) {
+            const sortProductDropdown = document.querySelector('#sortProductDropdown') as HTMLButtonElement;
+            const currentSortOption = document.querySelector(`[data-sort="${params.sort}"]`) as HTMLAnchorElement;
+            const sortText = currentSortOption.innerText;
+
+            sortProductDropdown.innerText = sortText;
+
+            this.sortProducts(currentSortOption, params.sort);
+        }
+
+        this.showChosenCards(null);
+        this.changeDualSlidersValues(null);
+        console.log(params);
     }
 
     private setQueryParams(params: QueryParams) {
@@ -85,6 +187,7 @@ class HomePage extends WFMComponent {
 
     public handleInputChange(event: Event): void {
         const target = event.target as HTMLInputElement;
+        console.log('change', target);
 
         if (target.classList.contains('category-checkbox')) {
             this.handleCategoryCheckbox(target);
@@ -120,20 +223,21 @@ class HomePage extends WFMComponent {
             const inputTarget = target as HTMLInputElement;
 
             this.showChosenCards(inputTarget);
+            this.changeDualSlidersValues(inputTarget);
         }
     }
 
     private handleCategoryCheckbox(target: HTMLInputElement): void {
         this.showChosenCards(target);
-        this.changeDualSlidersValues();
+        this.changeDualSlidersValues(target);
     }
 
     private handleBrandCheckbox(target: HTMLInputElement): void {
         this.showChosenCards(target);
-        this.changeDualSlidersValues();
+        this.changeDualSlidersValues(target);
     }
 
-    private showChosenCards(target: HTMLInputElement): void {
+    private showChosenCards(target: HTMLInputElement | null): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
 
         const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
@@ -154,11 +258,15 @@ class HomePage extends WFMComponent {
             queryParams.search = textInput.value.trim();
         }
 
+        // If the function is invoked not by sliders change, set the range of sliders to maximum (not to limit chosen categories and brands with slider values)
+
         if (
             target !== priceFromSlider &&
             target !== priceToSlider &&
             target !== stockFromSlider &&
-            target !== stockToSlider
+            target !== stockToSlider &&
+            target !== textInput &&
+            target !== null
         ) {
             priceFromSlider.value = this.minPrice;
             priceToSlider.value = this.maxPrice;
@@ -179,11 +287,15 @@ class HomePage extends WFMComponent {
         const maxStock: string = stockToSlider.value;
 
         if (minPrice !== this.minPrice || maxPrice !== this.maxPrice) {
-            queryParams.price = `${minPrice}-${maxPrice}`;
+            queryParams.price = `${minPrice}_${maxPrice}`;
+        } else if (this.queryParams.price) {
+            queryParams.price = this.queryParams.price;
         }
 
         if (minStock !== this.minStock || maxStock !== this.maxStock) {
-            queryParams.stock = `${minStock}-${maxStock}`;
+            queryParams.stock = `${minStock}_${maxStock}`;
+        } else if (this.queryParams.stock) {
+            queryParams.stock = this.queryParams.stock;
         }
 
         checkedCategoryInputs.forEach((input) => {
@@ -271,6 +383,11 @@ class HomePage extends WFMComponent {
         });
 
         this.showProductQuantity();
+
+        if (this.queryParams.sort) {
+            queryParams.sort = this.queryParams.sort;
+        }
+
         this.setQueryParams(queryParams);
     }
 
@@ -360,7 +477,7 @@ class HomePage extends WFMComponent {
         });
     }
 
-    private changeDualSlidersValues(): void {
+    private changeDualSlidersValues(target: HTMLInputElement | null): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
 
         const stockFromInput = document.querySelector('dual-slider-stock #fromInput') as HTMLInputElement;
@@ -376,52 +493,99 @@ class HomePage extends WFMComponent {
         const arrayCards = Array.prototype.slice.call(productCards);
         const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
 
-        if (displayedCards.length) {
-            let minActiveCardPrice = displayedCards[0].dataset.price;
-            let minActiveCardStock = displayedCards[0].dataset.stock;
-            let maxActiveCardPrice = displayedCards[0].dataset.price;
-            let maxActiveCardStock = displayedCards[0].dataset.stock;
+        if (target === null) {
+            console.log('null');
 
-            displayedCards.forEach((card) => {
-                if (card.dataset.price && minActiveCardPrice && maxActiveCardPrice) {
-                    if (+card.dataset.price < +minActiveCardPrice) {
-                        minActiveCardPrice = card.dataset.price;
-                    }
-                    if (+card.dataset.price > +maxActiveCardPrice) {
-                        maxActiveCardPrice = card.dataset.price;
-                    }
-                }
+            if (this.queryParams.stock) {
+                console.log(this.queryParams.stock);
 
-                if (card.dataset.stock && minActiveCardStock && maxActiveCardStock) {
-                    if (+card.dataset.stock < +minActiveCardStock) {
-                        minActiveCardStock = card.dataset.stock;
-                    }
-                    if (+card.dataset.stock > +maxActiveCardStock) {
-                        maxActiveCardStock = card.dataset.stock;
-                    }
-                }
-            });
+                const [minStock, maxStock] = this.queryParams.stock.split('_');
 
-            if (minActiveCardPrice && maxActiveCardPrice && minActiveCardStock && maxActiveCardStock) {
-                priceFromSlider.value = minActiveCardPrice;
-                priceToSlider.value = maxActiveCardPrice;
-                stockFromSlider.value = minActiveCardStock;
-                stockToSlider.value = maxActiveCardStock;
+                const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
+                const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
 
-                priceFromInput.value = minActiveCardPrice;
-                priceToInput.value = maxActiveCardPrice;
-                stockFromInput.value = minActiveCardStock;
-                stockToInput.value = maxActiveCardStock;
+                stockFromSlider.value = minStock;
+                stockToSlider.value = maxStock;
+
+                stockFromSlider.dispatchEvent(new Event('change'));
+                stockToSlider.dispatchEvent(new Event('change'));
+            }
+
+            if (this.queryParams.price) {
+                const [minPrice, maxPrice] = this.queryParams.price.split('_');
+
+                const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+                const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+
+                priceFromSlider.value = minPrice;
+                priceToSlider.value = maxPrice;
 
                 priceFromSlider.dispatchEvent(new Event('change'));
                 priceToSlider.dispatchEvent(new Event('change'));
-                stockFromSlider.dispatchEvent(new Event('change'));
-                stockToSlider.dispatchEvent(new Event('change'));
-                priceFromInput.dispatchEvent(new Event('change'));
-                priceToInput.dispatchEvent(new Event('change'));
-                stockFromInput.dispatchEvent(new Event('change'));
-                stockToInput.dispatchEvent(new Event('change'));
             }
+        } else {
+            if (displayedCards.length) {
+                let minActiveCardPrice = displayedCards[0].dataset.price;
+                let minActiveCardStock = displayedCards[0].dataset.stock;
+                let maxActiveCardPrice = displayedCards[0].dataset.price;
+                let maxActiveCardStock = displayedCards[0].dataset.stock;
+
+                displayedCards.forEach((card) => {
+                    if (card.dataset.price && minActiveCardPrice && maxActiveCardPrice) {
+                        if (+card.dataset.price < +minActiveCardPrice) {
+                            minActiveCardPrice = card.dataset.price;
+                        }
+                        if (+card.dataset.price > +maxActiveCardPrice) {
+                            maxActiveCardPrice = card.dataset.price;
+                        }
+                    }
+
+                    if (card.dataset.stock && minActiveCardStock && maxActiveCardStock) {
+                        if (+card.dataset.stock < +minActiveCardStock) {
+                            minActiveCardStock = card.dataset.stock;
+                        }
+                        if (+card.dataset.stock > +maxActiveCardStock) {
+                            maxActiveCardStock = card.dataset.stock;
+                        }
+                    }
+                });
+
+                if (minActiveCardPrice && maxActiveCardPrice && minActiveCardStock && maxActiveCardStock) {
+                    priceFromSlider.value = minActiveCardPrice;
+                    priceToSlider.value = maxActiveCardPrice;
+                    stockFromSlider.value = minActiveCardStock;
+                    stockToSlider.value = maxActiveCardStock;
+
+                    priceFromInput.value = minActiveCardPrice;
+                    priceToInput.value = maxActiveCardPrice;
+                    stockFromInput.value = minActiveCardStock;
+                    stockToInput.value = maxActiveCardStock;
+
+                    priceFromSlider.dispatchEvent(new Event('change'));
+                    priceToSlider.dispatchEvent(new Event('change'));
+                    stockFromSlider.dispatchEvent(new Event('change'));
+                    stockToSlider.dispatchEvent(new Event('change'));
+                    priceFromInput.dispatchEvent(new Event('change'));
+                    priceToInput.dispatchEvent(new Event('change'));
+                    stockFromInput.dispatchEvent(new Event('change'));
+                    stockToInput.dispatchEvent(new Event('change'));
+                }
+            }
+
+            const minPrice: string = priceFromSlider.value;
+            const maxPrice: string = priceToSlider.value;
+            const minStock: string = stockFromSlider.value;
+            const maxStock: string = stockToSlider.value;
+
+            if (minPrice !== this.minPrice || maxPrice !== this.maxPrice) {
+                this.queryParams.price = `${minPrice}_${maxPrice}`;
+            }
+
+            if (minStock !== this.minStock || maxStock !== this.maxStock) {
+                this.queryParams.stock = `${minStock}_${maxStock}`;
+            }
+
+            this.setQueryParams(this.queryParams);
         }
     }
 
