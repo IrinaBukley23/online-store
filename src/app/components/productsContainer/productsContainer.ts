@@ -37,26 +37,36 @@ class ProductsContainer extends WFMComponent {
     private dropProduct(elem: HTMLElement) {
         let cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         const productsContainer = document.querySelector('.cart__products-block');
-        elem.classList.remove('btn__drop');
-        elem.classList.add('btn__to-cart');
-        elem.innerHTML = 'add to cart';
+        const addBtnContainer = elem.parentElement;
+        if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn btn__to-cart">add to cart</button>`;
         if(productsContainer) productsContainer.innerHTML = '';
         cartArr.forEach(prod => {
-            if(prod.counter === 0) {
+            if(prod.product.id === +elem.id) {
                 const filteredArr = cartArr.filter((product: CartItem) => product.product.id !== +elem.id);
                 localStorage.setItem('cart', JSON.stringify(filteredArr));
                 cartArr = JSON.parse(localStorage.getItem('cart') as string);
             }
         })
+        const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+        if(headerTotalCounterEl) {
+        headerTotalCounterEl.innerHTML = `${Number(headerTotalCounterEl.innerHTML) - 1}`;
+        }
+        const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+        const id = (elem as HTMLElement)?.getAttribute('id');
+            const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+        if(headerTotalSumEl) {
+        headerTotalSumEl.innerHTML = `${Number(headerTotalSumEl.innerHTML) - Number(product.price)}`;
+        }
+        localStorage.setItem('totalCounter', String(Number(headerTotalSumEl.innerHTML) - Number(product.price)));
+        localStorage.setItem('totalSum', String(Number(headerTotalCounterEl.innerHTML) - 1));
     }
 
     private addToCart(elem: HTMLElement) {
         const id = elem.getAttribute('id');
         if (!id) return;
         const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
-        elem.classList.add('btn__drop');
-        elem.classList.remove('btn__to-cart');
-        elem.innerHTML = 'drop from cart';
+        const addBtnContainer = elem.parentElement;
+        if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn btn__drop">drop from cart</button>`;
         this.cartProducts.push({
             'product': product,
             'counter': 1,
@@ -133,7 +143,9 @@ export const productsContainer = new ProductsContainer({
                         </div>
                     </div>
                     <div class="product__buttons">
-                        <button id=${product.id} class="button btn__to-cart">${btnToCartText}</button>
+                        <div class="add__btn-container">
+                            <button id=${product.id} class="button btn__to-cart">${btnToCartText}</button>
+                        </div>
                         <a id=${product.id} class="button btn__details" href="#single/1">Details</a>
                     </div>
                 </div>

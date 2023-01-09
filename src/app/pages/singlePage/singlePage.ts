@@ -43,9 +43,6 @@ class SinglePage extends WFMComponent {
   private dropProduct(elem: HTMLElement) {
     let cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
     const productsContainer = document.querySelector('.cart__products-block');
-    elem.classList.remove('btn__drop');
-    elem.classList.add('btn__to-cart');
-    elem.innerHTML = 'add to cart';
     if(productsContainer) productsContainer.innerHTML = '';
     cartArr.forEach(prod => {
       if(prod.counter === 0) {
@@ -54,15 +51,29 @@ class SinglePage extends WFMComponent {
         cartArr = JSON.parse(localStorage.getItem('cart') as string);
       }
     })
-}
+    const addBtnContainer = elem.parentElement;
+    if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn add-to-cart">add to cart</button>`;
+
+    const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+    if(headerTotalCounterEl) {
+      headerTotalCounterEl.innerHTML = `${Number(headerTotalCounterEl.innerHTML) - 1}`;
+    }
+    const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+    const id = (elem as HTMLElement)?.getAttribute('id');
+        const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+    if(headerTotalSumEl) {
+      headerTotalSumEl.innerHTML = `${Number(headerTotalSumEl.innerHTML) - Number(product.price)}`;
+    }
+    localStorage.setItem('totalCounter', String(Number(headerTotalSumEl.innerHTML) - Number(product.price)));
+    localStorage.setItem('totalSum', String(Number(headerTotalCounterEl.innerHTML) - 1));
+  }
 
   private addToCart(elem: HTMLElement) {
     const id = (elem).getAttribute('id');
     if(!id) return;
     const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
-    elem.classList.add('btn__drop');
-    elem.classList.remove('btn__to-cart');
-    elem.innerHTML = 'drop from cart';
+    const addBtnContainer = elem.parentElement;
+    if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn btn__drop">drop from cart</button>`;
     this.cartProducts.push({
         'product': product,
         'counter': 1,
@@ -88,20 +99,12 @@ class SinglePage extends WFMComponent {
     if(headerTotalSumEl) {
         headerTotalSumEl.innerHTML = `${cartTotalSum}`;
     }
-
-    cartArr.forEach((item) => {
-        if (item.product.id === product.id) {
-            elem.innerHTML = 'drop from cart';
-        } else {
-            elem.innerHTML = 'add to cart';
-        }
-    });
   }
 
   private openPopup() {
     const popup = document.querySelector('.popup') as HTMLElement;
     popup.classList.add('active');
-}
+  }
 }
 
 export const singlePage = new SinglePage({
@@ -172,7 +175,9 @@ export const singlePage = new SinglePage({
         </div>
         <div class="single__info-price">
           <div class="single__info-price_sum">€${product.price}</div>
-          <button id=${product.id} class="single__info-price_btn add-to-cart">add to cart</button>
+          <div class="add__btn-container">
+            <button id=${product.id} class="single__info-price_btn add-to-cart">add to cart</button>
+          </div>
           <a id=${product.id} href="#cart" class="single__info-price_btn fast_purchase">buy now</a>
         </div>
       </div>

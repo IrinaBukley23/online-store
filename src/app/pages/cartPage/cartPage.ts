@@ -5,7 +5,6 @@ import { CartItem, ComponentConfig } from '../../../types';
 import { appRoutes } from '../../app.routes';
 
 import './cartPage.scss';
-import { ids } from 'webpack';
 
 class CartPage extends WFMComponent {
     constructor(config: ComponentConfig) {
@@ -48,13 +47,11 @@ class CartPage extends WFMComponent {
         }
 
         if(target.classList.contains('limit-on-page')) {
-            let limitValueEl = document.querySelector('.cart__pagination-limit input') as HTMLInputElement;
             const pages = document.querySelectorAll('.pagination__item') as NodeListOf<HTMLLIElement>;
-            if(Number(limitValueEl) > 3) {
-                limitValueEl.value = '3';
-                pages.forEach(page => this.pagination(page));
-            }
-            pages.forEach(page => this.pagination(page));
+            pages.forEach(page => {
+                this.pagination(page);
+                this.renderPaginationBtns();
+            });
         }
     }
 
@@ -89,7 +86,8 @@ class CartPage extends WFMComponent {
         }
 
         // pagination
-        if(target.classList.contains('pagination__item')) {
+        const isPaginationPagesBtn = target.classList.contains('pagination__item');
+        if(isPaginationPagesBtn) {
             this.pagination(target);
             this.renderPaginationBtns();
         }
@@ -101,13 +99,13 @@ class CartPage extends WFMComponent {
 
     private renderPaginationBtns() {
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        let limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
+        const limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
         const btnsBlock = document.querySelector('.pagination__list');
         if(btnsBlock) btnsBlock.innerHTML = '';
-        let paginationBtns = ``;
+        const paginationBtns = ``;
         const pagesCount = Math.ceil(cartArr.length / +limitProdsOnPage);
         for (let i = 0; i < pagesCount; i++) {
-            let paginationBtn = document.createElement('li');
+            const paginationBtn = document.createElement('li');
             paginationBtn.classList.add('pagination__item');
             paginationBtn.setAttribute('id', `${i+1}`);
             paginationBtn.innerHTML = `${i+1}`;
@@ -117,16 +115,16 @@ class CartPage extends WFMComponent {
 
     private pagination(elem: HTMLElement) {
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        let limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
-        const currentPage = +elem.id - 1;
-        const start = +limitProdsOnPage * +currentPage;
-        const end = start + +limitProdsOnPage;
+        const limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
+        const currentPage = Number(elem?.id) - 1;
+        const start = Number(limitProdsOnPage) * Number(currentPage);
+        const end = start + Number(limitProdsOnPage);
         const paginatedData = cartArr.slice(start, end);
         const productsContainer = document.querySelector('.cart__products-block');
         if(productsContainer) productsContainer.innerHTML = '';
         let index = start + 1;
         paginatedData && paginatedData.forEach(item => {
-            let cartTemplate = document.createElement('div');
+            const cartTemplate = document.createElement('div');
             cartTemplate.classList.add('cart__products-elem');
             cartTemplate.innerHTML = `
                 <p class="cart__products-num">${index++}</p>
@@ -154,7 +152,6 @@ class CartPage extends WFMComponent {
                 </div>`;
             productsContainer?.append(cartTemplate);
         });
-        this.renderPaginationBtns();
     }
 
     private renderPromoCodes(arr: string[]) {
@@ -240,14 +237,13 @@ class CartPage extends WFMComponent {
     private decrCounter(elem: HTMLElement) {
         const curElem = <HTMLElement> elem.nextSibling?.nextSibling
         let curNum = Number(curElem?.textContent);
-
+        if( curNum < 1 ) {
+            this.dropProduct();
+        }
         if(curNum >= 1) {
             curNum -= 1;
             localStorage.setItem('totalCounter', String(curNum))
-        } else {
-            this.dropProduct();
-            this.pagination(elem);
-        }
+        } 
         (curElem as HTMLElement).innerHTML = String(curNum);
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         let cartTotalSum = 0;
@@ -290,7 +286,7 @@ class CartPage extends WFMComponent {
                 localStorage.setItem('cart', JSON.stringify(filteredArr));
                 cartArr = JSON.parse(localStorage.getItem('cart') as string);
                 cartArr && cartArr.forEach((item: CartItem) => {
-                    let cartTemplate = document.createElement('div');
+                    const cartTemplate = document.createElement('div');
                     cartTemplate.classList.add('cart__products-elem');
                     cartTemplate.innerHTML = `
                         <p class="cart__products-num">${index++}</p>

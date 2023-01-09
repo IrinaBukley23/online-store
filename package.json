@@ -6,7 +6,8 @@
     "scripts": {
         "build": "webpack",
         "dev": "webpack serve --env development",
-        "lint": "eslint src"
+        "lint": "eslint src",
+        "test": "jest"
     },
     "author": "Irina Bukley, Olga Dementey",
     "devDependencies": {
@@ -23,6 +24,7 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-webpack-plugin": "^2.5.4",
         "html-webpack-plugin": "^5.3.1",
+        "jest": "^29.3.1",
         "mini-css-extract-plugin": "^1.6.0",
         "sass": "^1.32.12",
         "sass-loader": "^11.0.1",

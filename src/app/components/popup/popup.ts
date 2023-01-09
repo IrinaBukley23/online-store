@@ -169,7 +169,7 @@ class Popup extends WFMComponent {
       const nameEl = document.querySelector('.popup__name') as HTMLInputElement;
       const nameBlock = document.querySelector('.name_block') as HTMLDivElement;
     
-      let valueArr = elem.value.split(' ');
+      const valueArr = elem.value.split(' ');
 
       if(valueArr.length < 2) {
         nameErr.classList.add('active');
@@ -205,7 +205,7 @@ class Popup extends WFMComponent {
         phoneBlock.classList.add('active');
         this.isOpenPopup = true;
       } else {
-        let phone = elem.value.substring(1);
+        const phone = elem.value.substring(1);
         if (isNaN(+phone)){
           phoneErr.classList.add('active');
           phoneEl.classList.add('active');
@@ -226,7 +226,7 @@ class Popup extends WFMComponent {
       const addressEl = document.querySelector('.popup__address') as HTMLInputElement;
       const addressBlock = document.querySelector('.address_block') as HTMLDivElement;
     
-      let valueArr = elem.value.split(' ');
+      const valueArr = elem.value.split(' ');
 
       if(valueArr.length < 3) {
         addressErr.classList.add('active');
