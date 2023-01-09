@@ -7,6 +7,7 @@ import { sortDropdown } from '../../components/sortDropdown/sortDropdown';
 import './homePage.scss';
 import { textSearch } from '../../components/textSearch/textSearch';
 import { foundProductQuantity } from '../../components/foundProductQuantity/foundProductQuantity';
+import { productsView } from '../../components/productsView/productsView';
 
 class HomePage extends WFMComponent {
     private productsData: Product[];
@@ -38,7 +39,6 @@ class HomePage extends WFMComponent {
         const searchParams = new URLSearchParams(URLObject.searchParams);
         return Object.fromEntries(searchParams.entries());
     }
-
 
     private initFilterSearchSortFromQueryParams(params: QueryParams, reset?: boolean): void {
         // Restore category
@@ -684,12 +684,13 @@ class HomePage extends WFMComponent {
 
 export const homePage = new HomePage({
     selector: 'home',
-    innerComponents: [productsContainer, filter, sortDropdown, textSearch, foundProductQuantity],
+    innerComponents: [productsContainer, filter, sortDropdown, textSearch, foundProductQuantity, productsView],
     getTemplate: () => `
         <filter class="filter"></filter>
         <main class="main">
             <div class="display-info">
                 <sort-dropdown></sort-dropdown>
+                <products-view></products-view>
                 <found-product-quantity></found-product-quantity>
                 <text-search></text-search>
             </div>
