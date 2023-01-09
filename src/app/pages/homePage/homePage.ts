@@ -7,14 +7,15 @@ import { sortDropdown } from '../../components/sortDropdown/sortDropdown';
 import './homePage.scss';
 import { textSearch } from '../../components/textSearch/textSearch';
 import { foundProductQuantity } from '../../components/foundProductQuantity/foundProductQuantity';
+import { productsView } from '../../components/productsView/productsView';
 
 class HomePage extends WFMComponent {
     private productsData: Product[];
-    private minStock: string;
-    private maxStock: string;
-    private minPrice: string;
-    private maxPrice: string;
-    private URL: string;
+    private readonly minStock: string;
+    private readonly maxStock: string;
+    private readonly minPrice: string;
+    private readonly maxPrice: string;
+    private readonly URL: string;
     private queryParams: QueryParams;
 
     constructor(config: ComponentConfig) {
@@ -38,7 +39,6 @@ class HomePage extends WFMComponent {
         const searchParams = new URLSearchParams(URLObject.searchParams);
         return Object.fromEntries(searchParams.entries());
     }
-
 
     private initFilterSearchSortFromQueryParams(params: QueryParams, reset?: boolean): void {
         // Restore category
@@ -120,11 +120,20 @@ class HomePage extends WFMComponent {
         if (params.sort) {
             const sortProductDropdown = document.querySelector('#sortProductDropdown') as HTMLButtonElement;
             const currentSortOption = document.querySelector(`[data-sort="${params.sort}"]`) as HTMLAnchorElement;
-            const sortText = currentSortOption.innerText;
 
-            sortProductDropdown.innerText = sortText;
+            sortProductDropdown.innerText = currentSortOption.innerText;
 
             this.sortProducts(currentSortOption, params.sort);
+        }
+
+        //Restore view
+        if (params.view) {
+            const currentViewOption = document.querySelector(`[data-view="${params.view}"]`) as HTMLDivElement;
+            const viewBtns = document.querySelectorAll('.products-view__btn') as NodeListOf<HTMLDivElement>;
+            viewBtns.forEach((btn) => btn.classList.remove('active'));
+            currentViewOption.classList.add('active');
+
+            this.changeProductView(params.view);
         }
 
         this.showChosenCards(null, reset);
@@ -137,8 +146,6 @@ class HomePage extends WFMComponent {
         const searchParamsObj = new URLSearchParams(params);
 
         currentURL.search = searchParamsObj.toString();
-        console.log(searchParamsObj.toString(), currentURL);
-
         history.pushState('', '', currentURL);
     }
 
@@ -182,8 +189,13 @@ class HomePage extends WFMComponent {
         if (target.classList.contains('filter__btn--reset')) {
             const currentURL = new URL(document.URL);
             currentURL.search = '';
-            if (this.queryParams.sort) {
+
+            if (this.queryParams.sort && this.queryParams.view) {
+                this.setQueryParams({ sort: this.queryParams.sort, view: this.queryParams.view });
+            } else if (this.queryParams.sort) {
                 this.setQueryParams({ sort: this.queryParams.sort });
+            } else if (this.queryParams.view) {
+                this.setQueryParams({ view: this.queryParams.view });
             } else {
                 this.setQueryParams({});
             }
@@ -213,11 +225,27 @@ class HomePage extends WFMComponent {
                     console.log(err);
                 });
         }
+
+        if (target.classList.contains('products-view__btn') || target.classList.contains('products-view__image')) {
+            const viewBtns = document.querySelectorAll('.products-view__btn') as NodeListOf<HTMLDivElement>;;
+            viewBtns.forEach((btn) => btn.classList.remove('active'));
+
+            let view: string | undefined;
+
+            if (target.classList.contains('products-view__btn')) {
+                target.classList.add('active');
+                view = target.dataset.view;
+            } else if (target.classList.contains('products-view__image')) {
+                target.parentElement?.classList.add('active');
+                view = target.parentElement?.dataset.view;
+            }
+
+            this.changeProductView(view);
+        }
     }
 
     public handleInputChange(event: Event): void {
         const target = event.target as HTMLInputElement;
-        console.log('change', target);
 
         if (target.classList.contains('category-checkbox')) {
             this.handleCategoryCheckbox(target);
@@ -294,8 +322,7 @@ class HomePage extends WFMComponent {
             target !== priceFromSlider &&
             target !== priceToSlider &&
             target !== stockFromSlider &&
-            target !== stockToSlider &&
-            target !== textInput
+            target !== stockToSlider
         ) {
             priceFromSlider.value = this.minPrice;
             priceToSlider.value = this.maxPrice;
@@ -417,6 +444,10 @@ class HomePage extends WFMComponent {
 
         if (this.queryParams.sort) {
             queryParams.sort = this.queryParams.sort;
+        }
+
+        if (this.queryParams.view) {
+            queryParams.view = this.queryParams.view;
         }
 
         this.setQueryParams(queryParams);
@@ -665,6 +696,19 @@ class HomePage extends WFMComponent {
         }
     }
 
+    private changeProductView(view: string | undefined) {
+        this.queryParams.view = view;
+        this.setQueryParams(this.queryParams);
+
+        const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
+
+        if (view === 'block') {
+            productCards.forEach(card => card.classList.remove('list-view'));
+        } else if (view === 'list') {
+            productCards.forEach(card => card.classList.add('list-view'));
+        }
+    }
+
     private showProductQuantity(): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
         const foundProductsQuantityDisplay = document.querySelector('found-product-quantity') as HTMLElement;
@@ -684,7 +728,7 @@ class HomePage extends WFMComponent {
 
 export const homePage = new HomePage({
     selector: 'home',
-    innerComponents: [productsContainer, filter, sortDropdown, textSearch, foundProductQuantity],
+    innerComponents: [productsContainer, filter, sortDropdown, textSearch, foundProductQuantity, productsView],
     getTemplate: () => `
         <filter class="filter"></filter>
         <main class="main">
@@ -692,6 +736,7 @@ export const homePage = new HomePage({
                 <sort-dropdown></sort-dropdown>
                 <found-product-quantity></found-product-quantity>
                 <text-search></text-search>
+                <products-view class="products-view"></products-view>
             </div>
             <products-container class="product__cards"></products-container>
             <div class="nothing-found d-none">No products found.</div>

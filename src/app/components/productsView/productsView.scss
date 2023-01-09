@@ -1,0 +1,33 @@
+.products-view {
+  display: flex;
+  gap: 6px;
+  transition: .3s;
+
+  &__btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.active {
+      background-color: #ffe26e;
+    }
+
+    &:hover {
+      cursor: pointer;
+      border: 2px $color-accent-light solid;
+    }
+
+    img {
+      width: 25px;
+    }
+
+    &[data-view="block"] {
+      img {
+        width: 23px;
+      }
+    }
+  }
+}
