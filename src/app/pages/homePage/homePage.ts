@@ -39,19 +39,21 @@ class HomePage extends WFMComponent {
         return Object.fromEntries(searchParams.entries());
     }
 
-    private initFilterSearchSortFromQueryParams(params: QueryParams): void {
+    private initFilterSearchSortFromQueryParams(params: QueryParams, reset?: boolean): void {
+        // Restore category
+        const categoryInputs = document.querySelectorAll('.category-filter .form-check-input');
+
+        const categoryLabels: (string | undefined)[] = [];
+
+        categoryInputs.forEach((input) => {
+            if (input.nextElementSibling) {
+                const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
+                categoryLabels.push(labelText);
+            }
+        });
+
         if (params.category) {
             const paramCategories = params.category.split('_');
-            const categoryInputs = document.querySelectorAll('.category-filter .form-check-input');
-
-            const categoryLabels: (string | undefined)[] = [];
-
-            categoryInputs.forEach((input) => {
-                if (input.nextElementSibling) {
-                    const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
-                    categoryLabels.push(labelText);
-                }
-            });
 
             categoryLabels.forEach((label, index) => {
                 if (label) {
@@ -61,22 +63,30 @@ class HomePage extends WFMComponent {
                     }
                 }
             });
-
-            console.log(paramCategories);
+        } else {
+            categoryLabels.forEach((label, index) => {
+                if (label) {
+                    const input = categoryInputs[index] as HTMLInputElement;
+                    input.checked = false;
+                    input.disabled = false;
+                }
+            });
         }
+
+        // Restore brands
+        const brandInputs = document.querySelectorAll('.brand-filter .form-check-input');
+
+        const brandLabels: (string | undefined)[] = [];
+
+        brandInputs.forEach((input) => {
+            if (input.nextElementSibling) {
+                const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
+                brandLabels.push(labelText);
+            }
+        });
 
         if (params.brand) {
             const paramBrands = params.brand.split('_');
-            const brandInputs = document.querySelectorAll('.brand-filter .form-check-input');
-
-            const brandLabels: (string | undefined)[] = [];
-
-            brandInputs.forEach((input) => {
-                if (input.nextElementSibling) {
-                    const labelText = input.nextElementSibling.textContent?.trim().toLowerCase();
-                    brandLabels.push(labelText);
-                }
-            });
 
             brandLabels.forEach((label, index) => {
                 if (label) {
@@ -86,41 +96,26 @@ class HomePage extends WFMComponent {
                     }
                 }
             });
-
-            console.log(paramBrands);
+        } else {
+            brandLabels.forEach((label, index) => {
+                if (label) {
+                    const input = brandInputs[index] as HTMLInputElement;
+                    input.checked = false;
+                    input.disabled = false;
+                }
+            });
         }
 
-        // if (params.stock) {
-        //     const [minStock, maxStock] = params.stock.split('_');
-
-        //     const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
-        //     const stockToSlider = document.querySelector('dual-slider-stock #toSlider') as HTMLInputElement;
-
-        //     stockFromSlider.value = minStock;
-        //     stockToSlider.value = maxStock;
-
-        //     stockFromSlider.dispatchEvent(new Event('change'));
-        //     stockToSlider.dispatchEvent(new Event('change'));
-        // }
-
-        // if (params.price) {
-        //     const [minPrice, maxPrice] = params.price.split('_');
-
-        //     const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
-        //     const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
-
-        //     priceFromSlider.value = minPrice;
-        //     priceToSlider.value = maxPrice;
-
-        //     priceFromSlider.dispatchEvent(new Event('change'));
-        //     priceToSlider.dispatchEvent(new Event('change'));
-        // }
+        // Restore search
+        const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
 
         if (params.search) {
-            const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
             textInput.value = params.search;
+        } else {
+            textInput.value = '';
         }
 
+        // Restore sort
         if (params.sort) {
             const sortProductDropdown = document.querySelector('#sortProductDropdown') as HTMLButtonElement;
             const currentSortOption = document.querySelector(`[data-sort="${params.sort}"]`) as HTMLAnchorElement;
@@ -131,9 +126,8 @@ class HomePage extends WFMComponent {
             this.sortProducts(currentSortOption, params.sort);
         }
 
-        this.showChosenCards(null);
+        this.showChosenCards(null, reset);
         this.changeDualSlidersValues(null);
-        console.log(params);
     }
 
     private setQueryParams(params: QueryParams) {
@@ -183,11 +177,45 @@ class HomePage extends WFMComponent {
 
             this.sortProducts(target, sortType);
         }
+
+        if (target.classList.contains('filter__btn--reset')) {
+            const currentURL = new URL(document.URL);
+            currentURL.search = '';
+            if (this.queryParams.sort) {
+                this.setQueryParams({ sort: this.queryParams.sort });
+            } else {
+                this.setQueryParams({});
+            }
+
+            this.initFilterSearchSortFromQueryParams(this.queryParams, true);
+
+            target.innerText = 'Filter is reset';
+            target.classList.add('reset');
+            setTimeout(() => {
+                target.classList.remove('reset');
+                target.innerText = 'Reset filter';
+            }, 1000);
+        }
+
+        if (target.classList.contains('filter__btn--copy')) {
+            navigator.clipboard
+                .writeText(document.URL)
+                .then(() => {
+                    target.innerText = 'Filter is copied';
+                    target.classList.add('copied');
+                    setTimeout(() => {
+                        target.classList.remove('copied');
+                        target.innerText = 'Copy filter';
+                    }, 1000);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     }
 
     public handleInputChange(event: Event): void {
         const target = event.target as HTMLInputElement;
-        console.log('change', target);
 
         if (target.classList.contains('category-checkbox')) {
             this.handleCategoryCheckbox(target);
@@ -237,7 +265,7 @@ class HomePage extends WFMComponent {
         this.changeDualSlidersValues(target);
     }
 
-    private showChosenCards(target: HTMLInputElement | null): void {
+    private showChosenCards(target: HTMLInputElement | null, reset?: boolean): void {
         const productCards = document.querySelectorAll('.product') as NodeListOf<HTMLElement>;
 
         const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
@@ -265,8 +293,7 @@ class HomePage extends WFMComponent {
             target !== priceToSlider &&
             target !== stockFromSlider &&
             target !== stockToSlider &&
-            target !== textInput &&
-            target !== null
+            target !== textInput
         ) {
             priceFromSlider.value = this.minPrice;
             priceToSlider.value = this.maxPrice;
@@ -286,16 +313,18 @@ class HomePage extends WFMComponent {
         const minStock: string = stockFromSlider.value;
         const maxStock: string = stockToSlider.value;
 
-        if (minPrice !== this.minPrice || maxPrice !== this.maxPrice) {
-            queryParams.price = `${minPrice}_${maxPrice}`;
-        } else if (this.queryParams.price) {
-            queryParams.price = this.queryParams.price;
-        }
+        if (!reset) {
+            if (minPrice !== this.minPrice || maxPrice !== this.maxPrice) {
+                queryParams.price = `${minPrice}_${maxPrice}`;
+            } else if (this.queryParams.price) {
+                queryParams.price = this.queryParams.price;
+            }
 
-        if (minStock !== this.minStock || maxStock !== this.maxStock) {
-            queryParams.stock = `${minStock}_${maxStock}`;
-        } else if (this.queryParams.stock) {
-            queryParams.stock = this.queryParams.stock;
+            if (minStock !== this.minStock || maxStock !== this.maxStock) {
+                queryParams.stock = `${minStock}_${maxStock}`;
+            } else if (this.queryParams.stock) {
+                queryParams.stock = this.queryParams.stock;
+            }
         }
 
         checkedCategoryInputs.forEach((input) => {
@@ -494,11 +523,7 @@ class HomePage extends WFMComponent {
         const displayedCards = arrayCards.filter((card) => !card.classList.contains('d-none'));
 
         if (target === null) {
-            console.log('null');
-
             if (this.queryParams.stock) {
-                console.log(this.queryParams.stock);
-
                 const [minStock, maxStock] = this.queryParams.stock.split('_');
 
                 const stockFromSlider = document.querySelector('dual-slider-stock #fromSlider') as HTMLInputElement;
@@ -506,6 +531,15 @@ class HomePage extends WFMComponent {
 
                 stockFromSlider.value = minStock;
                 stockToSlider.value = maxStock;
+
+                stockFromSlider.dispatchEvent(new Event('change'));
+                stockToSlider.dispatchEvent(new Event('change'));
+                console.log('stock present', this.queryParams.stock);
+            } else {
+                console.log('stock not in query params');
+
+                stockFromSlider.value = this.minStock;
+                stockToSlider.value = this.maxStock;
 
                 stockFromSlider.dispatchEvent(new Event('change'));
                 stockToSlider.dispatchEvent(new Event('change'));
@@ -519,6 +553,12 @@ class HomePage extends WFMComponent {
 
                 priceFromSlider.value = minPrice;
                 priceToSlider.value = maxPrice;
+
+                priceFromSlider.dispatchEvent(new Event('change'));
+                priceToSlider.dispatchEvent(new Event('change'));
+            } else {
+                priceFromSlider.value = this.minPrice;
+                priceToSlider.value = this.maxPrice;
 
                 priceFromSlider.dispatchEvent(new Event('change'));
                 priceToSlider.dispatchEvent(new Event('change'));
@@ -656,7 +696,7 @@ export const homePage = new HomePage({
                 <text-search></text-search>
             </div>
             <products-container class="product__cards"></products-container>
-            <div class="nothing-found">No products found.</div>
+            <div class="nothing-found d-none">No products found.</div>
         </main>
     `,
 });

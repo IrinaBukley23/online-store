@@ -5,6 +5,30 @@
     flex-direction: column;
     gap: 20px;
 
+    &__btn {
+        background-color: $color-accent-light;
+        color: $color-text;
+        padding: 12px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.6rem;
+        text-transform: capitalize;
+        transition: all 0.3s;
+
+        &:hover {
+            background: #ffe26ebe;
+            box-shadow: 0 0 2px 3px #00000007;
+        }
+
+        &.copied,
+        &.reset {
+            background: #a3ff6ebe;
+        }
+    }
+
     &__block {
         display: flex;
         flex-direction: column;
