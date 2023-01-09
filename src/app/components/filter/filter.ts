@@ -15,6 +15,8 @@ export const filter = new Filter({
     selector: 'filter',
     innerComponents: [categoryFilter, brandFilter, dualSliderStock, dualSliderPrice],
     getTemplate: () => `
+      <button type="button" class="filter__btn filter__btn--reset">Reset filter</button>
+      <button type="button" class="filter__btn filter__btn--copy">Copy filter</button>
       <category-filter class="filter__block category-filter"></category-filter>
       <brand-filter class="filter__block brand-filter"></brand-filter>
       <dual-slider-stock class="dual-slider"></dual-slider-stock>
