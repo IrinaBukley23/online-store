@@ -48,7 +48,10 @@ class CartPage extends WFMComponent {
 
         if(target.classList.contains('limit-on-page')) {
             const pages = document.querySelectorAll('.pagination__item') as NodeListOf<HTMLLIElement>;
-            pages.forEach(page => this.pagination(page));
+            pages.forEach(page => {
+                this.pagination(page);
+                this.renderPaginationBtns();
+            });
         }
     }
 
@@ -83,7 +86,8 @@ class CartPage extends WFMComponent {
         }
 
         // pagination
-        if(target.classList.contains('pagination__item')) {
+        const isPaginationPagesBtn = target.classList.contains('pagination__item');
+        if(isPaginationPagesBtn) {
             this.pagination(target);
             this.renderPaginationBtns();
         }
@@ -112,9 +116,9 @@ class CartPage extends WFMComponent {
     private pagination(elem: HTMLElement) {
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         const limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
-        const currentPage = +elem.id - 1;
-        const start = +limitProdsOnPage * +currentPage;
-        const end = start + +limitProdsOnPage;
+        const currentPage = Number(elem?.id) - 1;
+        const start = Number(limitProdsOnPage) * Number(currentPage);
+        const end = start + Number(limitProdsOnPage);
         const paginatedData = cartArr.slice(start, end);
         const productsContainer = document.querySelector('.cart__products-block');
         if(productsContainer) productsContainer.innerHTML = '';
@@ -148,7 +152,6 @@ class CartPage extends WFMComponent {
                 </div>`;
             productsContainer?.append(cartTemplate);
         });
-        this.renderPaginationBtns();
     }
 
     private renderPromoCodes(arr: string[]) {
@@ -234,14 +237,13 @@ class CartPage extends WFMComponent {
     private decrCounter(elem: HTMLElement) {
         const curElem = <HTMLElement> elem.nextSibling?.nextSibling
         let curNum = Number(curElem?.textContent);
-
+        if( curNum < 1 ) {
+            this.dropProduct();
+        }
         if(curNum >= 1) {
             curNum -= 1;
             localStorage.setItem('totalCounter', String(curNum))
-        } else {
-            this.dropProduct();
-            this.pagination(elem);
-        }
+        } 
         (curElem as HTMLElement).innerHTML = String(curNum);
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         let cartTotalSum = 0;

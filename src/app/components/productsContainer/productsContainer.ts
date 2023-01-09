@@ -49,16 +49,16 @@ class ProductsContainer extends WFMComponent {
         })
         const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
         if(headerTotalCounterEl) {
-            headerTotalCounterEl.innerHTML = `${Number(headerTotalCounterEl.innerHTML) - 1}`;
-            localStorage.setItem('totalSum', String(Number(headerTotalCounterEl.innerHTML) - 1));
+        headerTotalCounterEl.innerHTML = `${Number(headerTotalCounterEl.innerHTML) - 1}`;
         }
         const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
-        if(headerTotalSumEl) {
-            const id = (elem as HTMLElement)?.getAttribute('id');
+        const id = (elem as HTMLElement)?.getAttribute('id');
             const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
-            headerTotalSumEl.innerHTML = `${Number(headerTotalSumEl.innerHTML) - Number(product.price)}`;
-            localStorage.setItem('totalCounter', String(Number(headerTotalSumEl.innerHTML) - Number(product.price)));
+        if(headerTotalSumEl) {
+        headerTotalSumEl.innerHTML = `${Number(headerTotalSumEl.innerHTML) - Number(product.price)}`;
         }
+        localStorage.setItem('totalCounter', String(Number(headerTotalSumEl.innerHTML) - Number(product.price)));
+        localStorage.setItem('totalSum', String(Number(headerTotalCounterEl.innerHTML) - 1));
     }
 
     private addToCart(elem: HTMLElement) {

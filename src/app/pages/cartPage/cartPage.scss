@@ -289,7 +289,9 @@
             margin: 8px;
             cursor: pointer;
             &.active {
-                border-bottom: 2px solid #ffffff;
+                border-bottom: 2px solid #ffe26ebe;
+                color: #ffe26ebe;
+                font-weight: 600;
             }
         }
     }    
