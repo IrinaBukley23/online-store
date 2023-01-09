@@ -59,7 +59,7 @@ class ProductsContainer extends WFMComponent {
         elem.innerHTML = 'drop from cart';
         this.cartProducts.push({
             'product': product,
-            'counter': 1, 
+            'counter': 1,
             'flag': true,
         });
         localStorage.setItem('cart', JSON.stringify(this.cartProducts));
@@ -103,28 +103,34 @@ export const productsContainer = new ProductsContainer({
             cardsTemplate += `
                 <div data-id="${product.id}" data-category="${product.category}" data-brand="${product.brand}" data-price="${product.price}" data-stock="${product.stock}"  data-discount="${product.discountPercentage}" class="product col-lg-4 col-md-6 col-12">
                 <div class="product__container">
-                    <div class="product__title">
-                     ${product.title}
-                    </div>
                     <div class="product__image">
                         <a id=${product.id} href="#single/1">
-                            <img alt="photo" class="product__image-link"  src="${product.thumbnail}">
+                            <img alt="${product.title}" class="product__image-link"  src="${product.thumbnail}">
                         </a>
                     </div>
-                    <div class="product__description">
-                        ${product.description}
-                    </div>
-                    <div class="product__stock">
-                        In stock: ${product.stock}
-                    </div>
-                    <div class="product__price">
-                        € ${product.price}
-                    </div>
-                    <div class="product__discount">
-                        Discount: ${product.discountPercentage}%
-                    </div>
-                    <div class="product__rating">
-                        Rating: ${product.rating}/5
+                    <div class="product__main">
+                        <div class="product__title">
+                         ${product.title}
+                        </div>
+                        <div class="product__description">
+                            ${product.description}
+                        </div>
+                        <div class="product__stock">
+                            In stock: ${product.stock}
+                        </div>
+                        <div class="product__fin">
+                            <div class="product__fin-left">
+                                <div class="product__discount">
+                                    Discount: ${product.discountPercentage}%
+                                </div>
+                                <div class="product__rating">
+                                    Rating: ${product.rating}/5
+                                </div>                            
+                            </div>
+                            <div class="product__price">
+                                € ${product.price}
+                            </div>
+                        </div>
                     </div>
                     <div class="product__buttons">
                         <button id=${product.id} class="button btn__to-cart">${btnToCartText}</button>

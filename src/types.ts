@@ -51,6 +51,7 @@ export type QueryParamsRequired = Record<keyof PartialProduct, string>;
 export type QueryParams = Partial<QueryParamsRequired> & {
     sort?: string;
     search?: string;
+    view?: string;
 }
 
 export interface CartItem {
@@ -68,6 +69,6 @@ export interface ProductsData {
 
 
 export interface PromoCodesText {
-    rs: string; 
+    rs: string;
     epm: string;
 }

@@ -57,7 +57,10 @@ module.exports = ({ development }) => ({
     plugins: [
         ...esLintPlugin(development),
         new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
-        new HtmlWebpackPlugin({ template: './src/index.html' }),
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            favicon: './src/assets/images/online-store-favicon.png'
+        }),
         new CopyPlugin({
             patterns: [
                 {

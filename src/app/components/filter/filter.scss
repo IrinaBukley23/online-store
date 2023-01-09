@@ -48,15 +48,15 @@
                 transition: 0.5s;
                 min-height: auto;
 
-                order: 1;
+                order: 2;
 
                 &:has(.form-check-input:disabled) {
-                    order: 2;
+                    order: 3;
                 }
 
-                // &:has(.form-check-input:checked) {
-                //     order: 1;
-                // }
+                 &:has(.form-check-input:checked) {
+                     order: 1;
+                 }
 
                 &-label {
                     text-transform: capitalize;
