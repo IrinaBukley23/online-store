@@ -49,10 +49,10 @@ class CartPage extends WFMComponent {
         if(target.classList.contains('limit-on-page')) {
             let limitValueEl = document.querySelector('.cart__pagination-limit input') as HTMLInputElement;
             const pages = document.querySelectorAll('.pagination__item') as NodeListOf<HTMLLIElement>;
-            if(Number(limitValueEl) > 3) {
-                limitValueEl.value = '3';
-                pages.forEach(page => this.pagination(page));
-            }
+            // if(Number(limitValueEl) > 3) {
+            //     limitValueEl.value = '3';
+            //     pages.forEach(page => this.pagination(page));
+            // }
             pages.forEach(page => this.pagination(page));
         }
     }

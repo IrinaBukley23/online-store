@@ -91,7 +91,7 @@ class SinglePage extends WFMComponent {
   private openPopup() {
     const popup = document.querySelector('.popup') as HTMLElement;
     popup.classList.add('active');
-}
+  }
 }
 
 export const singlePage = new SinglePage({
