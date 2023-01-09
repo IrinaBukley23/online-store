@@ -26,7 +26,6 @@ class HomePage extends WFMComponent {
         this.maxPrice = this.getMaxPriceValue();
         this.URL = document.URL;
         this.queryParams = this.getQueryParamsFromURL(this.URL);
-        this.queryParams = this.getQueryParamsFromURL(this.URL);
     }
 
     public render(): void {
@@ -35,8 +34,8 @@ class HomePage extends WFMComponent {
         // this.initSortFromQueryParams(this.queryParams);
     }
 
-    private getQueryParamsFromURL(URLstr: string): QueryParams {
-        const URLObject = new URL(URLstr);
+    private getQueryParamsFromURL(URLStr: string): QueryParams {
+        const URLObject = new URL(URLStr);
         const searchParams = new URLSearchParams(URLObject.searchParams);
         return Object.fromEntries(searchParams.entries());
     }
@@ -105,15 +104,22 @@ class HomePage extends WFMComponent {
             stockToSlider.dispatchEvent(new Event('change'));
         }
 
-        // if (params.price) {
-        // const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
-        // const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
-        // }
+        if (params.price) {
+            const [minPrice, maxPrice] = params.price.split('_');
+
+            const priceFromSlider = document.querySelector('dual-slider-price #fromSlider') as HTMLInputElement;
+            const priceToSlider = document.querySelector('dual-slider-price #toSlider') as HTMLInputElement;
+
+            priceFromSlider.value = minPrice;
+            priceToSlider.value = maxPrice;
+
+            priceFromSlider.dispatchEvent(new Event('change'));
+            priceToSlider.dispatchEvent(new Event('change'));
+        }
 
         if (params.search) {
             const textInput = this.el?.querySelector('.text-search__input') as HTMLInputElement;
             textInput.value = params.search;
-            console.log('succ');
         }
         console.log(params);
     }
@@ -204,6 +210,7 @@ class HomePage extends WFMComponent {
             const inputTarget = target as HTMLInputElement;
 
             this.showChosenCards(inputTarget);
+            this.changeDualSlidersValues();
         }
     }
 
@@ -238,11 +245,14 @@ class HomePage extends WFMComponent {
             queryParams.search = textInput.value.trim();
         }
 
+        // If the function is invoked not by sliders change, set the range of sliders to maximum (not to limit chosen categories and brands with slider values)
+
         if (
             target !== priceFromSlider &&
             target !== priceToSlider &&
             target !== stockFromSlider &&
-            target !== stockToSlider
+            target !== stockToSlider &&
+            target !== textInput
         ) {
             priceFromSlider.value = this.minPrice;
             priceToSlider.value = this.maxPrice;
@@ -507,6 +517,21 @@ class HomePage extends WFMComponent {
                 stockToInput.dispatchEvent(new Event('change'));
             }
         }
+
+        const minPrice: string = priceFromSlider.value;
+        const maxPrice: string = priceToSlider.value;
+        const minStock: string = stockFromSlider.value;
+        const maxStock: string = stockToSlider.value;
+
+        if (minPrice !== this.minPrice || maxPrice !== this.maxPrice) {
+            this.queryParams.price = `${minPrice}-${maxPrice}`;
+        }
+
+        if (minStock !== this.minStock || maxStock !== this.maxStock) {
+            this.queryParams.stock = `${minStock}-${maxStock}`;
+        }
+
+        this.setQueryParams(this.queryParams);
     }
 
     private sortProducts(target: HTMLElement, sortType: string | undefined): void {
