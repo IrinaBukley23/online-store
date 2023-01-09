@@ -41,12 +41,24 @@ class ProductsContainer extends WFMComponent {
         if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn btn__to-cart">add to cart</button>`;
         if(productsContainer) productsContainer.innerHTML = '';
         cartArr.forEach(prod => {
-            if(prod.counter === 0) {
+            if(prod.product.id === +elem.id) {
                 const filteredArr = cartArr.filter((product: CartItem) => product.product.id !== +elem.id);
                 localStorage.setItem('cart', JSON.stringify(filteredArr));
                 cartArr = JSON.parse(localStorage.getItem('cart') as string);
             }
         })
+        const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+        if(headerTotalCounterEl) {
+            headerTotalCounterEl.innerHTML = `${Number(headerTotalCounterEl.innerHTML) - 1}`;
+            localStorage.setItem('totalSum', String(Number(headerTotalCounterEl.innerHTML) - 1));
+        }
+        const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+        if(headerTotalSumEl) {
+            const id = (elem as HTMLElement)?.getAttribute('id');
+            const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+            headerTotalSumEl.innerHTML = `${Number(headerTotalSumEl.innerHTML) - Number(product.price)}`;
+            localStorage.setItem('totalCounter', String(Number(headerTotalSumEl.innerHTML) - Number(product.price)));
+        }
     }
 
     private addToCart(elem: HTMLElement) {

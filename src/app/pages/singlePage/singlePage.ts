@@ -53,6 +53,18 @@ class SinglePage extends WFMComponent {
     })
     const addBtnContainer = elem.parentElement;
     if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn add-to-cart">add to cart</button>`;
+    const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
+        if(headerTotalCounterEl) {
+          headerTotalCounterEl.innerHTML = `${Number(headerTotalCounterEl.innerHTML) - 1}`;
+          localStorage.setItem('totalSum', String(Number(headerTotalCounterEl.innerHTML) - 1));
+        }
+        const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
+        if(headerTotalSumEl) {
+            const id = (elem as HTMLElement)?.getAttribute('id');
+            const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
+            headerTotalSumEl.innerHTML = `${Number(headerTotalSumEl.innerHTML) - Number(product.price)}`;
+            localStorage.setItem('totalCounter', String(Number(headerTotalSumEl.innerHTML) - Number(product.price)));
+        }
   }
 
   private addToCart(elem: HTMLElement) {
