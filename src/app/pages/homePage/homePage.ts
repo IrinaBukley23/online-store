@@ -39,6 +39,7 @@ class HomePage extends WFMComponent {
         return Object.fromEntries(searchParams.entries());
     }
 
+
     private initFilterSearchSortFromQueryParams(params: QueryParams, reset?: boolean): void {
         // Restore category
         const categoryInputs = document.querySelectorAll('.category-filter .form-check-input');
@@ -216,6 +217,7 @@ class HomePage extends WFMComponent {
 
     public handleInputChange(event: Event): void {
         const target = event.target as HTMLInputElement;
+        console.log('change', target);
 
         if (target.classList.contains('category-checkbox')) {
             this.handleCategoryCheckbox(target);
@@ -534,10 +536,7 @@ class HomePage extends WFMComponent {
 
                 stockFromSlider.dispatchEvent(new Event('change'));
                 stockToSlider.dispatchEvent(new Event('change'));
-                console.log('stock present', this.queryParams.stock);
             } else {
-                console.log('stock not in query params');
-
                 stockFromSlider.value = this.minStock;
                 stockToSlider.value = this.maxStock;
 
@@ -559,7 +558,6 @@ class HomePage extends WFMComponent {
             } else {
                 priceFromSlider.value = this.minPrice;
                 priceToSlider.value = this.maxPrice;
-
                 priceFromSlider.dispatchEvent(new Event('change'));
                 priceToSlider.dispatchEvent(new Event('change'));
             }
