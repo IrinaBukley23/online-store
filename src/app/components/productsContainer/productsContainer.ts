@@ -37,9 +37,8 @@ class ProductsContainer extends WFMComponent {
     private dropProduct(elem: HTMLElement) {
         let cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         const productsContainer = document.querySelector('.cart__products-block');
-        elem.classList.remove('btn__drop');
-        elem.classList.add('btn__to-cart');
-        elem.innerHTML = 'add to cart';
+        const addBtnContainer = elem.parentElement;
+        if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn btn__to-cart">add to cart</button>`;
         if(productsContainer) productsContainer.innerHTML = '';
         cartArr.forEach(prod => {
             if(prod.counter === 0) {
@@ -54,9 +53,8 @@ class ProductsContainer extends WFMComponent {
         const id = elem.getAttribute('id');
         if (!id) return;
         const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
-        elem.classList.add('btn__drop');
-        elem.classList.remove('btn__to-cart');
-        elem.innerHTML = 'drop from cart';
+        const addBtnContainer = elem.parentElement;
+        if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn btn__drop">drop from cart</button>`;
         this.cartProducts.push({
             'product': product,
             'counter': 1, 
@@ -127,7 +125,9 @@ export const productsContainer = new ProductsContainer({
                         Rating: ${product.rating}/5
                     </div>
                     <div class="product__buttons">
-                        <button id=${product.id} class="button btn__to-cart">${btnToCartText}</button>
+                        <div class="add__btn-container">
+                            <button id=${product.id} class="button btn__to-cart">${btnToCartText}</button>
+                        </div>
                         <a id=${product.id} class="button btn__details" href="#single/1">Details</a>
                     </div>
                 </div>
