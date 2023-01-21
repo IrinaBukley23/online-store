@@ -6,9 +6,4 @@ const wfm = {
   },
 };
 
-const promocodesDescription: PromoCodesText = {
-  rs: 'Rolling Scopes School - 10%', 
-  epm: 'EPAM Systems - 10%' 
-}
-
-export { wfm, promocodesDescription };
+export { wfm };

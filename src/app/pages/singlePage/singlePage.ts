@@ -29,14 +29,14 @@ class SinglePage extends WFMComponent {
   }
 
   private imageChange(elem: HTMLElement) {
-    if(!(elem).classList.contains('images__list-item_img')) return;
-    this.el?.querySelectorAll('.images__list-item_img').forEach((imageItem) => imageItem.classList.remove('active'));
     if (!elem) return;
+    if (!(elem).classList.contains('images__list-item_img')) return;
+    this.el?.querySelectorAll('.images__list-item_img').forEach((imageItem) => imageItem.classList.remove('active'));
     (elem).classList.add('active');
-    if((elem).classList.contains('active')) {
-      const imgLarge = document.querySelector('.images__large');
-      const currentImgSrc = ((elem) as HTMLElement).getAttribute('src')
-      if(imgLarge) imgLarge.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
+    if ((elem).classList.contains('active')) {
+      const imgLarge = document.querySelector('.images__large') as HTMLImageElement;
+      const currentImgSrc = ((elem) as HTMLElement).getAttribute('src');
+      imgLarge.innerHTML = `<img src=${currentImgSrc} alt="photo">`;
     }
   }
 
@@ -46,7 +46,7 @@ class SinglePage extends WFMComponent {
     if(productsContainer) productsContainer.innerHTML = '';
     cartArr.forEach(prod => {
       if(prod.counter === 0) {
-        const filteredArr = cartArr.filter((product: CartItem) => product.product.id !== +elem.id);
+        const filteredArr = cartArr.filter((product: CartItem) => product.product.id !== Number(elem.id));
         localStorage.setItem('cart', JSON.stringify(filteredArr));
         cartArr = JSON.parse(localStorage.getItem('cart') as string);
       }
@@ -55,15 +55,11 @@ class SinglePage extends WFMComponent {
     if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn add-to-cart">add to cart</button>`;
 
     const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
-    if(headerTotalCounterEl) {
       headerTotalCounterEl.innerHTML = `${Number(headerTotalCounterEl.innerHTML) - 1}`;
-    }
     const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
     const id = (elem as HTMLElement)?.getAttribute('id');
         const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
-    if(headerTotalSumEl) {
       headerTotalSumEl.innerHTML = `${Number(headerTotalSumEl.innerHTML) - Number(product.price)}`;
-    }
     localStorage.setItem('totalCounter', String(Number(headerTotalSumEl.innerHTML) - Number(product.price)));
     localStorage.setItem('totalSum', String(Number(headerTotalCounterEl.innerHTML) - 1));
   }
@@ -92,13 +88,9 @@ class SinglePage extends WFMComponent {
     })
 
     const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
-    if(headerTotalCounterEl) {
-        headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
-    }
+    headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
     const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
-    if(headerTotalSumEl) {
-        headerTotalSumEl.innerHTML = `${cartTotalSum}`;
-    }
+    headerTotalSumEl.innerHTML = `${cartTotalSum}`;
   }
 
   private openPopup() {

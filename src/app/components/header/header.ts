@@ -13,8 +13,10 @@ export const header = new Header({
     selector: 'app-header',
     innerComponents: null,
     getTemplate() {
-      const headerTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
-      const headerTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
+      const totalCounterValue =  localStorage.getItem('totalCounter');
+      const headerTotalCounter = totalCounterValue ? totalCounterValue : '0';
+      const totalSumValue = localStorage.getItem('totalSum');
+      const headerTotalSum = totalSumValue ? totalSumValue : '0';
 
       return `
       <div class="wrapper"> 

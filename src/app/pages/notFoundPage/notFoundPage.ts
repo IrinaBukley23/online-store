@@ -5,7 +5,6 @@ import img from '../../../../public/error.gif';
 import './notFoundPage.scss';
 
 class NotFoundPage extends WFMComponent {
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
     constructor(config: ComponentConfig) {
         super(config);
     }

@@ -36,27 +36,23 @@ class ProductsContainer extends WFMComponent {
 
     private dropProduct(elem: HTMLElement) {
         let cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        const productsContainer = document.querySelector('.cart__products-block');
-        const addBtnContainer = elem.parentElement;
-        if(addBtnContainer) addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn btn__to-cart">add to cart</button>`;
-        if(productsContainer) productsContainer.innerHTML = '';
+        const productsContainer = document.querySelector('.cart__products-block') as HTMLElement;
+        const addBtnContainer = elem.parentElement as HTMLElement;
+        addBtnContainer.innerHTML = `<button id=${elem.id} class="single__info-price_btn btn__to-cart">add to cart</button>`;
+        productsContainer.innerHTML = '';
         cartArr.forEach(prod => {
-            if(prod.product.id === +elem.id) {
-                const filteredArr = cartArr.filter((product: CartItem) => product.product.id !== +elem.id);
+            if(prod.product.id === Number(elem.id)) {
+                const filteredArr = cartArr.filter((product: CartItem) => product.product.id !== Number(elem.id));
                 localStorage.setItem('cart', JSON.stringify(filteredArr));
                 cartArr = JSON.parse(localStorage.getItem('cart') as string);
             }
         })
         const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
-        if(headerTotalCounterEl) {
         headerTotalCounterEl.innerHTML = `${Number(headerTotalCounterEl.innerHTML) - 1}`;
-        }
         const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
         const id = (elem as HTMLElement)?.getAttribute('id');
-            const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
-        if(headerTotalSumEl) {
+        const [product] = productsData.products.filter((product: Product) => product.id === Number(id));
         headerTotalSumEl.innerHTML = `${Number(headerTotalSumEl.innerHTML) - Number(product.price)}`;
-        }
         localStorage.setItem('totalCounter', String(Number(headerTotalSumEl.innerHTML) - Number(product.price)));
         localStorage.setItem('totalSum', String(Number(headerTotalCounterEl.innerHTML) - 1));
     }
@@ -84,13 +80,9 @@ class ProductsContainer extends WFMComponent {
             localStorage.setItem('totalCounter', String(cartTotalCounter));
         });
         const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
-        if(headerTotalCounterEl) {
-            headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
-        }
+        headerTotalCounterEl.innerHTML = `${cartTotalCounter}`;
         const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
-        if(headerTotalSumEl) {
-            headerTotalSumEl.innerHTML = `${cartTotalSum}`;
-        }
+        headerTotalSumEl.innerHTML = `${cartTotalSum}`;
     }
 }
 
@@ -104,11 +96,7 @@ export const productsContainer = new ProductsContainer({
 
         productsData.products.forEach((product: Product) => {
             cartArr?.forEach(prod => {
-                if(prod.product.id === product.id){
-                    btnToCartText = 'drop from cart';
-                } else {
-                    btnToCartText = 'add to cart';
-                }
+                (prod.product.id === product.id) ? btnToCartText = 'drop from cart' : btnToCartText = 'add to cart';
             })
             cardsTemplate += `
                 <div data-id="${product.id}" data-category="${product.category}" data-brand="${product.brand}" data-price="${product.price}" data-stock="${product.stock}"  data-discount="${product.discountPercentage}" class="product col-lg-4 col-md-6 col-12">

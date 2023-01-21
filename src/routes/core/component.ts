@@ -37,7 +37,6 @@ export class Component implements ComponentInterface {
     }
 
     _initEvents(): void {
-        // Add input change handler
         const componentElem = this.el;
         
         if (this.handleInputChange) {
@@ -45,19 +44,16 @@ export class Component implements ComponentInterface {
             componentElem?.addEventListener('change', inputChangeHandler);
         }
 
-        // Add input handler
         if (this.handleInput) {
             const inputHandler = this.handleInput.bind(this);
             componentElem?.addEventListener('input', inputHandler);
         }
 
-        // Add click handler
         if (this.handleClick) {
             const clickHandler = this.handleClick.bind(this);
             componentElem?.addEventListener('click', clickHandler);
         }
 
-        // Add blur handler
         if (this.handleBlur) {
             const blurHandler = this.handleBlur.bind(this);
             componentElem?.addEventListener('focusout', blurHandler);

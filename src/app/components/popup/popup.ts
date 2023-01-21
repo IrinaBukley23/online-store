@@ -4,6 +4,9 @@ import visa from '../../../../public/visa.jpg';
 import mastercard from '../../../../public/master-card.jpg';
 import pease from '../../../../public/peace.jpg';
 import paysys from '../../../../public/pay-sys.jpg';
+import { cardProviderCoder } from '../../../enum';
+import { cardNumberLength, CVVLength, minAddressLength, minNameLength, maxLength } from '../../../routes/tools/constants';
+import { EMAIL_REGEXP } from '../../../routes/tools/rexExp';
 
 class Popup extends WFMComponent {
 
@@ -22,16 +25,20 @@ class Popup extends WFMComponent {
 
       const cardNumInput = target.classList.contains('popup__card-num');
       if(cardNumInput) {
-        const bankCard = document.querySelector('.popup__card-pay');
+        const bankCard = document.querySelector('.popup__card-pay') as HTMLElement;
         target.value = target.value.substr(0, 16);
-        if(target.value[0] === '4'){
-          if(bankCard) bankCard.innerHTML = ` <img src="${visa}" alt="visa">`;
-        } 
-        if(target.value[0] === '5') {
-          if(bankCard) bankCard.innerHTML = ` <img src="${mastercard}" alt="mastercard">`;
-        }  
-        if(target.value[0] === '6') {
-          if(bankCard) bankCard.innerHTML = ` <img src="${pease}" alt="pease">`;
+        switch (target.value) {
+          case cardProviderCoder.VISA: 
+            bankCard.innerHTML = ` <img src="${visa}" alt="visa">`;
+            break;
+          case cardProviderCoder.MASTERCARD:
+            bankCard.innerHTML = ` <img src="${mastercard}" alt="mastercard">`;
+            break;
+          case cardProviderCoder.PEACE:
+            bankCard.innerHTML = ` <img src="${pease}" alt="pease">`;
+            break;
+          default:
+            bankCard.innerHTML = ` <img src="${paysys}" alt="pease">`;
         }
         const cardNumInput = document.querySelector('.popup__card-num') as HTMLInputElement;
 
@@ -86,7 +93,8 @@ class Popup extends WFMComponent {
           const trueValidity = document.querySelector('.popup__true') as HTMLInputElement;
           const cvvValidity = document.querySelector('.popup__cvv') as HTMLInputElement;
           
-          if(!this.validationName(nameValidity) && !this.validationEmail(emailValidity) && !this.validationPhone(phoneValidity) && !this.validationAddress(addressValidity) && !this.validationCardNumber(cardNumValidity) && !this.validationCardTrue(trueValidity) && !this.validationCardCvv(cvvValidity)) {
+          const isValid = !this.validationName(nameValidity) && !this.validationEmail(emailValidity) && !this.validationPhone(phoneValidity) && !this.validationAddress(addressValidity) && !this.validationCardNumber(cardNumValidity) && !this.validationCardTrue(trueValidity) && !this.validationCardCvv(cvvValidity);
+          if(isValid) {
             const content = document.querySelector('.popup__content') as HTMLElement;
             const form = document.querySelector('.popup__content form') as HTMLFormElement;
 
@@ -104,17 +112,13 @@ class Popup extends WFMComponent {
             localStorage.setItem('totalCounter', '0');
 
             const headerTotalCounterEl = document.querySelector('.header__count') as HTMLElement;
-            if(headerTotalCounterEl) {
-                headerTotalCounterEl.innerHTML = `0`;
-            }
-    
+            headerTotalCounterEl.innerHTML = `0`;
+
             const headerTotalSumEl = document.querySelector('.header__sum p span') as HTMLElement;
-            if(headerTotalSumEl) {
-                headerTotalSumEl.innerHTML = `0`;
-            }
+            headerTotalSumEl.innerHTML = `0`;
 
             const cartEl = document.querySelector('.cart') as HTMLElement;
-            if(cartEl) cartEl.innerHTML = `<h3>Cart is empty</h3>`;
+            cartEl.innerHTML = `<h3>Cart is empty</h3>`;
           } else {
             this.validationName(nameValidity);
             this.validationPhone(phoneValidity);
@@ -171,14 +175,14 @@ class Popup extends WFMComponent {
     
       const valueArr = elem.value.split(' ');
 
-      if(valueArr.length < 2) {
+      if(valueArr.length < maxLength) {
         nameErr.classList.add('active');
         nameEl.classList.add('active');
         nameBlock.classList.add('active');
         this.isOpenPopup = true;
       } else {
         valueArr.forEach(elem => {
-          if(elem.length < 3) {
+          if(elem.length < CVVLength) {
             nameErr.classList.add('active');
             nameEl.classList.add('active');
             nameBlock.classList.add('active');
@@ -199,14 +203,14 @@ class Popup extends WFMComponent {
       const phoneEl = document.querySelector('.popup__phone') as HTMLInputElement;
       const phoneBlock = document.querySelector('.phone_block') as HTMLDivElement;
       
-      if(+elem.value.length < 9 || elem.value[0] !== '+') {
+      if(Number(elem.value.length) < cardNumberLength || elem.value[0] !== '+') {
         phoneErr.classList.add('active');
         phoneEl.classList.add('active');
         phoneBlock.classList.add('active');
         this.isOpenPopup = true;
       } else {
         const phone = elem.value.substring(1);
-        if (isNaN(+phone)){
+        if (isNaN(Number(phone))){
           phoneErr.classList.add('active');
           phoneEl.classList.add('active');
           phoneBlock.classList.add('active');
@@ -228,14 +232,14 @@ class Popup extends WFMComponent {
     
       const valueArr = elem.value.split(' ');
 
-      if(valueArr.length < 3) {
+      if(valueArr.length < minNameLength) {
         addressErr.classList.add('active');
         addressEl.classList.add('active');
         addressBlock.classList.add('active');
         this.isOpenPopup = true;
       } else {
         valueArr.forEach(elem => {
-          if(elem.length < 5) {
+          if(elem.length < minAddressLength) {
             addressErr.classList.add('active');
             addressEl.classList.add('active');
             addressBlock.classList.add('active');
@@ -255,8 +259,6 @@ class Popup extends WFMComponent {
       const emailErr = document.querySelector('.error__email') as HTMLLabelElement;
       const emailEl = document.querySelector('.popup__email') as HTMLInputElement;
       const emailBlock = document.querySelector('.email_block') as HTMLDivElement;
-
-      const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
       if (!isEmailValid(elem.value)) {
         emailErr.classList.add('active');
@@ -279,7 +281,7 @@ class Popup extends WFMComponent {
     private validationCardNumber(elem: HTMLInputElement): boolean {
       const cardNumErr = document.querySelector('.error__card-number') as HTMLLabelElement;
 
-      if (elem.value.length < 16) {
+      if (elem.value.length < cardNumberLength) {
         cardNumErr.classList.add('active');
         this.isOpenPopup = true;
       } else {
@@ -292,7 +294,7 @@ class Popup extends WFMComponent {
     private validationCardTrue(elem: HTMLInputElement): boolean {
       const cardNumErr = document.querySelector('.error__true') as HTMLLabelElement;
 
-      if (elem.value.length < 2) {
+      if (elem.value.length < maxLength) {
         cardNumErr.classList.add('active');
         this.isOpenPopup = true;
       } else {
@@ -304,10 +306,10 @@ class Popup extends WFMComponent {
 
     private validationCardCvv(elem: HTMLInputElement): boolean {
       const cvvErr = document.querySelector('.error__cvv') as HTMLLabelElement;
-      if(+elem.value.length !== 3) {
+      if(Number(elem.value.length) !== CVVLength) {
         cvvErr.classList.add('active');
       } else {
-        if (isNaN(+elem.value)){
+        if (isNaN(Number(elem.value))){
           cvvErr.classList.add('active');
           this.isOpenPopup = true;
         }else {

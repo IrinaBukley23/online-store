@@ -1,6 +1,6 @@
 import { PromoCodes } from '../../../enum';
 import { WFMComponent } from '../../../routes/index';
-import { promocodesDescription } from '../../../routes/tools/utils';
+import { promocodesDescription } from '../../../routes/tools/constants';
 import { CartItem, ComponentConfig } from '../../../types';
 import { appRoutes } from '../../app.routes';
 
@@ -100,10 +100,10 @@ class CartPage extends WFMComponent {
     private renderPaginationBtns() {
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
         const limitProdsOnPage  = (document.querySelector('.limit-on-page') as HTMLInputElement)?.value;
-        const btnsBlock = document.querySelector('.pagination__list');
-        if(btnsBlock) btnsBlock.innerHTML = '';
+        const btnsBlock = document.querySelector('.pagination__list') as HTMLButtonElement;
+        btnsBlock.innerHTML = '';
         const paginationBtns = ``;
-        const pagesCount = Math.ceil(cartArr.length / +limitProdsOnPage);
+        const pagesCount = Math.ceil(cartArr.length / Number(limitProdsOnPage));
         for (let i = 0; i < pagesCount; i++) {
             const paginationBtn = document.createElement('li');
             paginationBtn.classList.add('pagination__item');
@@ -120,8 +120,8 @@ class CartPage extends WFMComponent {
         const start = Number(limitProdsOnPage) * Number(currentPage);
         const end = start + Number(limitProdsOnPage);
         const paginatedData = cartArr.slice(start, end);
-        const productsContainer = document.querySelector('.cart__products-block');
-        if(productsContainer) productsContainer.innerHTML = '';
+        const productsContainer = document.querySelector('.cart__products-block') as HTMLElement;
+        productsContainer.innerHTML = '';
         let index = start + 1;
         paginatedData && paginatedData.forEach(item => {
             const cartTemplate = document.createElement('div');
@@ -276,8 +276,8 @@ class CartPage extends WFMComponent {
 
     private dropProduct() {
         let cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        const productsContainer = document.querySelector('.cart__products-block');
-        if(productsContainer) productsContainer.innerHTML = '';
+        const productsContainer = document.querySelector('.cart__products-block') as HTMLElement;
+        productsContainer.innerHTML = '';
         
         cartArr.forEach(prod => {
             if(prod.counter === 0) {
@@ -315,7 +315,7 @@ class CartPage extends WFMComponent {
                     productsContainer?.append(cartTemplate);
                 })
                 if(!cartArr || cartArr.length === 0) {
-                    if(productsContainer) productsContainer.innerHTML = `<h3>Cart is empty</h3>`;
+                    productsContainer.innerHTML = `<h3>Cart is empty</h3>`;
                 }
             }
         })
@@ -345,8 +345,8 @@ class CartPage extends WFMComponent {
             this.promoArr.splice(i, 1);
             const promoBlock = document.querySelector('.cart-applied');
             promoBlock?.classList.add('active');
-            const promocodesList= document.querySelector('.cart-applied_block')
-            if(promocodesList) (promocodesList as HTMLElement).innerHTML = '';
+            const promocodesList= document.querySelector('.cart-applied_block') as HTMLElement;
+            promocodesList.innerHTML = '';
             this.renderPromoCodes(this.promoArr);
     }
 
@@ -374,8 +374,11 @@ export const cartPage = new CartPage({
         let cartTemplate = ``;
         let index = 1;
         const cartArr: CartItem[] = JSON.parse(localStorage.getItem('cart') as string);
-        const cartTotalCounter = (localStorage.getItem('totalCounter')) ? localStorage.getItem('totalCounter') : '0';
-        const cartTotalSum = (localStorage.getItem('totalSum')) ? localStorage.getItem('totalSum') : '0';
+
+        const totalCounterValue =  localStorage.getItem('totalCounter');
+        const totalSumValue = localStorage.getItem('totalSum');
+        const cartTotalCounter = totalCounterValue ? totalCounterValue : '0';
+        const cartTotalSum = totalSumValue ? totalSumValue : '0';
         if(!cartArr || cartArr.length === 0) {
             return `<h3>Cart is empty</h3>`;
         }
