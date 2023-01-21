@@ -1,0 +1,138 @@
+.product {
+    padding: 30px 10px;
+    height: auto;
+
+    &.list-view {
+        width: 100%;
+
+        .product__container {
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .product__image {
+            margin-top: 0;
+            flex-basis: 30%;
+            flex-shrink: 0;
+        }
+
+        .product__main {
+            flex-basis: 50%;
+            flex-shrink: 0;
+            justify-content: space-around;
+        }
+
+        .product__buttons {
+            width: max-content;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            flex-basis: 20%;
+
+            .button {
+                width: max-content;
+            }
+        }
+    }
+
+    &__cards {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: start;
+    }
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid #00000021;
+        border-radius: 20px;
+        height: 100%;
+        padding: 20px 16px;
+        box-shadow: 0 0 4px 2px #00000011;
+        gap: 10px;
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    &__image {
+        height: 200px;
+        border-radius: 10px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    &__description {
+        text-transform: unset;
+    }
+
+    &__fin {
+        display: flex;
+        justify-content: space-between;
+
+        &-left {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    &__stock {
+        font-size: 1.6rem;
+    }
+
+    &__price {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    &__buttons {
+        gap: 10px;
+        display: flex;
+        justify-content: space-between;
+
+        .button {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 10px;
+            background: $color-accent-dark;
+            color: $color-main;
+            text-transform: capitalize;
+            transition: all 0.3s;
+
+            &.btn__details {
+                background: $color-accent-light;
+                color: $color-text;
+
+                &:hover {
+                    background: #ffe26ebe;
+                    box-shadow: 0 0 2px 3px #00000007;
+                }
+            }
+
+            &:hover {
+                background: #046948;
+                box-shadow: 0 0 2px 3px #0000001a;
+            }
+        }
+    }
+}
